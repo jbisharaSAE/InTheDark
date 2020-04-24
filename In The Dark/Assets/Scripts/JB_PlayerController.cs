@@ -6,10 +6,13 @@ using System;
 //This Script is intended for demoing and testing animations only.
 
 
-public class bearController : MonoBehaviour {
+public class JB_PlayerController : MonoBehaviour {
+
+    public Transform throwSpawn;
+    public GameObject kunaiPrefab;
+    private GameObject kunaiShuriken;
 
 	private float HSpeed = 10f;
-	//private float maxVertHSpeed = 20f;
 	private bool facingRight = true;
 	private float moveXInput;
 
@@ -24,11 +27,12 @@ public class bearController : MonoBehaviour {
 	private float jumpForce = 14f;
 
 	private Animator anim;
+    
 
 	// Use this for initialization
 	void Awake ()
 	{
-//		startTime = Time.time;
+
 		anim = GetComponent<Animator> ();
 	}
 
@@ -60,12 +64,24 @@ public class bearController : MonoBehaviour {
 
         GetComponent<Rigidbody2D>().velocity = new Vector2((moveXInput * HSpeed), GetComponent<Rigidbody2D>().velocity.y);
 
-        if (Input.GetButtonDown("Fire1") && (grounded)) { anim.SetTrigger("Punch"); }
+        // left mouse button - attack
+        if (Input.GetButtonDown("Fire1")) { anim.SetTrigger("Punch"); }
 
-        if (Input.GetButton("Fire2"))
+        // right mouse button - shuriken throw
+        if(Input.GetButtonDown("Fire2"))
         {
+            anim.SetTrigger("Throw");
+
+            ThrowShuriken();
+
+        }
+
+        // increases character speed
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            Debug.Log("testing left shift");
             anim.SetBool("Sprint", true);
-            HSpeed = 14f;
+            HSpeed = 25f;
 }
         else
         {
@@ -79,6 +95,7 @@ public class bearController : MonoBehaviour {
         else if (moveXInput < 0 && facingRight)
             Flip();
     }
+
     ////Flipping direction of character
     void Flip()
 	{
@@ -87,5 +104,10 @@ public class bearController : MonoBehaviour {
 		theScale.x *= -1;
 		transform.localScale = theScale;
 	}
+
+    private void ThrowShuriken()
+    {
+        kunaiShuriken = Instantiate(kunaiPrefab, throwSpawn.position, kunaiPrefab.transform.rotation);
+    }
 
 }
