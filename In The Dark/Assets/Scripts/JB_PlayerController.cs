@@ -107,7 +107,29 @@ public class JB_PlayerController : MonoBehaviour {
 
     private void ThrowShuriken()
     {
-        kunaiShuriken = Instantiate(kunaiPrefab, throwSpawn.position, kunaiPrefab.transform.rotation);
+        if (facingRight)
+        {
+            kunaiShuriken = Instantiate(kunaiPrefab, throwSpawn.position, kunaiPrefab.transform.rotation);
+            kunaiShuriken.GetComponent<JB_Kunai>().facingRight = facingRight;
+
+
+            Vector3 newScale = kunaiShuriken.transform.localScale;
+            newScale.y *= 1;
+
+            kunaiShuriken.GetComponent<Transform>().transform.localScale = newScale;
+        }
+        else
+        {
+            //Quaternion newRot = new Quaternion(0.0f, 0.0f, 90.0f, 1.0f);
+            kunaiShuriken = Instantiate(kunaiPrefab, throwSpawn.position, kunaiPrefab.transform.rotation);
+            kunaiShuriken.GetComponent<JB_Kunai>().facingRight = facingRight;
+
+            Vector3 newScale = kunaiShuriken.transform.localScale;
+            newScale.y *= -1;
+
+            kunaiShuriken.GetComponent<Transform>().transform.localScale = newScale; 
+        }
+        
     }
 
 }
