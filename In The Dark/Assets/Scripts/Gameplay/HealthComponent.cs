@@ -22,12 +22,12 @@ public class HealthComponent : MonoBehaviour
     /// <summary>
     /// If this object is dead (has no health)
     /// </summary>
-    public bool IsDead { get { return m_health > 0f; } }
+    public bool isDead { get { return m_health <= 0f; } }
 
     /// <summary>
     /// If this object is invincible
     /// </summary>
-    public bool IsInvincible { get { return m_invincible; } set { m_invincible = value; } }
+    public bool isInvincible { get { return m_invincible; } set { m_invincible = value; } }
 
     void Start()
     {
@@ -42,7 +42,10 @@ public class HealthComponent : MonoBehaviour
     /// <returns>Amount of health restored</returns>
     public float RestoreHealth(float amount)
     {
-        return ApplyHealthDelta(amount);
+        if (amount > 0)
+            return ApplyHealthDelta(amount);
+
+        return 0f;
     }
 
     /// <summary>
@@ -52,7 +55,20 @@ public class HealthComponent : MonoBehaviour
     /// <returns>Amount of damage applied</returns>
     public float ApplyDamage(float amount)
     {
-        return Mathf.Abs(ApplyHealthDelta(-amount));
+        if (amount > 0)
+            return Mathf.Abs(ApplyHealthDelta(-amount));
+
+        return 0f;
+    }
+
+    /// <summary>
+    /// Applies an amount of health directly. Delta can be negative (if applying negative amount)
+    /// </summary>
+    /// <param name="amount">Amount of delta</param>
+    /// <returns>Delta of change applied</returns>
+    public float ApplyDeltaDirect(float amount)
+    {
+        return ApplyHealthDelta(amount);
     }
 
     /// <summary>
@@ -62,7 +78,7 @@ public class HealthComponent : MonoBehaviour
     /// <returns>Delta that was applied to health</returns>
     private float ApplyHealthDelta(float delta)
     {
-        if (IsDead || Mathf.Approximately(delta, 0f))
+        if (isDead || Mathf.Approximately(delta, 0f))
             return 0f;
 
         // Stop here if recieving damage but we are invincible
@@ -79,7 +95,7 @@ public class HealthComponent : MonoBehaviour
         if (onHealthChanged != null)
             onHealthChanged.Invoke(this, m_health, delta);
 
-        if (IsDead)
+        if (isDead)
             if (onDeath != null)
                 onDeath.Invoke(this);
 
