@@ -12,30 +12,103 @@ using UnityEditor;
 [RequireComponent(typeof(Rigidbody2D))]
 public class CharacterMovement : MonoBehaviour
 {
-    [SerializeField] private Rigidbody2D m_rigidBody;         // Rigidbody to move. Used to interact with world
-    [SerializeField] private Collider2D m_collider;         // Collider that we move, ideally a capsule or box
+    public float m_speed = 10f;             // Speed of horizontal movement
+    public int m_jumps = 1;                 // Max amount of airborne jumps allowed
+    public float m_jumpForce = 10f;         // Force of jumps
+
+    [Header("Components")]
+    [SerializeField] private Rigidbody2D m_rigidBody;               // Rigidbody to move. Used to interact with world
+    [SerializeField] private BoxCollider2D m_collider;              // Collider that we move. Used for collision checks
+
+    private float m_horizontalInput = 0f;               // Input for moving horizontally
+
+
+    private bool m_isGrounded = false;         // If currently grounded   
+    private int m_numJumps = 0;                // Amount of jumps while airborne
+
+    /// <summary>
+    /// If character is currently grounded
+    /// </summary>
+    public bool isGrounded { get { return m_isGrounded; } }
 
     void Awake()
     {
         if (!m_rigidBody)
+        {
             m_rigidBody = GetComponent<Rigidbody2D>();
+            if (!m_rigidBody)
+                enabled = false;
+        }
 
-        //if (m_rigidBody)
-            //m_rigidBody.isKinematic = true;
+        if (m_rigidBody)
+            m_rigidBody.constraints = RigidbodyConstraints2D.FreezeRotation;
+
+        if (!m_collider)
+            m_collider = GetComponent<BoxCollider2D>();
+    }
+
+    void Update()
+    {
+        // For now, handling inputs here
+        {
+            m_horizontalInput = Input.GetAxis("Horizontal");
+        }
+
+        // TODO: Check if we can jump
+        if (isGrounded && Input.GetButtonDown("Jump"))
+            m_rigidBody.AddForce(new Vector2(0f, m_jumpForce), ForceMode2D.Impulse);
     }
 
     void FixedUpdate()
     {
-        float moveXInput = Input.GetAxis("Horizontal");
-        m_rigidBody.velocity = new Vector2((moveXInput * 10f), m_rigidBody.velocity.y);
+        Vector2 moveVel = new Vector2(m_speed * m_horizontalInput * Time.fixedDeltaTime, 0f);
+        m_rigidBody.velocity += moveVel;
 
-        if (Input.GetButtonDown("Jump"))
-            m_rigidBody.velocity = new Vector2(m_rigidBody.velocity.x, 14f);
-
-        m_rigidBody.velocity += Physics2D.gravity * Time.fixedDeltaTime;
-
-
+        // TODO: OnLanded event
+        updateIsGrounded();
     }
+
+    private bool updateIsGrounded()
+    {
+        m_isGrounded = false;
+        if (!m_collider)
+            return false;
+
+        float checkSize = 0.1f;
+
+        Vector2 colExtent = m_collider.size * 0.5f;
+
+        // Find area under our 'feet'
+        float feetLevel = transform.position.y - colExtent.y;
+
+        Collider2D[] hitCols = Physics2D.OverlapBoxAll(new Vector2(transform.position.x, feetLevel - checkSize),
+            new Vector2(colExtent.x * 2f, checkSize * 2f), 0f);
+        if (hitCols != null && hitCols.Length > 0)
+        {
+            foreach (Collider2D col in hitCols)
+                if (col.gameObject != gameObject)
+                    m_isGrounded = true;
+        }
+
+        Debug.Log(m_isGrounded);
+        return m_isGrounded;
+    }
+
+    #region Debug
+    void OnDrawGizmos()
+    {
+        float checkSize = 0.1f;
+
+        Vector2 colExtent = m_collider.size * 0.5f;
+
+        // Find area under our 'feet'
+        float feetLevel = transform.position.y - colExtent.y;
+
+        Gizmos.color = Color.green;
+        Gizmos.DrawCube(new Vector3(transform.position.x, feetLevel - checkSize, transform.position.z),
+            new Vector3(colExtent.x * 2f, checkSize * 2f, 0.01f));
+    }
+    #endregion
 }
 
 #if UNITY_EDITOR
@@ -68,7 +141,7 @@ class CharacterMovementEditor : Editor
     /// <param name="movement">Movement component to print</param>
     private void PrintRuntimeValues(CharacterMovement movement)
     {
-        
+        EditorGUILayout.Toggle("Is Grounded", movement.isGrounded);
     }
 }
 #endif
