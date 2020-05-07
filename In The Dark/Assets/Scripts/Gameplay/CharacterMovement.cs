@@ -57,12 +57,15 @@ public class CharacterMovement : MonoBehaviour
         // TODO: Check if we can jump
         if (isGrounded && Input.GetButtonDown("Jump"))
             m_rigidBody.AddForce(new Vector2(0f, m_jumpForce), ForceMode2D.Impulse);
+
+        if (Input.GetKeyDown(KeyCode.F))
+            m_rigidBody.velocity = Vector2.zero;
     }
 
     void FixedUpdate()
     {
-        Vector2 moveVel = new Vector2(m_speed * m_horizontalInput * Time.fixedDeltaTime, 0f);
-        m_rigidBody.velocity += moveVel;
+        Vector2 moveVel = new Vector2(m_speed * m_horizontalInput, m_rigidBody.velocity.y);
+        m_rigidBody.velocity = moveVel;
 
         // TODO: OnLanded event
         updateIsGrounded();
@@ -87,10 +90,17 @@ public class CharacterMovement : MonoBehaviour
         {
             foreach (Collider2D col in hitCols)
                 if (col.gameObject != gameObject)
+                {
                     m_isGrounded = true;
+                    if (col.attachedRigidbody)
+                        // TODO: Need to track the floor we are standing on.
+                        // In one frame, We want to cache the position of the floor BEFORE it updates.
+                        // After it updates and checking if we are still colliding with the same floor. 
+                        // We then want to apply the delta of the cached position and current position of the floor to our velocity.
+                        m_rigidBody.velocity += col.attachedRigidbody.velocity;
+                }
         }
 
-        Debug.Log(m_isGrounded);
         return m_isGrounded;
     }
 
