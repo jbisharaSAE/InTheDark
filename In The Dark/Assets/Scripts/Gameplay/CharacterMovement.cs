@@ -17,14 +17,20 @@ public class CharacterMovement : MonoBehaviour
     public float m_jumpForce = 10f;         // Force of jumps
 
     [Header("Components")]
-    [SerializeField] private Rigidbody2D m_rigidBody;               // Rigidbody to move. Used to interact with world
-    [SerializeField] private BoxCollider2D m_collider;              // Collider that we move. Used for collision checks
+    [SerializeField] protected Rigidbody2D m_rigidBody;                 // Rigidbody to move. Used to interact with world
+    [SerializeField] protected BoxCollider2D m_collider;                // Collider that we move. Used for collision checks
+
+    [Header("Config")]
+    [SerializeField] protected LayerMask m_worldLayers = Physics2D.AllLayers;         // Layer Mask for world collision checks
 
     private float m_horizontalInput = 0f;               // Input for moving horizontally
 
 
-    private bool m_isGrounded = false;         // If currently grounded   
-    private int m_numJumps = 0;                // Amount of jumps while airborne
+    protected bool m_isGrounded = false;                // If currently grounded   
+    protected int m_numJumps = 0;                       // Amount of jumps while airborne
+
+    private Collider2D m_floor;                             // Floor character is standing on
+    private Vector2 m_floorLocation = Vector2.zero;         // Location floor was when last updated
 
     /// <summary>
     /// If character is currently grounded
@@ -54,9 +60,11 @@ public class CharacterMovement : MonoBehaviour
             m_horizontalInput = Input.GetAxis("Horizontal");
         }
 
-        // TODO: Check if we can jump
-        if (isGrounded && Input.GetButtonDown("Jump"))
-            m_rigidBody.AddForce(new Vector2(0f, m_jumpForce), ForceMode2D.Impulse);
+        // TODO: Temp
+        if (Input.GetButtonDown("Jump"))
+        {
+            Jump();
+        }
 
         if (Input.GetKeyDown(KeyCode.F))
             m_rigidBody.velocity = Vector2.zero;
@@ -64,18 +72,37 @@ public class CharacterMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        Vector2 moveVel = new Vector2(m_speed * m_horizontalInput, m_rigidBody.velocity.y);
-        m_rigidBody.velocity = moveVel;
+        if (!Mathf.Approximately(m_horizontalInput, 0f))
+            m_rigidBody.velocity += new Vector2(m_horizontalInput * m_speed * Time.fixedDeltaTime, 0f);
 
         // TODO: OnLanded event
-        updateIsGrounded();
+        UpdateIsGrounded();
+
+        // Fake Friction
+        if (Mathf.Approximately(m_horizontalInput, 0f) && m_isGrounded)
+            m_rigidBody.velocity -= m_rigidBody.velocity * 0.1f;
     }
 
-    private bool updateIsGrounded()
+    public virtual bool Jump()
+    {
+        if (m_isGrounded)
+        {
+            //m_rigidBody.AddForce(new Vector2(0f, m_jumpForce), ForceMode2D.Impulse);
+            m_rigidBody.velocity += new Vector2(0f, m_jumpForce);
+            return true;
+        }
+
+        return false;
+    }
+
+    private bool UpdateIsGrounded()
     {
         m_isGrounded = false;
         if (!m_collider)
             return false;
+
+        Collider2D prevFloor = m_floor;
+        m_floor = null;
 
         float checkSize = 0.1f;
 
@@ -85,27 +112,40 @@ public class CharacterMovement : MonoBehaviour
         float feetLevel = transform.position.y - colExtent.y;
 
         Collider2D[] hitCols = Physics2D.OverlapBoxAll(new Vector2(transform.position.x, feetLevel - checkSize),
-            new Vector2(colExtent.x * 2f, checkSize * 2f), 0f);
+            new Vector2(colExtent.x * 2f * 0.9f, checkSize * 2f), 0f);
         if (hitCols != null && hitCols.Length > 0)
         {
             foreach (Collider2D col in hitCols)
                 if (col.gameObject != gameObject)
                 {
                     m_isGrounded = true;
-                    if (col.attachedRigidbody)
-                        // TODO: Need to track the floor we are standing on.
-                        // In one frame, We want to cache the position of the floor BEFORE it updates.
-                        // After it updates and checking if we are still colliding with the same floor. 
-                        // We then want to apply the delta of the cached position and current position of the floor to our velocity.
-                        m_rigidBody.velocity += col.attachedRigidbody.velocity;
+                    m_floor = col;
+                    break;
                 }
         }
+
+        if (m_floor)
+        {
+            if (m_floor == prevFloor)
+            {
+                // This is fine in the meantime for horizontal moving platforms. We might
+                // have to ultimately implement our own movement logic and collision checks for best results
+                Vector2 diff = (Vector2)m_floor.transform.position - m_floorLocation;
+                if (diff.sqrMagnitude > 0f)
+                {
+                    m_rigidBody.position += diff;
+                }
+            }
+
+            m_floorLocation = m_floor.transform.position;
+        }
+            
 
         return m_isGrounded;
     }
 
     #region Debug
-    void OnDrawGizmos()
+    protected virtual void OnDrawGizmos()
     {
         float checkSize = 0.1f;
 
@@ -115,15 +155,15 @@ public class CharacterMovement : MonoBehaviour
         float feetLevel = transform.position.y - colExtent.y;
 
         Gizmos.color = Color.green;
-        Gizmos.DrawCube(new Vector3(transform.position.x, feetLevel - checkSize, transform.position.z),
-            new Vector3(colExtent.x * 2f, checkSize * 2f, 0.01f));
+        Gizmos.DrawWireCube(new Vector3(transform.position.x, feetLevel - checkSize, transform.position.z),
+            new Vector3(colExtent.x * 2f * 0.9f, checkSize * 2f, 0.01f));
     }
     #endregion
 }
 
 #if UNITY_EDITOR
 [CustomEditor(typeof(CharacterMovement))]
-class CharacterMovementEditor : Editor
+public class CharacterMovementEditor : Editor
 {
     public override void OnInspectorGUI()
     {
@@ -149,7 +189,7 @@ class CharacterMovementEditor : Editor
     /// This function prints label of all the runtime values
     /// </summary>
     /// <param name="movement">Movement component to print</param>
-    private void PrintRuntimeValues(CharacterMovement movement)
+    protected virtual void PrintRuntimeValues(CharacterMovement movement)
     {
         EditorGUILayout.Toggle("Is Grounded", movement.isGrounded);
     }
