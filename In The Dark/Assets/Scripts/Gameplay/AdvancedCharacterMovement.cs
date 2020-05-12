@@ -13,6 +13,21 @@ public class AdvancedCharacterMovement : CharacterMovement
     [Header("Advanced")]
     public float m_wallJumpPower = 12f;         // Power of jump if wall jumping
 
+    void Update()
+    {
+        // For now, handling inputs here
+        {
+            SetHorizontalInput(Input.GetAxis("Horizontal"));
+
+            if (Input.GetButtonDown("Jump"))
+                Jump();
+
+            // Debug
+            if (Input.GetKeyDown(KeyCode.F))
+                m_rigidBody.velocity = Vector2.zero;
+        }
+    }
+
     public override bool Jump()
     {
         if (base.Jump())

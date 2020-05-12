@@ -27,7 +27,6 @@ public class CharacterMovement : MonoBehaviour
 
 
     protected bool m_isGrounded = false;                // If currently grounded   
-    protected int m_numJumps = 0;                       // Amount of jumps while airborne
 
     private Collider2D m_floor;                             // Floor character is standing on
     private Vector2 m_floorLocation = Vector2.zero;         // Location floor was when last updated
@@ -53,26 +52,14 @@ public class CharacterMovement : MonoBehaviour
             m_collider = GetComponent<BoxCollider2D>();
     }
 
-    void Update()
+    protected virtual void FixedUpdate()
     {
-        // For now, handling inputs here
-        {
-            m_horizontalInput = Input.GetAxis("Horizontal");
-        }
-
-        // TODO: Temp
-        if (Input.GetButtonDown("Jump"))
-        {
-            Jump();
-        }
-
-        if (Input.GetKeyDown(KeyCode.F))
-            m_rigidBody.velocity = Vector2.zero;
-    }
-
-    void FixedUpdate()
-    {
-        if (!Mathf.Approximately(m_horizontalInput, 0f))
+        // TODO: This handles slow startup when moving on ground, but avoids
+        // removing all horizontal movement when in air (ideally we shouldn't need to if check)
+        // (velocity.y check is for checking if we are about to jump)
+        if (m_isGrounded && m_rigidBody.velocity.y <= 0f)
+            m_rigidBody.velocity = new Vector2(m_horizontalInput * m_speed, 0f);
+        else
             m_rigidBody.velocity += new Vector2(m_horizontalInput * m_speed * Time.fixedDeltaTime, 0f);
 
         // TODO: OnLanded event
@@ -83,6 +70,19 @@ public class CharacterMovement : MonoBehaviour
             m_rigidBody.velocity -= m_rigidBody.velocity * 0.1f;
     }
 
+    /// <summary>
+    /// Set the horizontal input of movement
+    /// </summary>
+    /// <param name="input">amount of input to apply</param>
+    public virtual void SetHorizontalInput(float input)
+    {
+        m_horizontalInput = input;
+    }
+
+    /// <summary>
+    /// Have character jump once if able to.
+    /// </summary>
+    /// <returns>If a jump was performed</returns>
     public virtual bool Jump()
     {
         if (m_isGrounded)
