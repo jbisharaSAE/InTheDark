@@ -22,6 +22,11 @@ namespace mod
         /// </summary>
         public StateMachine stateMachine { get { return m_stateMachine; } }
 
+        /// <summary>
+        /// Helper for directly accessing the owning game object of the machine
+        /// </summary>
+        public GameObject machineOwner { get { return m_stateMachine?.gameObject; } }
+
         protected virtual void Awake()
         {
             // States never start enabled. The default state we start
@@ -36,6 +41,7 @@ namespace mod
         public void InitWithMachine(StateMachine owner)
         {
             m_stateMachine = owner;
+            OnInitializedWithMachine();
         }
 
         /// <summary>
@@ -56,6 +62,14 @@ namespace mod
         {
             OnExitState(nextState);
             enabled = false;
+        }
+
+        /// <summary>
+        /// Event for when this state has just been initialized with a state machine
+        /// </summary>
+        protected virtual void OnInitializedWithMachine()
+        {
+
         }
 
         /// <summary>
