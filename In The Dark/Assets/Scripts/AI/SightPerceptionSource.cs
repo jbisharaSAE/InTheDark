@@ -10,6 +10,6 @@ public class SightPerceptionSource : MonoBehaviour, ISightPerceptible
 {
     public Transform GetTransform()
     {
-        return transform;
+        return isActiveAndEnabled ? transform : null;
     }
 }

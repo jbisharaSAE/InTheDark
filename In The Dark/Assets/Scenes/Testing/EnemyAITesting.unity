@@ -121,6 +121,52 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &1112848
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1112849}
+  - component: {fileID: 1112850}
+  m_Layer: 8
+  m_Name: ChaseState
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1112849
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1112848}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1184295158}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1112850
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1112848}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e7c9ee18c41d9a45a7aebf83927c13f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_name: Chase
+  m_attackRange: 0.6
+  m_attackState: Attack
 --- !u!1 &22225342
 GameObject:
   m_ObjectHideFlags: 0
@@ -1004,7 +1050,7 @@ GameObject:
   - component: {fileID: 452119512}
   - component: {fileID: 452119513}
   m_Layer: 8
-  m_Name: State
+  m_Name: PatrolState
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1232,11 +1278,11 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 712160822}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.63, z: 0}
+  m_LocalPosition: {x: 0.6700001, y: 0.63, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1184295158}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &712160824
 MonoBehaviour:
@@ -1250,8 +1296,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4951a5c56d259364faa30ffbadc6a15d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_fieldOfView: 75
+  m_fieldOfView: 67
+  m_loseFieldOfView: 270
   m_fieldDistance: 5
+  m_loseFieldDistance: 10
   m_broadLayers:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -1591,7 +1639,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 728302562}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 12.55, y: 5.19, z: 0}
+  m_LocalPosition: {x: 8.92, y: -0.28, z: 0}
   m_LocalScale: {x: 8, y: 8, z: 8}
   m_Children: []
   m_Father: {fileID: 0}
@@ -2483,6 +2531,7 @@ GameObject:
   - component: {fileID: 1184295159}
   - component: {fileID: 1184295156}
   - component: {fileID: 1184295157}
+  - component: {fileID: 1184295162}
   m_Layer: 8
   m_Name: TestEnemy1
   m_TagString: Untagged
@@ -2502,9 +2551,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1352af2deaf529942bab06de5a12b824, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_speed: 5
+  m_speed: 2.5
   m_jumps: 1
   m_jumpForce: 10
+  m_rotateToMovement: 1
   m_rigidBody: {fileID: 1184295160}
   m_collider: {fileID: 1184295159}
   m_worldLayers:
@@ -2524,6 +2574,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_states:
   - {fileID: 452119513}
+  - {fileID: 1112850}
   m_startingState: Patrol
 --- !u!4 &1184295158
 Transform:
@@ -2532,15 +2583,16 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1184295155}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 2.23, y: 0.88, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 452119512}
+  - {fileID: 1112849}
   - {fileID: 712160823}
   m_Father: {fileID: 0}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!61 &1184295159
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2638,6 +2690,22 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1184295162
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1184295155}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5db0b0a46224e874d89f733f4288e5e2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_stateMachine: {fileID: 1184295157}
+  m_sightComponent: {fileID: 712160824}
+  m_chaseStateName: Chase
+  m_postChaseState: Patrol
 --- !u!1 &1232357200
 GameObject:
   m_ObjectHideFlags: 0

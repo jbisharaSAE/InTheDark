@@ -19,8 +19,11 @@ public interface ISightPerceptible
 /// </summary>
 public class SightPerception : MonoBehaviour
 {
-    [SerializeField, Range(0f, 360f)] private float m_fieldOfView = 120f;       // Rangle of angle to check for
+    // TODO: Change fov to be between -1 and 1
+    [SerializeField, Range(0f, 360f)] private float m_fieldOfView = 120f;       // Range of angle to check for
+    [SerializeField, Range(0f, 360f)] private float m_loseFieldOfView = 150f;   // Range of angle for checking already perception objects
     [SerializeField, Min(0f)] private float m_fieldDistance = 5f;               // Max distance at which objects can be seen
+    [SerializeField, Min(0f)] private float m_loseFieldDistance = 10f;          // Distance objects much reach for perception is lost
     [SerializeField] private LayerMask m_broadLayers = Physics2D.AllLayers;     // Collision layers for finding potential objects in sight
     [SerializeField] private LayerMask m_visibleLayers = Physics2D.AllLayers;   // Collision layers for checking if in direct sight
 
@@ -40,7 +43,7 @@ public class SightPerception : MonoBehaviour
             foreach (Collider2D target in targets)
             {
                 ISightPerceptible perceptable = target.GetComponent<ISightPerceptible>();
-                if (perceptable != null && CanSeePerctableObject(perceptable))
+                if (perceptable != null && CanSeePerctableObject(perceptable, target.gameObject))
                 {
                     // Returns true if being added (false if already present)
                     if (m_objectsInSight.Add(target.gameObject))
@@ -73,38 +76,47 @@ public class SightPerception : MonoBehaviour
     /// <returns>All objects with potential to be seen</returns>
     private Collider2D[] GetPotentialObjectsInSight()
     {
+        float distance = m_fieldDistance > m_loseFieldDistance ? m_fieldDistance : m_loseFieldDistance;
+
         // TODO: Maybe just do what we do with the rendering, we we jump in strades (but we still
         // check if we can see the transform specified by the interface)
-        return Physics2D.OverlapCircleAll(transform.position, m_fieldDistance, m_broadLayers);
+        return Physics2D.OverlapCircleAll(transform.position, distance, m_broadLayers);
     }
 
-
-    private bool CanSeePerctableObject(ISightPerceptible perceptible)
+    /// <summary>
+    /// Checks if the game object is in our sights. Will handle if it already has been
+    /// seen and should use the alternative values
+    /// </summary>
+    /// <param name="perceptible">Valid percitable reference</param>
+    /// <param name="gameObject">Game object that owns interface</param>
+    /// <returns>If object can be seen</returns>
+    private bool CanSeePerctableObject(ISightPerceptible perceptible, GameObject gameObject)
     {
         Transform targetToCheck = perceptible.GetTransform();
 
-        // No transform provided means we see it by default
+        // No transform means object should be considered invisible
         if (targetToCheck == null)
-            return true;
+            return false;
 
         Vector2 origin = transform.position;
         Vector2 target = targetToCheck.position;
 
+        float fovToCheck = m_fieldOfView;
+        float distanceToCheck = m_fieldDistance;
+        if (m_objectsInSight.Contains(gameObject))
+        {
+            fovToCheck = m_loseFieldOfView;
+            distanceToCheck = m_loseFieldDistance;
+        }
+
         // Collider we detected might be in range, but actual view transform is not
         Vector2 displacement = target - origin;
-        if (displacement.sqrMagnitude > (m_fieldDistance * m_fieldDistance))
+        if (displacement.sqrMagnitude > (distanceToCheck * distanceToCheck))
             return false;
 
         // Make sure view transform is actually within our field of view
-        // TODO: this isn't 100% accurate and I'm not sure why
-        //float dot = Vector2.Dot(displacement.normalized, transform.right);
-        //if (dot < 1f - (m_fieldOfView / 360f))
-        //    return false;
-
-        // Temp solution, need to look into why the above isn't 100% accurate
-        displacement.Normalize();
-        float rad = Mathf.Abs(Mathf.Atan2(displacement.y, displacement.x));
-        if (rad > (m_fieldOfView * 0.5f * Mathf.Deg2Rad))
+        float dot = Vector2.Dot(displacement.normalized, transform.right);
+        if (dot < Mathf.Cos(fovToCheck * 0.5f * Mathf.Deg2Rad))
             return false;
 
         // Make sure nothing is blocking the way
@@ -113,21 +125,37 @@ public class SightPerception : MonoBehaviour
     }
 
     #region Debug
-    private void OnDrawGizmos()
+    void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
+        DrawCone(m_fieldOfView, m_fieldDistance);
 
+        Gizmos.color = Color.magenta;
+        DrawCone(m_loseFieldOfView, m_loseFieldDistance);
+
+        if (Application.isPlaying)
+        {
+            Gizmos.color = Color.red;
+            foreach (GameObject seenObject in m_objectsInSight)
+                Gizmos.DrawWireSphere(seenObject.transform.position, 0.1f);
+        }
+    }
+
+    /// <summary>
+    /// Helper for drawing a cone which represents our field of view
+    /// </summary>
+    /// <param name="distance">Distance of cone</param>
+    private void DrawCone(float fov, float distance)
+    {
         Vector3 origin = transform.position;
-        float fovRad = m_fieldOfView * Mathf.Deg2Rad;
+        float fovRad = fov * Mathf.Deg2Rad;
         float start = Mathf.Atan2(transform.right.y, transform.right.x) - (fovRad * 0.5f);
-
-        // Visual representation of what we can see
 
         float jump = fovRad / 12f;
         for (int i = 0; i < 12; ++i)
         {
             float curAngle = start + (jump * i);
-            Vector2 dir = new Vector2(Mathf.Cos(curAngle), Mathf.Sin(curAngle)) * m_fieldDistance;
+            Vector2 dir = new Vector2(Mathf.Cos(curAngle), Mathf.Sin(curAngle)) * distance;
             Vector3 startPoint = origin + new Vector3(dir.x, dir.y, 0f);
 
             // Draw side of cone
@@ -135,7 +163,7 @@ public class SightPerception : MonoBehaviour
                 Gizmos.DrawLine(origin, startPoint);
 
             curAngle += jump;
-            dir = new Vector2(Mathf.Cos(curAngle), Mathf.Sin(curAngle)) * m_fieldDistance;
+            dir = new Vector2(Mathf.Cos(curAngle), Mathf.Sin(curAngle)) * distance;
             Vector3 endPoint = origin + new Vector3(dir.x, dir.y, 0f);
 
             // Draw size of cone
@@ -143,13 +171,6 @@ public class SightPerception : MonoBehaviour
                 Gizmos.DrawLine(origin, endPoint);
 
             Gizmos.DrawLine(startPoint, endPoint);
-        }
-
-        if (Application.isPlaying)
-        {
-            Gizmos.color = Color.red;
-            foreach (GameObject seenObject in m_objectsInSight)
-                Gizmos.DrawWireSphere(seenObject.transform.position, 0.1f);
         }
     }
     #endregion

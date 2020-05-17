@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using mod;
 
+// TODO: Update to be StateMachineBehavior
 public class SimplePatrolState : IStateComponent
 {
     public Transform m_patrolAreaOrigin;                            // Origin of patrol area, is center for Area Size

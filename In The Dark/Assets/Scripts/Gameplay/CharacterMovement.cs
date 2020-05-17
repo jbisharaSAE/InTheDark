@@ -15,6 +15,7 @@ public class CharacterMovement : MonoBehaviour
     public float m_speed = 10f;             // Speed of horizontal movement
     public int m_jumps = 1;                 // Max amount of airborne jumps allowed
     public float m_jumpForce = 10f;         // Force of jumps
+    public bool m_rotateToMovement = true;  // Rotate transform based on movement direction
 
     [Header("Components")]
     [SerializeField] protected Rigidbody2D m_rigidBody;                 // Rigidbody to move. Used to interact with world
@@ -62,12 +63,25 @@ public class CharacterMovement : MonoBehaviour
         else
             m_rigidBody.velocity += new Vector2(m_horizontalInput * m_speed * Time.fixedDeltaTime, 0f);
 
+        // Face way we are moving (TODO: Tidy up)
+        // TODO: We want to use this implementation, scaling using 1/-1 works, but offset
+        // child objects do not rotate correctly, this impl works 
+        if (m_rotateToMovement)
+        {
+            if (m_horizontalInput > 0f)
+                transform.localEulerAngles = new Vector3(0f, 0f, 0f);
+            else if (m_horizontalInput < 0f)
+                transform.localEulerAngles = new Vector3(0f, 180f, 0f);
+        }
+
         // TODO: OnLanded event
         UpdateIsGrounded();
 
         // Fake Friction
         if (Mathf.Approximately(m_horizontalInput, 0f) && m_isGrounded)
             m_rigidBody.velocity -= m_rigidBody.velocity * 0.1f;
+
+        m_horizontalInput = 0f;
     }
 
     /// <summary>
