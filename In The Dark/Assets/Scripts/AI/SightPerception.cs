@@ -33,6 +33,11 @@ public class SightPerception : MonoBehaviour
 
     private HashSet<GameObject> m_objectsInSight = new HashSet<GameObject>();       // Game objects that are visible (must have collision)
 
+    /// <summary>
+    /// Get the number of objects currently percepted
+    /// </summary>
+    public int numSeenObjects { get { return m_objectsInSight.Count; } }
+
     void Update()
     {
         HashSet<GameObject> oldObjectsInSight = new HashSet<GameObject>(m_objectsInSight);
@@ -122,6 +127,29 @@ public class SightPerception : MonoBehaviour
         // Make sure nothing is blocking the way
         RaycastHit2D hitResult = Physics2D.Linecast(transform.position, targetToCheck.position, m_visibleLayers);
         return hitResult.transform == targetToCheck;
+    }
+
+    /// <summary>
+    /// Get a seen game object that is closest to a point
+    /// </summary>
+    /// <param name="point">Point to query with</param>
+    /// <returns>Valid object or null</returns>
+    public GameObject GetClosestSeenObjectTo(Vector2 point)
+    {
+        GameObject closest = null;
+        float closestDistance = float.MaxValue;
+
+        foreach (GameObject seenObject in m_objectsInSight)
+        {
+            float distanceSqr = ((Vector2)seenObject.transform.position - point).sqrMagnitude;
+            if (distanceSqr < closestDistance)
+            {
+                closest = seenObject;
+                closestDistance = distanceSqr;
+            }
+        }
+
+        return closest;
     }
 
     #region Debug

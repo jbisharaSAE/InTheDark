@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// The 'core' of the simple melee enemy. Interacts with various
-/// components that are required to run the AI state machine
-/// </summary>
+// TODO: Have this component just respond to sight component, it will determine which enemy should be chased
+// and such (and inform the animator)
 public class MeleeEnemy : MonoBehaviour
 {
     [SerializeField] private mod.StateMachine m_stateMachine;       // State machine (TODO: Replace with animator)
@@ -21,7 +19,7 @@ public class MeleeEnemy : MonoBehaviour
     /// <summary>
     /// Get the target to attack (can be null)
     /// </summary>
-    public GameObject targetEnemy { get { return m_enemyToAttack; } }
+    public GameObject target { get { return m_enemyToAttack; } }
 
     void Start()
     {

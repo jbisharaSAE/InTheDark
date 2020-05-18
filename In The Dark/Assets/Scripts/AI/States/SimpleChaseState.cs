@@ -21,7 +21,7 @@ public class SimpleChaseState : IStateComponent
     protected override void OnEnterState(IStateComponent previousState)
     {
         MeleeEnemy enemyAI = machineOwner.GetComponent<MeleeEnemy>();
-        m_chaseTarget = enemyAI.targetEnemy;
+        m_chaseTarget = enemyAI.target;
     }
 
     void Update()

@@ -121,52 +121,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &1112848
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1112849}
-  - component: {fileID: 1112850}
-  m_Layer: 8
-  m_Name: ChaseState
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1112849
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1112848}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1184295158}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1112850
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1112848}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e7c9ee18c41d9a45a7aebf83927c13f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_name: Chase
-  m_attackRange: 0.6
-  m_attackState: Attack
 --- !u!1 &22225342
 GameObject:
   m_ObjectHideFlags: 0
@@ -1039,52 +993,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!1 &452119511
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 452119512}
-  - component: {fileID: 452119513}
-  m_Layer: 8
-  m_Name: PatrolState
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &452119512
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 452119511}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1184295158}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &452119513
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 452119511}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5125e1ef67d56624d988424567fa6c8b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_name: Patrol
-  m_patrolAreaOrigin: {fileID: 1396563382}
-  m_patrolAreaSize: {x: 10, y: 1}
 --- !u!1 &520058513
 GameObject:
   m_ObjectHideFlags: 0
@@ -1282,7 +1190,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1184295158}
-  m_RootOrder: 2
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &712160824
 MonoBehaviour:
@@ -1296,8 +1204,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4951a5c56d259364faa30ffbadc6a15d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_fieldOfView: 67
-  m_loseFieldOfView: 270
+  m_fieldOfView: 70
+  m_loseFieldOfView: 360
   m_fieldDistance: 5
   m_loseFieldDistance: 10
   m_broadLayers:
@@ -1639,7 +1547,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 728302562}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.92, y: -0.28, z: 0}
+  m_LocalPosition: {x: 0.54, y: -8.72, z: 0}
   m_LocalScale: {x: 8, y: 8, z: 8}
   m_Children: []
   m_Father: {fileID: 0}
@@ -2527,11 +2435,12 @@ GameObject:
   m_Component:
   - component: {fileID: 1184295158}
   - component: {fileID: 1184295161}
+  - component: {fileID: 1184295157}
   - component: {fileID: 1184295160}
   - component: {fileID: 1184295159}
   - component: {fileID: 1184295156}
-  - component: {fileID: 1184295157}
   - component: {fileID: 1184295162}
+  - component: {fileID: 1184295163}
   m_Layer: 8
   m_Name: TestEnemy1
   m_TagString: Untagged
@@ -2560,22 +2469,25 @@ MonoBehaviour:
   m_worldLayers:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &1184295157
-MonoBehaviour:
+--- !u!95 &1184295157
+Animator:
+  serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1184295155}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b95e80ed60ea5464d8268159666b0e89, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_states:
-  - {fileID: 452119513}
-  - {fileID: 1112850}
-  m_startingState: Patrol
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: f5fe296a2c1829446a6611af639a3be3, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!4 &1184295158
 Transform:
   m_ObjectHideFlags: 0
@@ -2587,8 +2499,6 @@ Transform:
   m_LocalPosition: {x: 2.23, y: 0.88, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 452119512}
-  - {fileID: 1112849}
   - {fileID: 712160823}
   m_Father: {fileID: 0}
   m_RootOrder: 2
@@ -2699,13 +2609,26 @@ MonoBehaviour:
   m_GameObject: {fileID: 1184295155}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5db0b0a46224e874d89f733f4288e5e2, type: 3}
+  m_Script: {fileID: 11500000, guid: 39f15665bfe97bb4a95714d0026067c4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_stateMachine: {fileID: 1184295157}
-  m_sightComponent: {fileID: 712160824}
-  m_chaseStateName: Chase
-  m_postChaseState: Patrol
+  m_animator: {fileID: 1184295157}
+  m_sightPerception: {fileID: 712160824}
+  m_updateRate: 0.2
+--- !u!114 &1184295163
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1184295155}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7ea0b912b27c404d9b17a647a0ef587, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_patrolAreaOrigin: {fileID: 1396563382}
+  m_areaSize: {x: 10, y: 1}
 --- !u!1 &1232357200
 GameObject:
   m_ObjectHideFlags: 0
