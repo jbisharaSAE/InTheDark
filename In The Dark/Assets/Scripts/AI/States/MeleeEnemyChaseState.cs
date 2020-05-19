@@ -38,5 +38,10 @@ public class MeleeEnemyChaseState : StateMachineBehaviour
         {
             m_movementComp.SetHorizontalInput(Mathf.Sign(displacement.x));
         }
+
+        // Face our target
+        float desiredRot = displacement.x > 0f ? 0f : 180f;
+        if (animator.transform.eulerAngles.y != desiredRot)
+            animator.transform.eulerAngles = new Vector3(0f, desiredRot, 0f);
     }
 }
