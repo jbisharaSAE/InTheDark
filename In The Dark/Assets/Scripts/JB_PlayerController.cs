@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using UnityEngine.UI;
 
 //This Script is intended for demoing and testing animations only.
 
@@ -18,12 +19,15 @@ public class JB_PlayerController : MonoBehaviour {
 	private float moveXInput;
     private float attackTimer = 0.0f;
     public float dashForce;
-    private int attackPhase = 0;
+    public int attackPhase = 0;
     private bool bFacingRight = true;
     private Rigidbody2D rb;
     private bool bDashing;
     private BoxCollider2D playerBoxCollider;
     private Vector2 dir;
+    public GameObject sword;
+    private JB_EnergyResourceManagement resourceScript;
+
 
     //Used for flipping Character Direction
 	public static Vector3 playerScale;
@@ -46,7 +50,10 @@ public class JB_PlayerController : MonoBehaviour {
         playerBoxCollider = GetComponent<BoxCollider2D>();
 
         anim = GetComponent<Animator> ();
-	}
+
+        resourceScript = GetComponent<JB_EnergyResourceManagement>();
+
+    }
 
 	void FixedUpdate ()
 	{
@@ -92,6 +99,7 @@ public class JB_PlayerController : MonoBehaviour {
         else
         {
             attackPhase = 0;
+            resourceScript.attackPhase = attackPhase;
         }
       
 
@@ -143,6 +151,8 @@ public class JB_PlayerController : MonoBehaviour {
         }
 
         //Debug.DrawRay(transform.position, dir*10f, Color.green);
+
+       
     }
 
     private void Dash(bool rightDir, RaycastHit2D hit)
@@ -191,33 +201,51 @@ public class JB_PlayerController : MonoBehaviour {
 
     private void Attack()
     {
-        attackTimer = 1.0f;
-
-        switch (attackPhase)
+        if(resourceScript.currentEnergy > 10.0f)
         {
-            case 0:
-                Debug.Log(attackPhase + " case 0");
-                // attack animation 1
-                break;
-            case 1:
-                Debug.Log(attackPhase + " case 1");
-                // attack animation 2
-                break;
-            case 2:
-                Debug.Log(attackPhase + " case 2");
-                // attack animation 3
-                break;
+            attackTimer = 1.0f;
 
+            
+
+            switch (attackPhase)
+            {
+                case 0:
+                    resourceScript.currentEnergy -= 10.0f;
+                    Debug.Log(attackPhase + " case 0");
+                    // attack animation 1
+                    break;
+                case 1:
+                    resourceScript.currentEnergy -= 20.0f;
+                    Debug.Log(attackPhase + " case 1");
+                    
+                    // attack animation 2
+                    break;
+                case 2:
+                    resourceScript.currentEnergy -= 25.0f;
+                    //sword.GetComponent<JB_SwordTrigger>().bThirdattack = true;
+                    resourceScript.bThirdattack = true;
+                    Debug.Log(attackPhase + " case 2");
+                    
+                    //UpdateComboPoints();
+                    // attack animation 3
+                    break;
+
+            }
+
+            ++attackPhase;
+            resourceScript.attackPhase = attackPhase;
         }
-
-        ++attackPhase;
+        
 
         if (attackPhase > 2)
         {
             attackPhase = 0;
+            resourceScript.attackPhase = attackPhase;
         }
         anim.SetTrigger("Punch");
     }
+
+   
 
     private void ThrowShuriken()
     {
