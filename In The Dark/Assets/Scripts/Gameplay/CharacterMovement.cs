@@ -123,7 +123,7 @@ public class CharacterMovement : MonoBehaviour
         Vector2 colExtent = m_collider.size * 0.5f;
 
         // Find area under our 'feet'
-        float feetLevel = transform.position.y - colExtent.y;
+        float feetLevel = transform.position.y - (colExtent.y * transform.lossyScale.y);
 
         Collider2D[] hitCols = Physics2D.OverlapBoxAll(new Vector2(transform.position.x, feetLevel - checkSize),
             new Vector2(colExtent.x * 2f * 0.9f, checkSize * 2f), 0f);
@@ -166,7 +166,7 @@ public class CharacterMovement : MonoBehaviour
         Vector2 colExtent = m_collider.size * 0.5f;
 
         // Find area under our 'feet'
-        float feetLevel = transform.position.y - colExtent.y;
+        float feetLevel = transform.position.y - (colExtent.y * transform.lossyScale.y);
 
         Gizmos.color = Color.green;
         Gizmos.DrawWireCube(new Vector3(transform.position.x, feetLevel - checkSize, transform.position.z),

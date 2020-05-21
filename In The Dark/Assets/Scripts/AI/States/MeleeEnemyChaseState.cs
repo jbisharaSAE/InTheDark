@@ -6,6 +6,9 @@ public class MeleeEnemyChaseState : StateMachineBehaviour
 {
     [SerializeField] private float m_attackRange = 1.5f;        // Range target must be within to attack
 
+    // temp
+    public float m_speedMultiplier = 2.5f;
+
     private CharacterMovement m_movementComp = null;
     private EnemyTargetSelector m_brain = null;
 
@@ -36,7 +39,7 @@ public class MeleeEnemyChaseState : StateMachineBehaviour
         // or below us) we just want to wait for them to either reach us
         else if (Mathf.Abs(displacement.x) > (m_attackRange * 0.25f))
         {
-            m_movementComp.SetHorizontalInput(Mathf.Sign(displacement.x));
+            m_movementComp.SetHorizontalInput(Mathf.Sign(displacement.x) * m_speedMultiplier);
             animator.SetBool("Idle", false);
         }
         else
