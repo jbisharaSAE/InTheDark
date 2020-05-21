@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class JB_SwordTrigger : MonoBehaviour
 {
-    public JB_EnergyResourceManagement resourceScript;
+    public JB_ResourceManagement resourceScript;
     //public bool bThirdattack;
 
     //private void OnTriggerEnter2D(Collider2D collision)
@@ -26,7 +26,7 @@ public class JB_SwordTrigger : MonoBehaviour
         if (collision.gameObject.tag == "Enemy")
         {
             Debug.Log("testing collision trigger");
-            resourceScript.BasicSwordAttack();
+            resourceScript.BasicSwordAttack(1);
             // did the sword hit an enemy
         }
         else if (collision.gameObject.tag == "Boss")

@@ -26,7 +26,7 @@ public class JB_PlayerController : MonoBehaviour {
     private BoxCollider2D playerBoxCollider;
     private Vector2 dir;
     public GameObject sword;
-    private JB_EnergyResourceManagement resourceScript;
+    private JB_ResourceManagement resourceScript;
 
 
     //Used for flipping Character Direction
@@ -51,7 +51,7 @@ public class JB_PlayerController : MonoBehaviour {
 
         anim = GetComponent<Animator> ();
 
-        resourceScript = GetComponent<JB_EnergyResourceManagement>();
+        resourceScript = GetComponent<JB_ResourceManagement>();
 
     }
 
@@ -66,6 +66,7 @@ public class JB_PlayerController : MonoBehaviour {
 
 	void Update()
 	{
+       #region player_input
 
         moveXInput = Input.GetAxis("Horizontal");
 
@@ -152,7 +153,23 @@ public class JB_PlayerController : MonoBehaviour {
 
         //Debug.DrawRay(transform.position, dir*10f, Color.green);
 
-       
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            resourceScript.PlayerAbilities(1);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            resourceScript.PlayerAbilities(2);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            resourceScript.PlayerAbilities(3);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4))
+        {
+            resourceScript.PlayerAbilities(4 );
+        }
+        #endregion
     }
 
     private void Dash(bool rightDir, RaycastHit2D hit)
