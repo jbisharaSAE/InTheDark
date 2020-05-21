@@ -1444,6 +1444,7 @@ GameObject:
   - component: {fileID: 728302565}
   - component: {fileID: 728302564}
   - component: {fileID: 728302563}
+  - component: {fileID: 728302567}
   m_Layer: 0
   m_Name: SightPerceptionSouceDummy
   m_TagString: Untagged
@@ -1553,6 +1554,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &728302567
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 728302562}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c6ccd1b1adfb2b41b1b57eea836b9bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_health: 100
+  m_maxHealth: 100
+  m_invincible: 0
 --- !u!1 &774433671
 GameObject:
   m_ObjectHideFlags: 0

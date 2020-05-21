@@ -34,14 +34,25 @@ public class MeleeEnemyChaseState : StateMachineBehaviour
         }
         // If target is far to left or right us, move forward. If close (might be above
         // or below us) we just want to wait for them to either reach us
-        if (Mathf.Abs(displacement.x) > m_attackRange)
+        else if (Mathf.Abs(displacement.x) > (m_attackRange * 0.25f))
         {
             m_movementComp.SetHorizontalInput(Mathf.Sign(displacement.x));
+            animator.SetBool("Idle", false);
+        }
+        else
+        {
+            animator.SetBool("Idle", true);
         }
 
         // Face our target
         float desiredRot = displacement.x > 0f ? 0f : 180f;
         if (animator.transform.eulerAngles.y != desiredRot)
             animator.transform.eulerAngles = new Vector3(0f, desiredRot, 0f);
+    }
+
+    public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+        // Reset trigger we may have activated
+        animator.ResetTrigger("Attack");
     }
 }
