@@ -8,10 +8,19 @@ using UnityEngine;
 public interface ISightPerceptible
 {
     /// <summary>
+    /// If the object can be seen at this time. Returning false
+    /// will consider the object 'invisible' to the sight perception
+    /// </summary>
+    bool CanBeDetected();
+
+    /// <summary>
     /// Get the transform that needs to be visible to the perception component in
     /// order for the object implementing this interface to be seen
     /// </summary>
     Transform GetTransform();
+
+    void OnVisibleToSightPerception(SightPerception sightPerception);
+    void OnNotVisibleToSightPerception(SightPerception sightPerception);
 }
 
 /// <summary>
@@ -40,6 +49,11 @@ public class SightPerception : MonoBehaviour
 
     void Update()
     {
+        // We want to ignore triggers for our sight checks
+        // We assume right now that any events we call, if querying, will also want to ignore them
+        bool queriesHitTriggers = Physics2D.queriesHitTriggers;
+        Physics2D.queriesHitTriggers = false;
+
         HashSet<GameObject> oldObjectsInSight = new HashSet<GameObject>(m_objectsInSight);
 
         Collider2D[] targets = GetPotentialObjectsInSight();
@@ -48,12 +62,21 @@ public class SightPerception : MonoBehaviour
             foreach (Collider2D target in targets)
             {
                 ISightPerceptible perceptable = target.GetComponent<ISightPerceptible>();
-                if (perceptable != null && CanSeePerctableObject(perceptable, target.gameObject))
+                if (perceptable == null || !perceptable.CanBeDetected())
+                {
+                    continue;
+                }
+
+                if (CanSeePerctableObject(perceptable, target.gameObject))
                 {
                     // Returns true if being added (false if already present)
                     if (m_objectsInSight.Add(target.gameObject))
+                    {
                         if (OnPercpetionUpdated != null)
                             OnPercpetionUpdated.Invoke(target.gameObject, true);
+
+                        perceptable.OnVisibleToSightPerception(this);
+                    }
 
                     oldObjectsInSight.Remove(target.gameObject);
                 }
@@ -72,7 +95,14 @@ public class SightPerception : MonoBehaviour
        
             if (OnPercpetionUpdated != null)
                 OnPercpetionUpdated.Invoke(lostObject, false);
+
+            // Possible that component that implemented interface is no longer present
+            ISightPerceptible perceptable = lostObject.GetComponent<ISightPerceptible>();
+            if (perceptable != null)
+                perceptable.OnNotVisibleToSightPerception(this);
         }
+
+        Physics2D.queriesHitTriggers = queriesHitTriggers;
     }
 
     /// <summary>
