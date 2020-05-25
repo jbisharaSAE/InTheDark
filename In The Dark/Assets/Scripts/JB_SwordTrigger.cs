@@ -25,13 +25,18 @@ public class JB_SwordTrigger : MonoBehaviour
         Debug.Log("testing collision stay");
         if (collision.gameObject.tag == "Enemy")
         {
-            Debug.Log("testing collision trigger");
-            resourceScript.BasicSwordAttack(1);
             // did the sword hit an enemy
+            RandomGeneratedCombo();
         }
         else if (collision.gameObject.tag == "Boss")
         {
             // did the sword hit a boss
         }
+    }
+
+    private void RandomGeneratedCombo()
+    {
+        int rand = Random.Range(1, 4);
+        resourceScript.BasicSwordAttack(rand);
     }
 }

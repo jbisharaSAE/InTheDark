@@ -7,28 +7,52 @@ public class JB_ResourceManagement : MonoBehaviour
 {
     // UI elements
     public Image energyBar;
+    public Image healthBar;
     public Image[] comboPoints;
     public float currentEnergy = 100.0f;
+    public float currentHealth = 100.0f;
     private float attackCost = 10.0f;
+    private float tempHP = 100.0f;
     public int currentCombo = 1;
     public float energyRefillSpeed = 25.0f;
+    public float healthAdjust;
     public int attackPhase;
-    public bool bThirdattack;
+    public bool bThirdattack = false;
+    public bool bAdjustHealth = false;
     public JB_SwordTrigger swordScript;
 
 
     // Update is called once per frame
     void Update()
     {
+        
         if (currentEnergy <= 100.0f)
         {
             currentEnergy += Time.deltaTime * energyRefillSpeed;
         }
 
         energyBar.fillAmount = currentEnergy / 100.0f;
+        healthBar.fillAmount = currentHealth / 100.0f;
+
+        UpdateHealth();
     }
 
-    private void UpdateComboPoints(int combo)
+    // used to adjust health, loss or gain
+    public void UpdateHealth()
+    {
+        
+
+        if (bAdjustHealth)
+        {
+            tempHP += healthAdjust;
+            bAdjustHealth = false;
+        }
+
+        currentHealth = Mathf.Lerp(currentHealth, tempHP, 1.0f);
+    }
+
+
+    public void UpdateComboPoints(int combo)
     {
         currentCombo += combo;
         Debug.Log("current combo point = " + currentCombo);

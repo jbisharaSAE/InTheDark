@@ -11,6 +11,7 @@ public class JB_PlayerController : MonoBehaviour {
 
     public Transform throwSpawn;
     public GameObject kunaiPrefab;
+    public Image dashBar;
     private GameObject kunaiShuriken;
     private Animator anim;
     
@@ -18,7 +19,9 @@ public class JB_PlayerController : MonoBehaviour {
     private float hSpeed = 10f;
 	private float moveXInput;
     private float attackTimer = 0.0f;
-    public float dashForce;
+    private float dashRecharge = 100.0f; // keep as float to adjust image bar
+    public float dashRefillSpeed;
+    public int dashCharge = 2;
     public int attackPhase = 0;
     private bool bFacingRight = true;
     private Rigidbody2D rb;
@@ -107,7 +110,7 @@ public class JB_PlayerController : MonoBehaviour {
         // right mouse button - shuriken throw
         if(Input.GetButtonDown("Fire2"))
         {
-            anim.SetTrigger("Throw");
+            
 
             ThrowShuriken();
 
@@ -170,9 +173,50 @@ public class JB_PlayerController : MonoBehaviour {
             resourceScript.PlayerAbilities(4 );
         }
         #endregion
+
+        if (dashRecharge <= 100.0f)
+        {
+            dashRecharge += Time.deltaTime * dashRefillSpeed;
+        }
+
+        dashBar.fillAmount = dashRecharge / 100.0f;
+
+        if(dashRecharge < 50.0f)
+        {
+            dashCharge = 0;
+        }
+        else if(dashRecharge >= 50.0f && dashRecharge < 100.0f)
+        {
+            dashCharge = 1;
+        }
+        else
+        {
+            dashCharge = 2;
+        }
+
     }
 
     private void Dash(bool rightDir, RaycastHit2D hit)
+    {
+        
+
+        if (dashCharge == 2 )
+        {
+            --dashCharge;
+            dashRecharge = 50.0f;
+            DashDirection(rightDir, hit);
+        }
+        else if(dashCharge == 1)
+        {
+            --dashCharge;
+            dashRecharge = 0.0f;
+            DashDirection(rightDir, hit);
+        }
+
+       
+    }
+
+    private void DashDirection(bool rightDir, RaycastHit2D hit)
     {
         bDashing = true;
         float dashDistance = 5f;
@@ -189,7 +233,7 @@ public class JB_PlayerController : MonoBehaviour {
 
         if (rightDir)
         {
-            
+
             transform.position += Vector3.right * dashDistance;
         }
         else
@@ -266,30 +310,37 @@ public class JB_PlayerController : MonoBehaviour {
 
     private void ThrowShuriken()
     {
-        // throwing shuriken in right direction
-        if (bFacingRight)
+        if(resourceScript.currentCombo > 0)
         {
-            kunaiShuriken = Instantiate(kunaiPrefab, throwSpawn.position, kunaiPrefab.transform.rotation);
-            kunaiShuriken.GetComponent<JB_Kunai>().facingRight = bFacingRight;
+            anim.SetTrigger("Throw");
+
+            resourceScript.UpdateComboPoints(-1);
+            // throwing shuriken in right direction
+            if (bFacingRight)
+            {
+                kunaiShuriken = Instantiate(kunaiPrefab, throwSpawn.position, kunaiPrefab.transform.rotation);
+                kunaiShuriken.GetComponent<JB_Kunai>().facingRight = bFacingRight;
 
 
-            Vector3 newScale = kunaiShuriken.transform.localScale;
-            newScale.y *= 1;
+                Vector3 newScale = kunaiShuriken.transform.localScale;
+                newScale.y *= 1;
 
-            kunaiShuriken.GetComponent<Transform>().transform.localScale = newScale;
+                kunaiShuriken.GetComponent<Transform>().transform.localScale = newScale;
+            }
+            // throwing shuriken in left direction
+            else
+            {
+
+                kunaiShuriken = Instantiate(kunaiPrefab, throwSpawn.position, kunaiPrefab.transform.rotation);
+                kunaiShuriken.GetComponent<JB_Kunai>().facingRight = bFacingRight;
+
+                Vector3 newScale = kunaiShuriken.transform.localScale;
+                newScale.y *= -1;
+
+                kunaiShuriken.GetComponent<Transform>().transform.localScale = newScale;
+            }
         }
-        // throwing shuriken in left direction
-        else
-        {
-            
-            kunaiShuriken = Instantiate(kunaiPrefab, throwSpawn.position, kunaiPrefab.transform.rotation);
-            kunaiShuriken.GetComponent<JB_Kunai>().facingRight = bFacingRight;
-
-            Vector3 newScale = kunaiShuriken.transform.localScale;
-            newScale.y *= -1;
-
-            kunaiShuriken.GetComponent<Transform>().transform.localScale = newScale; 
-        }
+        
         
     }
 
