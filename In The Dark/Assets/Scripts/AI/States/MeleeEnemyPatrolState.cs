@@ -6,12 +6,14 @@ public class MeleeEnemyPatrolState : StateMachineBehaviour
 {
     private CharacterMovement m_movementComp = null;
     private PatrolArea m_patrolAreaComp = null;
+    private TouchPerception m_touchComp = null;
     private float m_movementInput = 0f;
 
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         m_movementComp = animator.GetComponent<CharacterMovement>();
         m_patrolAreaComp = animator.GetComponent<PatrolArea>();
+        m_touchComp = animator.GetComponent<TouchPerception>();
 
         if (!m_patrolAreaComp)
         {
@@ -25,6 +27,9 @@ public class MeleeEnemyPatrolState : StateMachineBehaviour
         // Keep following way we were going if we can
         else if (!m_patrolAreaComp.IsInArea(animator.transform.position))
             m_movementInput = Mathf.Sign((m_patrolAreaComp.position - (Vector2)animator.transform.position).x);
+
+        if (m_touchComp)
+            m_touchComp.OnPerceptionUpdated += OnTouchedByObject;
     }
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -37,5 +42,17 @@ public class MeleeEnemyPatrolState : StateMachineBehaviour
         }
 
         m_movementComp.SetHorizontalInput(m_movementInput);
+    }
+
+    public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+        // We only want this event called while we are active
+        if (m_touchComp)
+            m_touchComp.OnPerceptionUpdated -= OnTouchedByObject;
+    }
+
+    private void OnTouchedByObject(GameObject detectedObject, float side)
+    {
+        m_movementInput = side;
     }
 }

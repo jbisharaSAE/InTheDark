@@ -5,8 +5,8 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D))]
 public class MovingPlatform : MonoBehaviour
 {
-    [SerializeField] private Rigidbody2D m_rigidBody;           // Rigid body to move
-    [SerializeField] private Transform[] m_waypoints;           // Waypoints of path
+    [SerializeField] private Rigidbody2D m_rigidBody = null;    // Rigid body to move
+    [SerializeField] private Transform[] m_waypoints = null;    // Waypoints of path
     [SerializeField] private float m_speed = 5f;                // Speed of movement
     [SerializeField] private bool m_reverse = false;            // If to traverse waypoints in reverse order
 

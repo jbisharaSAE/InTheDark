@@ -179,7 +179,8 @@ public class JB_PlayerController : MonoBehaviour {
             dashRecharge += Time.deltaTime * dashRefillSpeed;
         }
 
-        dashBar.fillAmount = dashRecharge / 100.0f;
+        if (dashBar)
+            dashBar.fillAmount = dashRecharge / 100.0f;
 
         if(dashRecharge < 50.0f)
         {
