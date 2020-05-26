@@ -13,11 +13,11 @@ public class HealthComponent : MonoBehaviour
 
     // Event that is called when ever this object loses/restores health
     public delegate void OnHealthChangedEvent(HealthComponent self, float newHealth, float delta);
-    public OnHealthChangedEvent onHealthChanged;
+    public OnHealthChangedEvent OnHealthChanged;
 
     // Event that is called upon death of the object. This will get called after onHealthChanged
     public delegate void OnDeathEvent(HealthComponent self);
-    public OnDeathEvent onDeath;
+    public OnDeathEvent OnDeath;
 
     /// <summary>
     /// If this object is dead (has no health)
@@ -92,12 +92,12 @@ public class HealthComponent : MonoBehaviour
         // (Healing will be positive, damage will be negative)
         delta = m_health - OldHealth;
 
-        if (onHealthChanged != null)
-            onHealthChanged.Invoke(this, m_health, delta);
+        if (OnHealthChanged != null)
+            OnHealthChanged.Invoke(this, m_health, delta);
 
         if (isDead)
-            if (onDeath != null)
-                onDeath.Invoke(this);
+            if (OnDeath != null)
+                OnDeath.Invoke(this);
 
         return delta;
     }

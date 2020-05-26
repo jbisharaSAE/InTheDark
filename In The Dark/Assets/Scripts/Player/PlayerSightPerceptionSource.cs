@@ -5,6 +5,7 @@ using UnityEngine;
 /// <summary>
 /// This component handles how the players character is percepted (sight) by the AI
 /// </summary>
+// TODO: Rename this to something bettert
 public class PlayerSightPerceptionSource : ShadowAreaListener, ISightPerceptible
 {
     private short m_numSeenBy = 0;          // Number of times we have been seen
