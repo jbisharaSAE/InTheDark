@@ -161,6 +161,9 @@ public class CharacterMovement : MonoBehaviour
     #region Debug
     protected virtual void OnDrawGizmos()
     {
+        if (!m_collider)
+            return;
+
         float checkSize = 0.1f;
 
         Vector2 colExtent = m_collider.size * 0.5f;

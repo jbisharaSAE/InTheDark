@@ -7,11 +7,18 @@ using UnityEngine;
 /// </summary>
 public class EnemyScript : MonoBehaviour
 {
-    private HealthComponent m_healthComp = null;        // Enemies health component
+    [SerializeField] private HealthComponent m_healthComp = null;           // Enemies health component
 
-    void Awake()
+    /// <summary>
+    /// This enemies health component
+    /// </summary>
+    public HealthComponent healthComponent { get { return m_healthComp; } }
+
+    protected virtual void Awake()
     {
-        m_healthComp = GetComponent<HealthComponent>();
+        if (!m_healthComp)
+            m_healthComp = GetComponent<HealthComponent>();
+
         if (m_healthComp)
         {
             m_healthComp.OnHealthChanged += OnHealthChanged;

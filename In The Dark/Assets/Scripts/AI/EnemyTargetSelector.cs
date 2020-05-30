@@ -145,4 +145,17 @@ public class EnemyTargetSelector : MonoBehaviour
             }
         }
     }
+
+    /// <summary>
+    /// Only returns the target if actually in sight (and not being forgetten).
+    /// This is useful for when only wanting to target the enemy only if seen
+    /// </summary>
+    /// <returns>Valid object or null</returns>
+    public GameObject ConditionalGetTarget()
+    {
+        if (m_selectedTarget)
+            return m_waitToForgetRoutine == null ? m_selectedTarget : null;
+
+        return null;
+    }
 }
