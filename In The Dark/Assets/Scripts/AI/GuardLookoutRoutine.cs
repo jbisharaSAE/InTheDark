@@ -52,6 +52,7 @@ public class GuardLookoutRoutine : MonoBehaviour
         // Update the look transform to match face direction
         Transform lookTrans = m_lookTransform ? m_lookTransform : transform;
         Vector3 eulerAngles = lookTrans.eulerAngles;
+        eulerAngles.x = eulerAngles.y = 0f; // Issue with Y being 180f 
         eulerAngles.z = Mathf.MoveTowardsAngle(eulerAngles.z, m_entry.m_faceDirection, m_lookSpeed);
 
         // Update the guards orientation

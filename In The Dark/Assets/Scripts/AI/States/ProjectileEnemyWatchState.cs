@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ProjectileEnemyWatch : StateMachineBehaviour
+public class ProjectileEnemyWatchState : StateMachineBehaviour
 {
     private GuardLookoutRoutine m_lookoutComp = null;
 

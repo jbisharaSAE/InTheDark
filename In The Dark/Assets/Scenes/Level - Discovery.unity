@@ -345,6 +345,7 @@ GameObject:
   - component: {fileID: 61576062}
   - component: {fileID: 61576064}
   - component: {fileID: 61576065}
+  - component: {fileID: 61576066}
   m_Layer: 0
   m_Name: TestRoutine
   m_TagString: Untagged
@@ -475,6 +476,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_healthComp: {fileID: 0}
   m_lookoutComp: {fileID: 0}
+  m_attackComp: {fileID: 0}
 --- !u!114 &61576065
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -491,7 +493,23 @@ MonoBehaviour:
   m_sightPerception: {fileID: 162679248}
   m_updateRate: 0.2
   m_forgetTime: 1
-  m_focusSightOnTarget: 0
+  m_focusSightOnTarget: 1
+--- !u!114 &61576066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 61576059}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8308f368ac37b5c48b33418d36d5d6cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_projectilePrefab: {fileID: 4682100570281373644, guid: bfb09e69bdc4a2b428e9c477910f547b,
+    type: 3}
+  m_rechargeTime: 1
+  m_offset: {x: 1, y: 0}
 --- !u!1 &107486820
 GameObject:
   m_ObjectHideFlags: 0
