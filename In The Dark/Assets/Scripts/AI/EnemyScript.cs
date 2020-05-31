@@ -7,6 +7,9 @@ using UnityEngine;
 /// </summary>
 public class EnemyScript : MonoBehaviour
 {
+    [SerializeField] private PickupComponent m_deathDrop = null;            // Pickup to spawn upon death
+    [SerializeField, Range(0f, 1f)] private float m_dropChance = 0.1f;      // Chance of dropping pick up upon death
+
     [SerializeField] private HealthComponent m_healthComp = null;           // Enemies health component
 
     /// <summary>
@@ -36,6 +39,24 @@ public class EnemyScript : MonoBehaviour
 
     protected virtual void OnDeath(HealthComponent self)
     {
+        TryDroppingPickup();
         Destroy(gameObject);
+    }
+
+    /// <summary>
+    /// Attempts to drop a pickup right where we are
+    /// </summary>
+    private void TryDroppingPickup()
+    {
+        if (!m_deathDrop)
+            return;
+
+        // Test our luck
+        float failChance = 1f - m_dropChance;
+        if (failChance * 10f < Random.Range(0f, 100f))
+            return;
+
+        // Spawn the pickup right where we are
+        Instantiate(m_deathDrop, transform.position, Quaternion.identity);
     }
 }

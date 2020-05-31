@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Simple script that will try to apply health to any object that overlaps it.
-/// This component only works with trigger colliders
+/// Simple pickup that will restore health to the player
 /// </summary>
-public class HealthPickup : MonoBehaviour
+public class HealthPickup : PickupComponent
 {
     public float m_healthToGive = 20f;      // Amount of health to give. Can be negative to apply damage
 
-    void OnTriggerEnter2D(Collider2D collision)
+    protected override void OnPickedUp(Collider2D collision)
     {
         // Callback can happen multiple times if overlapping multiple
         // colliders at once. We disable ourselves if that happens
