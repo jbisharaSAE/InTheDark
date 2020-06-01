@@ -28,8 +28,10 @@ public class JB_PlayerController : MonoBehaviour {
     private bool bDashing;
     private BoxCollider2D playerBoxCollider;
     private Vector2 dir;
-    public GameObject sword;
     private JB_ResourceManagement resourceScript;
+
+    [SerializeField]
+    private JB_SwordTrigger swordScript;
 
 
     //Used for flipping Character Direction
@@ -275,17 +277,18 @@ public class JB_PlayerController : MonoBehaviour {
                     resourceScript.currentEnergy -= 10.0f;
                     Debug.Log(attackPhase + " case 0");
                     // attack animation 1
+                    swordScript.bAttack = true;
                     break;
                 case 1:
                     resourceScript.currentEnergy -= 20.0f;
                     Debug.Log(attackPhase + " case 1");
-                    
+                    swordScript.bAttack = true;
                     // attack animation 2
                     break;
                 case 2:
                     resourceScript.currentEnergy -= 25.0f;
                     //sword.GetComponent<JB_SwordTrigger>().bThirdattack = true;
-                    resourceScript.bThirdattack = true;
+                    swordScript.bThirdattack = true;
                     Debug.Log(attackPhase + " case 2");
                     
                     //UpdateComboPoints();
@@ -311,11 +314,14 @@ public class JB_PlayerController : MonoBehaviour {
 
     private void ThrowShuriken()
     {
+        // throwing a shuriken requires a combo point, we are checking to see if we any to use
         if(resourceScript.currentCombo > 0)
         {
             anim.SetTrigger("Throw");
 
+            // calls function to adjust combo point
             resourceScript.UpdateComboPoints(-1);
+
             // throwing shuriken in right direction
             if (bFacingRight)
             {

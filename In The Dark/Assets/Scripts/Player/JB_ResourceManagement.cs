@@ -15,11 +15,13 @@ public class JB_ResourceManagement : MonoBehaviour
     private float tempHP = 100.0f;
     public int currentCombo = 1;
     public float energyRefillSpeed = 25.0f;
-    public float healthAdjust;
     public int attackPhase;
     public bool bThirdattack = false;
-    public bool bAdjustHealth = false;
     public JB_SwordTrigger swordScript;
+
+    // used to adjust player health
+    public bool bAdjustHealth = false;
+    public float healthAdjust;
 
 
     // Update is called once per frame
@@ -44,7 +46,6 @@ public class JB_ResourceManagement : MonoBehaviour
     public void UpdateHealth()
     {
         
-
         if (bAdjustHealth)
         {
             tempHP += healthAdjust;
@@ -85,10 +86,12 @@ public class JB_ResourceManagement : MonoBehaviour
 
     }
 
+    // called from JB_SwordTrigger script
     public void BasicSwordAttack(int combo)
     {
         Debug.Log(attackPhase + "sword attack phase");
         Debug.Log(currentCombo + "combo points");
+
         if (bThirdattack)
         {
             bThirdattack = false;

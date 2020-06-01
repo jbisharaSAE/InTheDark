@@ -140,6 +140,7 @@ GameObject:
   - component: {fileID: 6101050}
   - component: {fileID: 5809852}
   - component: {fileID: 2898537014938462875}
+  - component: {fileID: 5556191119478186715}
   m_Layer: 11
   m_Name: PlayerCharacter
   m_TagString: Untagged
@@ -270,9 +271,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   throwSpawn: {fileID: 2552451388401253584}
   kunaiPrefab: {fileID: 159966, guid: db63e525ccc0d9448a5effe191669979, type: 3}
-  dashForce: 500
+  dashBar: {fileID: 0}
+  dashRefillSpeed: 0
+  dashCharge: 2
   attackPhase: 0
   sword: {fileID: 0}
+  swordScript: {fileID: 2707334436452098184}
   groundCheck: {fileID: 417436}
   whatIsGround:
     serializedVersion: 2
@@ -364,12 +368,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   energyBar: {fileID: 0}
+  healthBar: {fileID: 0}
   comboPoints: []
   currentEnergy: 100
+  currentHealth: 100
   currentCombo: 0
   energyRefillSpeed: 25
+  healthAdjust: 0
   attackPhase: 0
+  bThirdattack: 0
+  bAdjustHealth: 0
   swordScript: {fileID: 0}
+--- !u!114 &5556191119478186715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 189690}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c6ccd1b1adfb2b41b1b57eea836b9bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_health: 100
+  m_maxHealth: 100
+  m_invincible: 0
 --- !u!1 &3939328227193926025
 GameObject:
   m_ObjectHideFlags: 0
@@ -553,4 +577,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   resourceScript: {fileID: 2898537014938462875}
+  bAttack: 0
   bThirdattack: 0
