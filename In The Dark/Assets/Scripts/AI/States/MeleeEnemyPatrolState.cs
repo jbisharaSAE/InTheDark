@@ -8,12 +8,14 @@ public class MeleeEnemyPatrolState : StateMachineBehaviour
     private PatrolArea m_patrolAreaComp = null;
     private TouchPerception m_touchComp = null;
     private float m_movementInput = 0f;
+    private WallDetectionComponent m_detection = null;
 
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         m_movementComp = animator.GetComponent<CharacterMovement>();
         m_patrolAreaComp = animator.GetComponent<PatrolArea>();
         m_touchComp = animator.GetComponent<TouchPerception>();
+        m_detection = animator.GetComponent<WallDetectionComponent>();
 
         if (!m_patrolAreaComp)
         {
@@ -41,7 +43,11 @@ public class MeleeEnemyPatrolState : StateMachineBehaviour
             return;
         }
 
-        m_movementComp.SetHorizontalInput(m_movementInput);
+        if (m_movementComp.isGrounded || !m_detection.wallDetected)
+            m_movementComp.SetHorizontalInput(m_movementInput);
+
+        if (m_detection.wallDetected)
+            m_movementComp.Jump();
     }
 
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

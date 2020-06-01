@@ -28,6 +28,7 @@ public class CharacterMovement : MonoBehaviour
 
 
     protected bool m_isGrounded = false;                // If currently grounded   
+    private bool m_aboutToJump = false; 
 
     private Collider2D m_floor;                             // Floor character is standing on
     private Vector2 m_floorLocation = Vector2.zero;         // Location floor was when last updated
@@ -75,7 +76,12 @@ public class CharacterMovement : MonoBehaviour
         }
 
         // TODO: OnLanded event
-        UpdateIsGrounded();
+        bool bWasGrouded = m_isGrounded;
+        if (UpdateIsGrounded() != bWasGrouded)
+        {
+            if (m_isGrounded)
+                m_aboutToJump = false;
+        }
 
         // Fake Friction
         if (Mathf.Approximately(m_horizontalInput, 0f) && m_isGrounded)
@@ -99,10 +105,11 @@ public class CharacterMovement : MonoBehaviour
     /// <returns>If a jump was performed</returns>
     public virtual bool Jump()
     {
-        if (m_isGrounded)
+        if (m_isGrounded && !m_aboutToJump)
         {
             //m_rigidBody.AddForce(new Vector2(0f, m_jumpForce), ForceMode2D.Impulse);
             m_rigidBody.velocity += new Vector2(0f, m_jumpForce);
+            m_aboutToJump = true;
             return true;
         }
 

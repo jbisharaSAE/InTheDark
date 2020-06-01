@@ -11,11 +11,13 @@ public class MeleeEnemyChaseState : StateMachineBehaviour
 
     private CharacterMovement m_movementComp = null;
     private EnemyTargetSelector m_brain = null;
+    private WallDetectionComponent m_detection = null;
 
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         m_movementComp = animator.GetComponent<CharacterMovement>();
         m_brain = animator.GetComponent<EnemyTargetSelector>();
+        m_detection = animator.GetComponent<WallDetectionComponent>();
     }
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -41,6 +43,9 @@ public class MeleeEnemyChaseState : StateMachineBehaviour
         {
             m_movementComp.SetHorizontalInput(Mathf.Sign(displacement.x) * m_speedMultiplier);
             animator.SetBool("Idle", false);
+
+            if (m_detection.wallDetected)
+                m_movementComp.Jump();
         }
         else
         {
