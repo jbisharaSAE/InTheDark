@@ -20,6 +20,16 @@ public class HealthComponent : MonoBehaviour
     public OnDeathEvent OnDeath;
 
     /// <summary>
+    /// This objects current health
+    /// </summary>
+    public float health { get { return m_health; } }
+
+    /// <summary>
+    /// This objects max health
+    /// </summary>
+    public float maxHealth { get { return m_maxHealth; } }
+
+    /// <summary>
     /// If this object is dead (has no health)
     /// </summary>
     public bool isDead { get { return m_health <= 0f; } }
