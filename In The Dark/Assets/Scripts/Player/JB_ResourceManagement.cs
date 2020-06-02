@@ -10,7 +10,6 @@ public class JB_ResourceManagement : MonoBehaviour
     public Image healthBar;
     public Image[] comboPoints;
     public float currentEnergy = 100.0f;
-    public float currentHealth = 100.0f;
     private float attackCost = 10.0f;
     private float tempHP = 100.0f;
     public int currentCombo = 1;
@@ -22,6 +21,25 @@ public class JB_ResourceManagement : MonoBehaviour
     // used to adjust player health
     public bool bAdjustHealth = false;
     public float healthAdjust;
+
+    private HealthComponent healthScript = null;
+    private float interpolatedHealth = 0f;
+    private float maxHealth = 0f;
+    public float interpolateSpeed = 5f;
+    
+
+    private void Start()
+    {
+        healthScript = GetComponent<HealthComponent>();
+
+        if (healthScript)
+        {
+            healthScript.OnHealthChanged += OnHealthChanged;
+            interpolatedHealth = healthScript.health;
+            maxHealth = healthScript.maxHealth;
+        }
+    }
+
 
 
     // Update is called once per frame
@@ -37,22 +55,52 @@ public class JB_ResourceManagement : MonoBehaviour
             energyBar.fillAmount = currentEnergy / 100.0f;
 
         if (healthBar)
-            healthBar.fillAmount = currentHealth / 100.0f;
+            healthBar.fillAmount = interpolatedHealth / maxHealth;
 
         UpdateHealth();
+
+        // testing functions
+        //if (Input.GetKeyDown(KeyCode.Alpha5))
+        //{
+        //    healthScript.ApplyDamage(10f);
+        //}
+        //if (Input.GetKeyDown(KeyCode.Alpha6))
+        //{
+        //    healthScript.RestoreHealth(10f);
+        //}
+    }
+
+    private void OnHealthChanged(HealthComponent self, float newHealth, float delta)
+    {
+        bAdjustHealth = true;
     }
 
     // used to adjust health, loss or gain
     public void UpdateHealth()
     {
-        
+
+        //if (bAdjustHealth)
+        //{
+        //    tempHP += healthAdjust;
+        //    bAdjustHealth = false;
+        //}
+
+        //currentHealth = Mathf.Lerp(currentHealth, tempHP, 1.0f);
+
         if (bAdjustHealth)
         {
-            tempHP += healthAdjust;
-            bAdjustHealth = false;
+            interpolatedHealth = Mathf.Lerp(interpolatedHealth, healthScript.health, interpolateSpeed * Time.deltaTime);
+            // Disable ourselves once close to actual health value
+            if (Mathf.Approximately(interpolatedHealth, healthScript.health))
+            {
+                bAdjustHealth = false;
+            }
+                
         }
+        
 
-        currentHealth = Mathf.Lerp(currentHealth, tempHP, 1.0f);
+
+        
     }
 
 
