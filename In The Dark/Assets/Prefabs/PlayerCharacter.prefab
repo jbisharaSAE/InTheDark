@@ -163,6 +163,7 @@ Transform:
   - {fileID: 414520}
   - {fileID: 2552451388401253584}
   - {fileID: 4904331518599404356}
+  - {fileID: 8776753263849813679}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -271,11 +272,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   throwSpawn: {fileID: 2552451388401253584}
   kunaiPrefab: {fileID: 159966, guid: db63e525ccc0d9448a5effe191669979, type: 3}
+  parryColliderObj: {fileID: 2981093043588765826}
   dashBar: {fileID: 0}
   dashRefillSpeed: 0
   dashCharge: 2
   attackPhase: 0
-  sword: {fileID: 0}
   swordScript: {fileID: 2707334436452098184}
   groundCheck: {fileID: 417436}
   whatIsGround:
@@ -371,14 +372,14 @@ MonoBehaviour:
   healthBar: {fileID: 0}
   comboPoints: []
   currentEnergy: 100
-  currentHealth: 100
   currentCombo: 0
   energyRefillSpeed: 25
-  healthAdjust: 0
   attackPhase: 0
   bThirdattack: 0
-  bAdjustHealth: 0
   swordScript: {fileID: 0}
+  bAdjustHealth: 0
+  healthAdjust: 0
+  hpRefillSpeed: 5
 --- !u!114 &5556191119478186715
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -394,6 +395,63 @@ MonoBehaviour:
   m_health: 100
   m_maxHealth: 100
   m_invincible: 0
+--- !u!1 &2981093043588765826
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8776753263849813679}
+  - component: {fileID: 2087760197090352380}
+  m_Layer: 0
+  m_Name: ParryBox
+  m_TagString: ParryBox
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &8776753263849813679
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2981093043588765826}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 424682}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &2087760197090352380
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2981093043588765826}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 3, y: 3.77}
+  m_EdgeRadius: 0
 --- !u!1 &3939328227193926025
 GameObject:
   m_ObjectHideFlags: 0

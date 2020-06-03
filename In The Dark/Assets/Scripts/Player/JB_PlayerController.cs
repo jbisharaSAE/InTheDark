@@ -11,6 +11,7 @@ public class JB_PlayerController : MonoBehaviour {
 
     public Transform throwSpawn;
     public GameObject kunaiPrefab;
+    public GameObject parryColliderObj;
     public Image dashBar;
     private GameObject kunaiShuriken;
     private Animator anim;
@@ -45,8 +46,6 @@ public class JB_PlayerController : MonoBehaviour {
 	private float jumpForce = 14f;
 
 
-	
-    
 
 	// Use this for initialization
 	void Awake ()
@@ -175,6 +174,11 @@ public class JB_PlayerController : MonoBehaviour {
         {
             resourceScript.PlayerAbilities(4 );
         }
+
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            StartCoroutine(ParryCollider());
+        }
         #endregion
 
         if (dashRecharge <= 100.0f)
@@ -198,6 +202,13 @@ public class JB_PlayerController : MonoBehaviour {
             dashCharge = 2;
         }
 
+    }
+
+    IEnumerator ParryCollider()
+    {
+        parryColliderObj.SetActive(true);
+        yield return new WaitForSeconds(0.5f);
+        parryColliderObj.SetActive(false);
     }
 
     private void Dash(bool rightDir, RaycastHit2D hit)

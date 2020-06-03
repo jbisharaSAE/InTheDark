@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Enemy
   - Boss
+  - EProjectile
+  - EAttack
+  - ParryBox
   layers:
   - Default
   - TransparentFX
@@ -20,9 +23,9 @@ TagManager:
   - Player
   - Ground
   - Sword
-  - 
-  - 
-  - 
+  - Parry
+  - EProjectile
+  - EAttack
   - 
   - 
   - 

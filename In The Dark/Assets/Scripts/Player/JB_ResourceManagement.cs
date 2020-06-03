@@ -23,9 +23,9 @@ public class JB_ResourceManagement : MonoBehaviour
     public float healthAdjust;
 
     private HealthComponent healthScript = null;
-    private float interpolatedHealth = 0f;
+    private float currentHealth = 0f;
     private float maxHealth = 0f;
-    public float interpolateSpeed = 5f;
+    public float hpRefillSpeed = 5f;
     
 
     private void Start()
@@ -35,7 +35,7 @@ public class JB_ResourceManagement : MonoBehaviour
         if (healthScript)
         {
             healthScript.OnHealthChanged += OnHealthChanged;
-            interpolatedHealth = healthScript.health;
+            currentHealth = healthScript.health;
             maxHealth = healthScript.maxHealth;
         }
     }
@@ -55,7 +55,7 @@ public class JB_ResourceManagement : MonoBehaviour
             energyBar.fillAmount = currentEnergy / 100.0f;
 
         if (healthBar)
-            healthBar.fillAmount = interpolatedHealth / maxHealth;
+            healthBar.fillAmount = currentHealth / maxHealth;
 
         UpdateHealth();
 
@@ -89,9 +89,9 @@ public class JB_ResourceManagement : MonoBehaviour
 
         if (bAdjustHealth)
         {
-            interpolatedHealth = Mathf.Lerp(interpolatedHealth, healthScript.health, interpolateSpeed * Time.deltaTime);
+            currentHealth = Mathf.Lerp(currentHealth, healthScript.health, hpRefillSpeed * Time.deltaTime);
             // Disable ourselves once close to actual health value
-            if (Mathf.Approximately(interpolatedHealth, healthScript.health))
+            if (Mathf.Approximately(currentHealth, healthScript.health))
             {
                 bAdjustHealth = false;
             }

@@ -56,7 +56,15 @@ public class ProjectileComponent : MonoBehaviour
                 healthComp.ApplyDamage(m_damage);
         }
 
-        Destroy(gameObject);
+        if(collision.tag == "ParryBox")
+        {
+            m_rigidBody.velocity *= -1;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+        
     }
 
     /// <summary>
