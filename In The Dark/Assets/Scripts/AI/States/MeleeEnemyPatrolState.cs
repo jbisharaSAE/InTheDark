@@ -43,11 +43,11 @@ public class MeleeEnemyPatrolState : StateMachineBehaviour
             return;
         }
 
-        if (m_movementComp.isGrounded || !m_detection.wallDetected)
-            m_movementComp.SetHorizontalInput(m_movementInput);
+        //if (m_movementComp.isGrounded || !m_detection.wallDetected)
+            m_movementComp.SetMoveInput(m_movementInput);
 
-        if (m_detection.wallDetected)
-            m_movementComp.Jump();
+        //if (m_detection.wallDetected)
+        //   m_movementComp.Jump();
     }
 
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

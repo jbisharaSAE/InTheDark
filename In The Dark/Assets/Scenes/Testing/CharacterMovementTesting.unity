@@ -396,7 +396,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 104000242}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 7, y: 0, z: 0}
+  m_LocalPosition: {x: 7, y: 3.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8696603}
@@ -2075,7 +2075,7 @@ GameObject:
   - component: {fileID: 948130300}
   - component: {fileID: 948130303}
   - component: {fileID: 948130302}
-  - component: {fileID: 948130304}
+  - component: {fileID: 948130305}
   m_Layer: 0
   m_Name: Character
   m_TagString: Untagged
@@ -2195,7 +2195,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
---- !u!114 &948130304
+--- !u!114 &948130305
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2204,19 +2204,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 948130299}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa974e00c1a687947bb819459b66526c, type: 3}
+  m_Script: {fileID: 11500000, guid: 1fdebee6c895b7944834539d2944817f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_maxSpeed: 10
-  m_walkAcceleration: 20
+  m_walkSpeed: 10
+  m_airSpeed: 8
+  m_maxAcceleration: 20
   m_brakeFriction: 50
-  m_airSpeedMultiplier: 0.8
   m_jumpPower: 10
-  m_wallJumpPower: 15
   m_maxAirJumps: 1
-  m_floorCheckOffset: {x: 0, y: -1.55}
-  m_rightWallCheckOffset: {x: 1.55, y: 0}
-  m_leftWallCheckOffset: {x: -1.55, y: 0}
+  m_rigidBody: {fileID: 948130303}
+  m_collider: {fileID: 948130302}
+  m_orientateToMovement: 0
+  m_worldLayers:
+    serializedVersion: 2
+    m_Bits: 2871
+  m_wallJumpPower: 12
 --- !u!1 &982284301
 GameObject:
   m_ObjectHideFlags: 0

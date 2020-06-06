@@ -7,7 +7,8 @@ public class MeleeEnemyChaseState : StateMachineBehaviour
     [SerializeField] private float m_attackRange = 1.5f;        // Range target must be within to attack
 
     // temp
-    public float m_speedMultiplier = 2.5f;
+    public float m_chaseSpeed = 8f;
+    public float m_ogSpeed = 4f;
 
     private CharacterMovement m_movementComp = null;
     private EnemyTargetSelector m_brain = null;
@@ -18,6 +19,8 @@ public class MeleeEnemyChaseState : StateMachineBehaviour
         m_movementComp = animator.GetComponent<CharacterMovement>();
         m_brain = animator.GetComponent<EnemyTargetSelector>();
         m_detection = animator.GetComponent<WallDetectionComponent>();
+
+        m_movementComp.m_walkSpeed = m_chaseSpeed;
     }
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -41,11 +44,11 @@ public class MeleeEnemyChaseState : StateMachineBehaviour
         // or below us) we just want to wait for them to either reach us
         else if (Mathf.Abs(displacement.x) > (m_attackRange * 0.25f))
         {
-            m_movementComp.SetHorizontalInput(Mathf.Sign(displacement.x) * m_speedMultiplier);
+            m_movementComp.SetMoveInput(Mathf.Sign(displacement.x));
             animator.SetBool("Idle", false);
 
-            if (m_detection.wallDetected)
-                m_movementComp.Jump();
+            //if (m_detection.wallDetected)
+            //    m_movementComp.Jump();
         }
         else
         {
@@ -62,5 +65,7 @@ public class MeleeEnemyChaseState : StateMachineBehaviour
     {
         // Reset trigger we may have activated
         animator.ResetTrigger("Attack");
+
+        m_movementComp.m_walkSpeed = m_ogSpeed;
     }
 }
