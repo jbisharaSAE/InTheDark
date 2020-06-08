@@ -35,6 +35,7 @@ public class JB_ResourceManagement : MonoBehaviour
         if (healthScript)
         {
             healthScript.OnHealthChanged += OnHealthChanged;
+            healthScript.OnDeath += OnDeath;
             currentHealth = healthScript.health;
             maxHealth = healthScript.maxHealth;
         }
@@ -68,11 +69,21 @@ public class JB_ResourceManagement : MonoBehaviour
         //{
         //    healthScript.RestoreHealth(10f);
         //}
+        if (Input.GetKeyDown(KeyCode.F5))
+        {
+            healthScript.ApplyDamage(healthScript.health);
+        }
     }
 
     private void OnHealthChanged(HealthComponent self, float newHealth, float delta)
     {
         bAdjustHealth = true;
+    }
+
+    private void OnDeath(HealthComponent self)
+    {
+        if (PlayerHUD.instance)
+            PlayerHUD.instance.DisplayGameOverScreen();
     }
 
     // used to adjust health, loss or gain

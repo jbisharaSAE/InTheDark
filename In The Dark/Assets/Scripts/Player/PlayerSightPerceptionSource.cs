@@ -10,8 +10,14 @@ public class PlayerSightPerceptionSource : ShadowAreaListener, ISightPerceptible
 {
     private short m_numSeenBy = 0;          // Number of times we have been seen
 
+    [SerializeField] private HealthComponent m_healthComp = null;       // Owners health component
+
     public bool CanBeDetected()
     {
+        // Ignore us if we have died
+        if (m_healthComp && m_healthComp.isDead)
+            return false;
+
         // If already seen by a enemy, we should be visible to all enemies
         return m_numSeenBy > 0 || !inShadows;
     }

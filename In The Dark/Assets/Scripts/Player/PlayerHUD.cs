@@ -14,9 +14,11 @@ public class PlayerHUD : MonoBehaviour
     public static PlayerHUD instance { get; private set; }
 
     [SerializeField] private GameObject m_gameHUD = null;               // Object with core Game HUD
-    [SerializeField] private PauseMenu m_pauseMenuPrefab = null;        // Prefab for pause menu to spawn
+    [SerializeField] private GameObject m_pauseMenuPrefab = null;       // Prefab for pause menu to spawn
+    [SerializeField] private GameObject m_gameOverMenuPrefab = null;    // Prefab for game over menu to spawn
 
-    private PauseMenu m_pauseMenu = null;       // Reference to instance of Pause Menu
+    private GameObject m_instancedHUD = null;       // Instance of current HUD being displayed
+    private int m_instancedHUDPrefabHash = 0;       // Hashcode of prefab used for spawning instanced HUD
 
     void Awake()
     {
@@ -42,46 +44,121 @@ public class PlayerHUD : MonoBehaviour
             return;
 
         // TODO: First, make an input binding
-        // Second, we should handle this in a central GameManager?
+        // Second, should handle this in player controller, not HUD
         if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            if (m_pauseMenu)
-                HidePauseScreen();
-            else
-                DisplayPauseScreen();
-        }
+            GameManager.TogglePause();
     }
 
+    /// <summary>
+    /// Displays the pause menu
+    /// </summary>
     public void DisplayPauseScreen()
     {
-        if (m_pauseMenu || !m_pauseMenuPrefab)
-            return;
-
-        SetGameHUDVisible(false);
-        m_pauseMenu = Instantiate(m_pauseMenuPrefab);
-
-        // TODO: we should handle this in a central GameManager?
-        // Scripts could then use GameManager.isPaused to check if they should update
-        // We basically are 'Paused' if the menu was created (though the game should be pausable even without the HUD)
-        if (m_pauseMenu)
-            Time.timeScale = 0f;
+        DisplayHUD(m_pauseMenuPrefab);
     }
 
+    /// <summary>
+    /// Hides the pause menu, re-activating the primary Game HUD
+    /// </summary>
     public void HidePauseScreen()
     {
-        if (!m_pauseMenu)
-            return;
-
-        Destroy(m_pauseMenu.gameObject);
-        m_pauseMenu = null;
-
-        SetGameHUDVisible(true);
-
-        // TODO: we should handle this in a central GameManager?
-        // Scripts could then use GameManager.isPaused to check if they should update
-        Time.timeScale = 1f;
+        if (IsHUDInstanced(m_pauseMenuPrefab))
+            ShowGameHUD();
     }
 
+    /// <summary>
+    /// Displays the game over menu
+    /// </summary>
+    public void DisplayGameOverScreen()
+    {
+        DisplayHUD(m_gameOverMenuPrefab);
+    }
+
+    /// <summary>
+    /// Hides the game over menu, re-activating the primary Game HUD
+    /// </summary>
+    public void HideGameOverScreen()
+    {
+        if (IsHUDInstanced(m_gameOverMenuPrefab))
+            ShowGameHUD();
+    }
+
+    /// <summary>
+    /// Displays the HUD specified by given prefab.
+    /// This will hide the primary game HUD
+    /// </summary>
+    /// <param name="prefab">Prefab of HUD to display</param>
+    private void DisplayHUD(GameObject prefab)
+    {
+        if (!prefab)
+            return;
+
+        // HUD might already be instanced, if so we don't need to do anything
+        if (IsHUDInstanced(prefab))
+            return;
+
+        DestroyHUD();
+        SetGameHUDVisible(false);
+
+        SpawnHUD(prefab);
+    }
+
+    /// <summary>
+    /// Shows the primary game HUD, hiding any instanced HUD
+    /// </summary>
+    private void ShowGameHUD()
+    {
+        DestroyHUD();
+        SetGameHUDVisible(true);
+    }
+
+    /// <summary>
+    /// Spawns the HUD based on a prefab
+    /// </summary>
+    /// <param name="prefab">Prefab of HUD to display</param>
+    /// <returns>New HUD object or null</returns>
+    private GameObject SpawnHUD(GameObject prefab)
+    {
+        if (!prefab)
+            return null;
+   
+        m_instancedHUD = Instantiate(prefab);
+        m_instancedHUDPrefabHash = prefab.GetHashCode();
+
+        return m_instancedHUD;
+    }
+
+    /// <summary>
+    /// Destroys the current instanced HUD if it exists
+    /// </summary>
+    private void DestroyHUD()
+    {
+        if (!m_instancedHUD)
+            return;
+
+        Destroy(m_instancedHUD);
+
+        m_instancedHUD = null;
+        m_instancedHUDPrefabHash = 0;
+    }
+
+    /// <summary>
+    /// If the prefab has been instanced to use as the HUD
+    /// </summary>
+    /// <param name="prefab">Prefab to check</param>
+    /// <returns>If instance of prefab exists</returns>
+    private bool IsHUDInstanced(GameObject prefab)
+    {
+        if (!prefab || !m_instancedHUD)
+            return false;
+
+        return m_instancedHUDPrefabHash == prefab.GetHashCode();
+    }
+
+    /// <summary>
+    /// Sets the visibility of the primary game HUD
+    /// </summary>
+    /// <param name="visible">If HUD should be visible</param>
     private void SetGameHUDVisible(bool visible)
     {
         if (m_gameHUD)

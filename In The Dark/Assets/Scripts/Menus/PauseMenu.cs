@@ -12,9 +12,7 @@ public class PauseMenu : MonoBehaviour
     /// </summary>
     public void ResumeSession()
     {
-        if (PlayerHUD.instance)
-            // TODO: Would ideally have a GameManager.Unpause()
-            PlayerHUD.instance.HidePauseScreen();
+        GameManager.Unpause();
     }
 
     /// <summary>
