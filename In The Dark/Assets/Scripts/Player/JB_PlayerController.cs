@@ -30,6 +30,7 @@ public class JB_PlayerController : MonoBehaviour {
     private BoxCollider2D playerBoxCollider;
     private Vector2 dir;
     private JB_ResourceManagement resourceScript;
+    public JB_PauseMenu pauseScript;
 
     [SerializeField]
     private JB_SwordTrigger swordScript;
@@ -179,6 +180,13 @@ public class JB_PlayerController : MonoBehaviour {
         {
             StartCoroutine(ParryCollider());
         }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            
+            pauseScript.TogglePauseMenu();
+        }
+
         #endregion
 
         if (dashRecharge <= 100.0f)

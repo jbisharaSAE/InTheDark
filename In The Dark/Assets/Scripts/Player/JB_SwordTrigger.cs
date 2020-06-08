@@ -60,6 +60,7 @@ public class JB_SwordTrigger : MonoBehaviour
     private void RandomGeneratedCombo()
     {
         int rand = Random.Range(1, 4);
+        resourceScript.bThirdattack = true;
         resourceScript.BasicSwordAttack(rand);
     }
 
