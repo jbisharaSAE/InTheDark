@@ -749,6 +749,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_deathDrop: {fileID: 0}
   m_dropChance: 0.1
+  m_movementComp: {fileID: 0}
   m_healthComp: {fileID: 0}
   m_lookoutComp: {fileID: 0}
   m_attackComp: {fileID: 0}
@@ -8259,6 +8260,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1015335560}
+  - component: {fileID: 1015335561}
   m_Layer: 0
   m_Name: TestEnemy1
   m_TagString: Untagged
@@ -8280,6 +8282,20 @@ Transform:
   m_Father: {fileID: 321131336}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1015335561
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1015335559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7ea0b912b27c404d9b17a647a0ef587, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_patrolExtents: {x: 10, y: 1.25}
+  m_chaseExtents: {x: 20, y: 1}
 --- !u!1 &1022462445
 GameObject:
   m_ObjectHideFlags: 0
@@ -9552,6 +9568,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_deathDrop: {fileID: 0}
   m_dropChance: 0.1
+  m_movementComp: {fileID: 0}
   m_healthComp: {fileID: 0}
 --- !u!50 &1200946725 stripped
 Rigidbody2D:
@@ -12928,6 +12945,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_deathDrop: {fileID: 0}
   m_dropChance: 0.1
+  m_movementComp: {fileID: 0}
   m_healthComp: {fileID: 0}
   m_lookoutComp: {fileID: 0}
   m_attackComp: {fileID: 0}
