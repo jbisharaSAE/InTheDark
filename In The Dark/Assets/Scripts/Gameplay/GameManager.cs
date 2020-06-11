@@ -28,6 +28,11 @@ public class GameManager : MonoBehaviour
 
         instance = this;
         DontDestroyOnLoad(gameObject);
+
+        // Initialize prime instance
+        {
+            SceneManager.activeSceneChanged += OnActiveSceneChanged;
+        }
     }
 
     void OnDestroy()
@@ -41,7 +46,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void OnLevelWasLoaded(int level)
+    void OnActiveSceneChanged(Scene from, Scene to)
     {
         // Make sure that game isn't paused
         UnpauseImpl();
