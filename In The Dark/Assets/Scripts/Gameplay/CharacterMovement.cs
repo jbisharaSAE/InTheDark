@@ -91,7 +91,7 @@ public class CharacterMovement : MonoBehaviour
         }
 
         // Consume input
-        m_moveInput = 0f;
+        //m_moveInput = 0f;
     }
 
     /// <summary>

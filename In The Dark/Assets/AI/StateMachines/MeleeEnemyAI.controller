@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a5371381d5834e4287adaff68ac0a8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_attackRange: 2.5
 --- !u!1101 &-8321700568979483548
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -38,6 +37,31 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!1101 &-6105614795329499762
+AnimatorStateTransition:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_Conditions:
+  - m_ConditionMode: 2
+    m_ConditionEvent: HasTarget
+    m_EventTreshold: 0
+  m_DstStateMachine: {fileID: 0}
+  m_DstState: {fileID: 773980146614547448}
+  m_Solo: 0
+  m_Mute: 0
+  m_IsExit: 0
+  serializedVersion: 3
+  m_TransitionDuration: 0.1
+  m_TransitionOffset: 0
+  m_ExitTime: 0.625
+  m_HasExitTime: 0
+  m_HasFixedDuration: 1
+  m_InterruptionSource: 0
+  m_OrderedInterruption: 1
+  m_CanTransitionToSelf: 1
 --- !u!1102 &-5691953447266232747
 AnimatorState:
   serializedVersion: 5
@@ -51,6 +75,7 @@ AnimatorState:
   m_Transitions:
   - {fileID: 8098094550719489723}
   - {fileID: -4282300075779235544}
+  - {fileID: -6105614795329499762}
   m_StateMachineBehaviours:
   - {fileID: -8783464234111081608}
   m_Position: {x: 50, y: 50, z: 0}
@@ -84,10 +109,10 @@ AnimatorStateMachine:
     m_Position: {x: 300, y: 10, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 7281784945295163580}
-    m_Position: {x: 30, y: -130, z: 0}
+    m_Position: {x: 180, y: -120, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -626194575172283520}
-    m_Position: {x: 300, y: -130, z: 0}
+    m_Position: {x: 340, y: -230, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -5691953447266232747}
     m_Position: {x: 30, y: -230, z: 0}
@@ -418,7 +443,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d57d4e144bb7ea409e6f6a1b0e871b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_idleTime: 2
 --- !u!1102 &5737357426553343864
 AnimatorState:
   serializedVersion: 5
@@ -460,7 +484,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a5371381d5834e4287adaff68ac0a8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_attackRange: 2.5
 --- !u!1102 &7281784945295163580
 AnimatorState:
   serializedVersion: 5
