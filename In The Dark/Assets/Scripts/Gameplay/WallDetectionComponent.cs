@@ -71,7 +71,6 @@ public class WallDetectionComponent : MonoBehaviour
         Collider2D collider = Physics2D.OverlapBox(origin, size, 0f, m_worldLayers);
         if (collider != null)
         {
-            Debug.Log(collider.gameObject.name);
             return true;
         }
 

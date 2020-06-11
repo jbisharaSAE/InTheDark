@@ -24,7 +24,7 @@ public class CharacterMovement : MonoBehaviour
 
     [Header("Components")]
     [SerializeField] protected Rigidbody2D m_rigidBody;                 // Rigidbody to move. Used to interact with world
-    [SerializeField] protected BoxCollider2D m_collider;                // Collider that we move. Used for collision checks
+    [SerializeField] protected CapsuleCollider2D m_collider;                // Collider that we move. Used for collision checks
 
     [Header("Config")]
     [SerializeField] protected bool m_orientateToMovement = false;                  // If to rotate transform based on movement direction
@@ -46,7 +46,7 @@ public class CharacterMovement : MonoBehaviour
     protected virtual void Awake()
     {
         if (!m_collider)
-            m_collider = GetComponent<BoxCollider2D>();
+            m_collider = GetComponent<CapsuleCollider2D>();
 
         if (!m_rigidBody)
         {
@@ -91,7 +91,7 @@ public class CharacterMovement : MonoBehaviour
         }
 
         // Consume input
-        m_moveInput = 0f;
+        //m_moveInput = 0f;
     }
 
     /// <summary>
@@ -221,7 +221,7 @@ public class CharacterMovement : MonoBehaviour
             return new Bounds(transform.position, Vector3.one);
 
         Vector2 position = transform.position;
-        Vector2 extents = m_collider.bounds.extents;
+        Vector2 extents = m_collider.size * 0.5f;
         
         // Position now at foot level
         position.y -= (extents.y * m_collider.transform.lossyScale.y);

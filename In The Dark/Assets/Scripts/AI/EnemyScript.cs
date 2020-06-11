@@ -10,7 +10,14 @@ public class EnemyScript : MonoBehaviour
     [SerializeField] private PickupComponent m_deathDrop = null;            // Pickup to spawn upon death
     [SerializeField, Range(0f, 1f)] private float m_dropChance = 0.1f;      // Chance of dropping pick up upon death
 
+    [Header("Components", order = 0)]
+    [SerializeField] private CharacterMovement m_movementComp = null;       // Enemies movement component
     [SerializeField] private HealthComponent m_healthComp = null;           // Enemies health component
+
+    /// <summary>
+    /// This enemies character movement component
+    /// </summary>
+    public CharacterMovement movementComponent { get { return m_movementComp; } }
 
     /// <summary>
     /// This enemies health component
@@ -19,6 +26,9 @@ public class EnemyScript : MonoBehaviour
 
     protected virtual void Awake()
     {
+        if (!m_movementComp)
+            m_movementComp = GetComponent<CharacterMovement>();
+
         if (!m_healthComp)
             m_healthComp = GetComponent<HealthComponent>();
 

@@ -43,10 +43,7 @@ public class AdvancedCharacterMovement : CharacterMovement
     {
         base.OnLanded();
         m_lastWallJumpSide = WallJumpSide.None;
-
-        Debug.Log("LANDED");
     }
-
 
     /// <summary>
     /// Check if we can either perform a normal jump or a wall jump.
