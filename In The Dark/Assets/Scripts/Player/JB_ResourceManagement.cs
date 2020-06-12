@@ -128,7 +128,7 @@ public class JB_ResourceManagement : MonoBehaviour
         else if (currentCombo >= 5)
         {
             // resetting combo point value to 4 if it goes above 4
-            currentCombo = 4;
+            currentCombo = 5;
         }
 
 

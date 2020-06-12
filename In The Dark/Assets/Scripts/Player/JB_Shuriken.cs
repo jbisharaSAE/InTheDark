@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class JB_Kunai : MonoBehaviour
+public class JB_Shuriken : MonoBehaviour
 {
     private Rigidbody2D rb;
     public float speed = 100f;
@@ -27,7 +27,8 @@ public class JB_Kunai : MonoBehaviour
         {
             rb.velocity = (Vector2.left) * speed;
         }
-        
+
+
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

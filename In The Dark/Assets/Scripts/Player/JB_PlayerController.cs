@@ -346,7 +346,7 @@ public class JB_PlayerController : MonoBehaviour {
             if (bFacingRight)
             {
                 kunaiShuriken = Instantiate(kunaiPrefab, throwSpawn.position, kunaiPrefab.transform.rotation);
-                kunaiShuriken.GetComponent<JB_Kunai>().facingRight = bFacingRight;
+                kunaiShuriken.GetComponent<JB_Shuriken>().facingRight = bFacingRight;
 
 
                 Vector3 newScale = kunaiShuriken.transform.localScale;
@@ -359,7 +359,7 @@ public class JB_PlayerController : MonoBehaviour {
             {
 
                 kunaiShuriken = Instantiate(kunaiPrefab, throwSpawn.position, kunaiPrefab.transform.rotation);
-                kunaiShuriken.GetComponent<JB_Kunai>().facingRight = bFacingRight;
+                kunaiShuriken.GetComponent<JB_Shuriken>().facingRight = bFacingRight;
 
                 Vector3 newScale = kunaiShuriken.transform.localScale;
                 newScale.y *= -1;

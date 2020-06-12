@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class JB_BossRun : StateMachineBehaviour
 {
-    public float speed = 2.5f;
+    
     public float attackRange = 3f;
 
+    private float speed;
     private Transform player;
     private Rigidbody2D rb;
     private JB_BossOne bossScript;
@@ -17,6 +18,7 @@ public class JB_BossRun : StateMachineBehaviour
         player = GameObject.FindGameObjectWithTag("Player").transform;
         rb = animator.GetComponent<Rigidbody2D>();
         bossScript = animator.GetComponent<JB_BossOne>();
+        speed = animator.GetComponent<JB_BossOne>().moveSpeed;
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -26,7 +28,7 @@ public class JB_BossRun : StateMachineBehaviour
 
         Vector2 target = new Vector2(player.position.x, rb.position.y);
         Vector2 newPos = Vector2.MoveTowards(rb.position, target, speed * Time.fixedDeltaTime);
-        rb.MovePosition(newPos);
+        
 
         float distance = Vector2.Distance(player.position, rb.position);
 
@@ -35,12 +37,26 @@ public class JB_BossRun : StateMachineBehaviour
             // attack
             animator.SetTrigger("Attack");
         }
+        else
+        {
+            
+            rb.MovePosition(newPos);
+            
+        }
+
+        if(distance > 10f)
+        {
+            bossScript.ThrowShuriken();
+        }
     }
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         animator.ResetTrigger("Attack");
+        animator.ResetTrigger("Throw");
+
+        
     }
 
 }
