@@ -37,6 +37,7 @@ public class MeleeEnemyChaseState : StateMachineBehaviour
         Vector2 displacement = target.transform.position - animator.transform.position;
         if (displacement.sqrMagnitude <= (m_scriptComp.attackRange * m_scriptComp.attackRange))
         {
+            m_movementComp.SetMoveInput(0f);
             animator.SetTrigger("Attack");
             return;
         }
@@ -47,12 +48,19 @@ public class MeleeEnemyChaseState : StateMachineBehaviour
             // or below us) we just want to wait for them to either reach us
             if (Mathf.Abs(displacement.x) > (m_scriptComp.attackRange * 0.25f))
             {
-                m_movementComp.SetMoveInput(Mathf.Sign(displacement.x));
+                if (ShouldTryJump())
+                {
+                    m_movementComp.Jump();
+                }
+
+                m_movementComp.SetMoveInput(Mathf.Sign(displacement.x) * (m_movementComp.isGrounded ? 1f : 0.4f));
                 animator.SetBool("Idle", false);
             }
             else
             {
+                m_movementComp.SetMoveInput(0f);
                 animator.SetBool("Idle", true);
+               
             }
         }
         else
@@ -71,5 +79,16 @@ public class MeleeEnemyChaseState : StateMachineBehaviour
     {
         // Reset trigger we may have activated
         animator.ResetTrigger("Attack");
+    }
+
+    private bool ShouldTryJump()
+    {
+        if (!m_movementComp.isGrounded)
+        {
+            if (!m_movementComp.CanJump() || m_movementComp.velocity.y > 0f)
+                return false;
+        }
+
+        return m_scriptComp.inJumpSpot;
     }
 }

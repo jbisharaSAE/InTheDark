@@ -23,12 +23,12 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField, Min(0)] private int m_maxAirJumps = 1;                 // Max number of times character can jump in air
 
     [Header("Components")]
-    [SerializeField] protected Rigidbody2D m_rigidBody;                 // Rigidbody to move. Used to interact with world
+    [SerializeField] protected Rigidbody2D m_rigidBody;                     // Rigidbody to move. Used to interact with world
     [SerializeField] protected CapsuleCollider2D m_collider;                // Collider that we move. Used for collision checks
 
     [Header("Config")]
-    [SerializeField] protected bool m_orientateToMovement = false;                  // If to rotate transform based on movement direction
-    [SerializeField] protected LayerMask m_worldLayers = Physics2D.AllLayers;       // Layers of world geoemetry
+    [SerializeField] public bool m_orientateToMovement = false;                     // If to rotate transform based on movement direction
+    [SerializeField] public LayerMask m_worldLayers = Physics2D.AllLayers;          // Layers of world geoemetry
 
     protected float m_moveInput = 0f;           // Current input to apply next FixedUpdate()
     protected bool m_isGrounded = true;         // If we are grounded (start as default)
@@ -37,6 +37,14 @@ public class CharacterMovement : MonoBehaviour
 
     protected Collider2D m_floorCollider;               // Floor character is standing on
     protected Vector2 m_floorLocation = Vector2.zero;   // Location floor was when last updated
+
+    public Rigidbody2D rigidbody2D { get { return m_rigidBody; } }
+    public CapsuleCollider2D capsule { get { return m_collider; } }
+
+    /// <summary>
+    /// The velocity of the character
+    /// </summary>
+    public Vector3 velocity { get { return m_rigidBody.velocity; } }
 
     /// <summary>
     /// If character is currently grounded
@@ -109,10 +117,7 @@ public class CharacterMovement : MonoBehaviour
     /// <returns>If a jump was performed</returns>
     public virtual bool Jump()
     {
-        if (m_aboutToJump)
-            return false;
-
-        if (m_isGrounded || m_numAirJumps < m_maxAirJumps)
+        if (CanJump())
         {
             Vector2 velocity = m_rigidBody.velocity;
             velocity.y = m_jumpPower; // Velocity change
@@ -127,6 +132,18 @@ public class CharacterMovement : MonoBehaviour
         }
 
         return false;
+    }
+
+    /// <summary>
+    /// If character is currently able to jump
+    /// </summary>
+    /// <returns>If character can jump</returns>
+    public virtual bool CanJump()
+    {
+        if (m_aboutToJump)
+            return false;
+
+        return m_isGrounded || m_numAirJumps < m_maxAirJumps;
     }
 
     /// <summary>
@@ -208,7 +225,7 @@ public class CharacterMovement : MonoBehaviour
     private IEnumerator PostFixedUpdate()
     {
         yield return new WaitForFixedUpdate();
-        UpdateIsGrounded(true);
+        //UpdateIsGrounded(true);
     }
 
     /// <summary>
