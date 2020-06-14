@@ -11,6 +11,7 @@ public class JB_BossRun : StateMachineBehaviour
     private Transform player;
     private Rigidbody2D rb;
     private JB_BossOne bossScript;
+    
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
@@ -32,23 +33,26 @@ public class JB_BossRun : StateMachineBehaviour
 
         float distance = Vector2.Distance(player.position, rb.position);
 
-        if(distance <= attackRange)
+        if (distance <= attackRange)
         {
             // attack
             animator.SetTrigger("Attack");
         }
         else
         {
-            
+            // move towards player
             rb.MovePosition(newPos);
-            
+
         }
 
-        if(distance > 10f)
+        if (distance > 10f)
         {
+            // run throw script if far away enough from player
             bossScript.ThrowShuriken();
         }
+
     }
+
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

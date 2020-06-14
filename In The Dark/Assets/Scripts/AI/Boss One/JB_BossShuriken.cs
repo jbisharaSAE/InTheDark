@@ -6,6 +6,7 @@ public class JB_BossShuriken : MonoBehaviour
 {
     private Rigidbody2D rb;
     [SerializeField] private float speed = 25f;
+    [SerializeField] private float shurikenDmg = 10f;
 
     // Start is called before the first frame update
     void Start()
@@ -17,5 +18,18 @@ public class JB_BossShuriken : MonoBehaviour
     void Update()
     {
         rb.velocity = transform.right * speed;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if(collision.gameObject.tag == "Player")
+        {
+            collision.gameObject.GetComponent<HealthComponent>().ApplyDamage(shurikenDmg);
+            Destroy(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 }

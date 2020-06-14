@@ -59,11 +59,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2dd38408635a8a341b33401308969581, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  smokeBombPrefab: {fileID: 4991050977572382686, guid: b7af85582abb49c4ab415208fc30d8d4,
+    type: 3}
   shurikenPrefab: {fileID: 2645528879409822259, guid: e09b1230b91599a46ac1f119564c52dc,
     type: 3}
   shurikenSpawn: {fileID: 6316142197310318688}
   isFlipped: 1
   moveSpeed: 5
+  bossVanishHeight: 100
+  bVanishTimed: 1
 --- !u!114 &257334515
 MonoBehaviour:
   m_ObjectHideFlags: 0
