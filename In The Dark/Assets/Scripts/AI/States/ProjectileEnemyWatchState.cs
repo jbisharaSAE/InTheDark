@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class ProjectileEnemyWatchState : StateMachineBehaviour
 {
+    private GuardEnemyScript m_scriptComp = null;
     private GuardLookoutRoutine m_lookoutComp = null;
 
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        m_scriptComp = animator.GetComponent<GuardEnemyScript>();
+
         m_lookoutComp = animator.GetComponent<GuardLookoutRoutine>();
         if (m_lookoutComp)
-            // TODO: Resume routine starting from entry that looks closest to
-            // direction the enemy is currently facing!
-            m_lookoutComp.ResumeRoutine();
+            // Resume the lookout routine from the entry closest to way guard is already looking
+            m_lookoutComp.ResumeRoutineClosestTo(m_scriptComp.eyeSightDirection);
     }
 
     public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

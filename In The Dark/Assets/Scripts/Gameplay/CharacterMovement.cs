@@ -38,7 +38,7 @@ public class CharacterMovement : MonoBehaviour
     protected Collider2D m_floorCollider;               // Floor character is standing on
     protected Vector2 m_floorLocation = Vector2.zero;   // Location floor was when last updated
 
-    public Rigidbody2D rigidbody2D { get { return m_rigidBody; } }
+    public new Rigidbody2D rigidbody2D { get { return m_rigidBody; } }
     public CapsuleCollider2D capsule { get { return m_collider; } }
 
     /// <summary>

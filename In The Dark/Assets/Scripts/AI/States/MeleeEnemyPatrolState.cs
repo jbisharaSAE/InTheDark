@@ -12,7 +12,6 @@ public class MeleeEnemyPatrolState : StateMachineBehaviour
     private float m_movementInput = 0f;     // Input to set each update
 
     private TouchPerception m_touchComp = null;
-    private WallDetectionComponent m_detection = null;
 
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {

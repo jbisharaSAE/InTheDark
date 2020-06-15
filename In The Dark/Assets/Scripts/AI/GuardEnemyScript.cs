@@ -19,6 +19,11 @@ public class GuardEnemyScript : EnemyScript
     /// </summary>
     public EnemyProjectileAttack attackComponent { get { return m_attackComp; } }
 
+    /// <summary>
+    /// The direction this guard is looking
+    /// </summary>
+    public Vector2 eyeSightDirection { get { return GetEyeSightDirection(); } }
+
     protected override void Awake()
     {
         if (!m_lookoutComp)
@@ -33,10 +38,14 @@ public class GuardEnemyScript : EnemyScript
     public void ThrowProjectile()
     {
         if (m_attackComp)
-            m_attackComp.TryThrowProjectile(GetThrowDirection());
+            m_attackComp.TryThrowProjectile(GetEyeSightDirection());
     }
 
-    private Vector2 GetThrowDirection()
+    /// <summary>
+    /// Get the direction the guard is currently looking
+    /// </summary>
+    /// <returns>Normalized vector</returns>
+    private Vector2 GetEyeSightDirection()
     {
         if (m_sightPerception)
             return m_sightPerception.transform.right;
