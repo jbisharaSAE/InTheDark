@@ -12,15 +12,15 @@ using UnityEditor;
 [RequireComponent(typeof(Rigidbody2D))]
 public class CharacterMovement : MonoBehaviour
 {
-    protected readonly float floorCheckExtent = 0.025f;
+    protected readonly float floorCheckExtent = 0.075f;
 
     [Header("Movement")]
     [SerializeField, Min(0f)] public float m_walkSpeed = 10f;               // Normal walk speed while on the ground
     [SerializeField, Min(0f)] public float m_airSpeed = 8f;                 // Speed while in the air
     [SerializeField, Min(0f)] protected float m_maxAcceleration = 40f;      // Acceleration for reaching walk/air speed
     [SerializeField, Min(0f)] protected float m_brakeFriction = 50f;        // Friction to apply when no input has been applied
-    [SerializeField, Min(0f)] protected float m_jumpPower = 5f;             // Power of jump, decides velocity
-    [SerializeField, Min(0)] private int m_maxAirJumps = 1;                 // Max number of times character can jump in air
+    [SerializeField, Min(0f)] public float m_jumpPower = 5f;                // Power of jump, decides velocity
+    [SerializeField, Min(0)] public int m_maxAirJumps = 1;                  // Max number of times character can jump in air
 
     [Header("Components")]
     [SerializeField] protected Rigidbody2D m_rigidBody;                     // Rigidbody to move. Used to interact with world
@@ -44,7 +44,27 @@ public class CharacterMovement : MonoBehaviour
     /// <summary>
     /// The velocity of the character
     /// </summary>
-    public Vector3 velocity { get { return m_rigidBody.velocity; } }
+    public Vector2 velocity { get { return m_rigidBody.velocity; } }
+
+    /// <summary>
+    /// The bounds of the character
+    /// </summary>
+    public Bounds bounds { get { return capsule.bounds; } }
+
+    /// <summary>
+    /// If character is moving horizontally (not falling)
+    /// </summary>
+    public bool isMoving { get { return !Mathf.Approximately(velocity.x, 0.1f); } }
+    
+    /// <summary>
+    /// If character is falling (y velocity is negative)
+    /// </summary>
+    public bool isFalling { get { return velocity.y < 0f; } }
+
+    /// <summary>
+    /// If character is about to or is jumping
+    /// </summary>
+    public bool isJumping { get { return m_aboutToJump; } }
 
     /// <summary>
     /// If character is currently grounded

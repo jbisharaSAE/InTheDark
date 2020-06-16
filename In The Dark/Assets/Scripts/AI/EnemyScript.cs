@@ -12,12 +12,18 @@ public class EnemyScript : MonoBehaviour
 
     [Header("Components", order = 0)]
     [SerializeField] private CharacterMovement m_movementComp = null;       // Enemies movement component
+    [SerializeField] private Animator m_animatorComp = null;                // Enemies animator component
     [SerializeField] private HealthComponent m_healthComp = null;           // Enemies health component
 
     /// <summary>
     /// This enemies character movement component
     /// </summary>
     public CharacterMovement movementComponent { get { return m_movementComp; } }
+
+    /// <summary>
+    /// This enemies animator component
+    /// </summary>
+    public Animator animatorComponent { get { return m_animatorComp; } }
 
     /// <summary>
     /// This enemies health component
@@ -29,6 +35,9 @@ public class EnemyScript : MonoBehaviour
         if (!m_movementComp)
             m_movementComp = GetComponent<CharacterMovement>();
 
+        if (!m_animatorComp)
+            m_animatorComp = GetComponent<Animator>();
+
         if (!m_healthComp)
             m_healthComp = GetComponent<HealthComponent>();
 
@@ -37,6 +46,12 @@ public class EnemyScript : MonoBehaviour
             m_healthComp.OnHealthChanged += OnHealthChanged;
             m_healthComp.OnDeath += OnDeath;
         }
+    }
+
+    protected virtual void Update()
+    {
+        animatorComponent.SetBool("Jumping", m_movementComp.isJumping);
+        animatorComponent.SetBool("Airborne", !m_movementComp.isGrounded);
     }
 
     protected virtual void OnHealthChanged(HealthComponent self, float newHealth, float delta)

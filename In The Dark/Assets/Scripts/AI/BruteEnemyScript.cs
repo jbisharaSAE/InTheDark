@@ -44,6 +44,8 @@ public class BruteEnemyScript : EnemyScript
             movementComponent.m_orientateToMovement = true;
             movementComponent.m_walkSpeed = m_patrolSpeed;
         }
+
+        GetComponent<EnemyTargetSelector>().m_focusSightOnTarget = false;
     }
 
     public void OnEnterChase()
@@ -53,5 +55,7 @@ public class BruteEnemyScript : EnemyScript
             movementComponent.m_orientateToMovement = false;
             movementComponent.m_walkSpeed = m_chaseSpeed;
         }
+
+        GetComponent<EnemyTargetSelector>().m_focusSightOnTarget = true;
     }
 }

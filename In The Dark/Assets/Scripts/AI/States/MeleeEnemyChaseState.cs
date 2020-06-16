@@ -46,9 +46,9 @@ public class MeleeEnemyChaseState : StateMachineBehaviour
         {
             // If target is far to left or right us, move forward. If close (might be above
             // or below us) we just want to wait for them to either reach us
-            if (Mathf.Abs(displacement.x) > (m_scriptComp.attackRange * 0.25f))
+            if (Mathf.Abs(displacement.x) > (m_movementComp.bounds.size.x))
             {
-                if (ShouldTryJump())
+                if (ShouldTryJump(displacement.y))
                 {
                     m_movementComp.Jump();
                 }
@@ -60,14 +60,14 @@ public class MeleeEnemyChaseState : StateMachineBehaviour
             {
                 m_movementComp.SetMoveInput(0f);
                 animator.SetBool("Idle", true);
-               
+
             }
         }
         else
         {
             animator.SetBool("Idle", true);
             m_movementComp.SetMoveInput(0f);
-        }      
+        }
 
         // Face our target
         float desiredRot = displacement.x > 0f ? 0f : 180f;
@@ -81,14 +81,15 @@ public class MeleeEnemyChaseState : StateMachineBehaviour
         animator.ResetTrigger("Attack");
     }
 
-    private bool ShouldTryJump()
+    private bool ShouldTryJump(float displacementY)
     {
         if (!m_movementComp.isGrounded)
         {
+            // Might already be jumping
             if (!m_movementComp.CanJump() || m_movementComp.velocity.y > 0f)
                 return false;
         }
 
-        return m_scriptComp.inJumpSpot;
+        return m_scriptComp.inJumpSpot && displacementY > 1f;
     }
 }
