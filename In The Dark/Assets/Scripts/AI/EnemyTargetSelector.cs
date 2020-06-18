@@ -7,7 +7,6 @@ public class EnemyTargetSelector : MonoBehaviour
     [SerializeField] private Animator m_animator = null;
     [SerializeField] private SightPerception m_sightPerception = null;
     [SerializeField] private float m_updateRate = 0.2f;
-    [SerializeField] private float m_forgetTime = 1f;
 
     public bool m_focusSightOnTarget = false;
 

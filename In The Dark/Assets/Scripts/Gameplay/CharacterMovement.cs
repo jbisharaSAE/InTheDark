@@ -31,6 +31,7 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] public LayerMask m_worldLayers = Physics2D.AllLayers;          // Layers of world geoemetry
 
     protected float m_moveInput = 0f;           // Current input to apply next FixedUpdate()
+    protected byte m_inputDisabled = 0;         // If to ignore move input (treat is as zero)
     protected bool m_isGrounded = true;         // If we are grounded (start as default)
     protected bool m_aboutToJump = false;       // If about to jumping, used to prevent jumping multiple time
     protected int m_numAirJumps = 0;            // Number of air jumps that have been done since last being grounded
@@ -55,7 +56,7 @@ public class CharacterMovement : MonoBehaviour
     /// If character is moving horizontally (not falling)
     /// </summary>
     public bool isMoving { get { return !Mathf.Approximately(velocity.x, 0.1f); } }
-    
+
     /// <summary>
     /// If character is falling (y velocity is negative)
     /// </summary>
@@ -70,6 +71,16 @@ public class CharacterMovement : MonoBehaviour
     /// If character is currently grounded
     /// </summary>
     public bool isGrounded { get { return m_isGrounded; } }
+
+    /// <summary>
+    /// If characters move input is disabled
+    /// </summary>
+    public bool inputDisabled { get { return m_inputDisabled > 0; } }
+
+    /// <summary>
+    /// Current input applied, considers if input is disabled
+    /// </summary>
+    public float currentInput { get { return inputDisabled ? 0f : m_moveInput; } }
 
     protected virtual void Awake()
     {
@@ -95,7 +106,8 @@ public class CharacterMovement : MonoBehaviour
 
         Vector2 velocity = m_rigidBody.velocity;
 
-        if (m_isGrounded && Mathf.Approximately(m_moveInput, 0f))
+        float input = currentInput;
+        if (m_isGrounded && Mathf.Approximately(input, 0f))
         {
             // Apply a braking friction force to auto slow us down
             velocity.x = Mathf.Lerp(velocity.x, 0f, m_brakeFriction * Time.fixedDeltaTime);
@@ -104,7 +116,7 @@ public class CharacterMovement : MonoBehaviour
         {
             float maxSpeed = GetMaxSpeed();
 
-            velocity.x += m_moveInput * m_maxAcceleration * Time.fixedDeltaTime;
+            velocity.x += input * m_maxAcceleration * Time.fixedDeltaTime;
             velocity.x = Mathf.Clamp(velocity.x, -maxSpeed, maxSpeed);
         }
 
@@ -114,7 +126,7 @@ public class CharacterMovement : MonoBehaviour
         // Rotate ourselves if desired
         if (m_orientateToMovement)
         {
-            if (m_moveInput != 0f)
+            if (input != 0f)
                 transform.localEulerAngles = Helpers.FlipRotation(m_moveInput);
         }
 
@@ -129,6 +141,21 @@ public class CharacterMovement : MonoBehaviour
     public virtual void SetMoveInput(float input)
     {
         m_moveInput = input;
+    }
+
+    /// <summary>
+    /// Set if move input is disabled (treated as zero)
+    /// </summary>
+    /// <param name="disable">If to disable input</param>
+    public void SetMoveInputDisabled(bool disable)
+    {
+        if (disable)
+            ++m_inputDisabled;
+        else
+            --m_inputDisabled;
+
+        if (m_inputDisabled < 0)
+            m_inputDisabled = 0;
     }
 
     /// <summary>
