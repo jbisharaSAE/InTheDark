@@ -15,7 +15,11 @@ public class HealthComponent : MonoBehaviour
     public delegate void OnHealthChangedEvent(HealthComponent self, float newHealth, float delta);
     public OnHealthChangedEvent OnHealthChanged;
 
-    // Event that is called upon death of the object. This will get called after onHealthChanged
+    // Event that is called when damaged. This gets called after OnHealthChanged but before OnDeath (if damaged killed)
+    public delegate void OnDamagedEvent(HealthComponent self, float damage, DamageInfo info);
+    public OnDamagedEvent OnDamaged;
+
+    // Event that is called upon death of the object. This will get called after OnHealthChanged and OnDamaged
     public delegate void OnDeathEvent(HealthComponent self);
     public OnDeathEvent OnDeath;
 
@@ -53,62 +57,108 @@ public class HealthComponent : MonoBehaviour
     public float RestoreHealth(float amount)
     {
         if (amount > 0)
-            return ApplyHealthDelta(amount);
+            return RestoreHealthImpl(amount);
 
         return 0f;
     }
 
     /// <summary>
-    /// Applies damage to this object. Will do nothing if dead
+    /// Applies damage to this object. Will do nothing if dead.
     /// </summary>
     /// <param name="amount">Amount of damage to apply</param>
     /// <returns>Amount of damage applied</returns>
+    public float ApplyDamage(DamageInfo damage)
+    {
+        return ApplyDamageImpl(damage);
+    }
+
+    /// <summary>
+    /// Applies damage to this object. Will do nothing if dead.
+    /// </summary>
+    /// <param name="amount">Amount of damage to apply</param>
+    /// <returns>Amount of damage applied</returns>
+    [System.Obsolete("Please use DamageInfo overload instead of single float value", false)]
     public float ApplyDamage(float amount)
     {
         if (amount > 0)
-            return Mathf.Abs(ApplyHealthDelta(-amount));
+        {
+            DamageInfo damageInfo = DamageInfo.MakeDamageInfo(amount);
+            return ApplyDamageImpl(damageInfo);
+        }
 
         return 0f;
     }
 
     /// <summary>
-    /// Applies an amount of health directly. Delta can be negative (if applying negative amount)
+    /// Implementation for restoring health, does not take in damage info
     /// </summary>
-    /// <param name="amount">Amount of delta</param>
-    /// <returns>Delta of change applied</returns>
-    public float ApplyDeltaDirect(float amount)
+    /// <param name="amount">Amount of health to restore</param>
+    /// <returns>Amount of health applied</returns>
+    private float RestoreHealthImpl(float amount)
     {
-        return ApplyHealthDelta(amount);
-    }
-
-    /// <summary>
-    /// Applies a delta of health to this object
-    /// </summary>
-    /// <param name="delta">Delta to apply. Positive to restore, negative to damage</param>
-    /// <returns>Delta that was applied to health</returns>
-    private float ApplyHealthDelta(float delta)
-    {
-        if (isDead || Mathf.Approximately(delta, 0f))
+        if (isDead || amount <= 0f)
             return 0f;
 
-        // Stop here if recieving damage but we are invincible
-        if (m_invincible && delta < 0f)
+        // Don't bother if already at max health
+        if (health >= maxHealth)
             return 0f;
 
         float OldHealth = m_health;
-        m_health = Mathf.Clamp(OldHealth + delta, 0f, m_maxHealth);
+        m_health = Mathf.Clamp(OldHealth + amount, 0f, m_maxHealth);
 
         // Update delta based on how much health has actually changed
-        // (Healing will be positive, damage will be negative)
-        delta = m_health - OldHealth;
+        // Value will be positive
+        amount = m_health - OldHealth;
 
+        InvokeEvents(amount, null);
+        return amount;
+    }
+
+    /// <summary>
+    /// Implementation for applying damage, takes in a damage info instance
+    /// </summary>
+    /// <param name="info">Info containing details for damage</param>
+    /// <returns>Amount of damage applied</returns>
+    private float ApplyDamageImpl(DamageInfo info)
+    {
+        if (!info)
+            return 0f;
+
+        float damage = info.damage;
+        if (isDead || damage <= 0f)
+            return 0f;
+
+        // Stop here if recieving damage but we are invincible
+        if (m_invincible)
+            return 0f;
+
+        float OldHealth = m_health;
+        m_health = Mathf.Clamp(OldHealth - damage, 0f, m_maxHealth);
+
+        // Update delta based on how much health has actually changed
+        // Value will be negative
+        damage = m_health - OldHealth;
+
+        InvokeEvents(damage, info);
+        return -damage;
+    }
+
+    /// <summary>
+    /// Invokes health changed events based on both current values and given params
+    /// </summary>
+    /// <param name="delta">Delta of health change</param>
+    /// <param name="damageInfo">Damage info if damaged</param>
+    private void InvokeEvents(float delta, DamageInfo damageInfo)
+    {
         if (OnHealthChanged != null)
             OnHealthChanged.Invoke(this, m_health, delta);
+
+        if (delta < 0f)
+            if (OnDamaged != null)
+                OnDamaged.Invoke(this, Mathf.Abs(delta), damageInfo);
 
         if (isDead)
             if (OnDeath != null)
                 OnDeath.Invoke(this);
-
-        return delta;
     }
 }

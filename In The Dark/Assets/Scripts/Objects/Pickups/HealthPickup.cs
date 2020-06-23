@@ -21,7 +21,7 @@ public class HealthPickup : PickupComponent
             return;
 
         // Only destroy the pickup if we have actually applied the health delta
-        float delta = healthComp.ApplyDeltaDirect(m_healthToGive);
+        float delta = healthComp.RestoreHealth(m_healthToGive);
         if (Mathf.Abs(delta) > 0f)
         {
             enabled = false;
