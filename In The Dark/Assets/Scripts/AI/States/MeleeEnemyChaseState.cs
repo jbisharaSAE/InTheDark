@@ -37,6 +37,7 @@ public class MeleeEnemyChaseState : StateMachineBehaviour
         Vector2 displacement = target.transform.position - animator.transform.position;
         if (displacement.sqrMagnitude <= (m_scriptComp.attackRange * m_scriptComp.attackRange))
         {
+            m_movementComp.SetMoveInput(0f);
             animator.SetTrigger("Attack");
             return;
         }
@@ -45,21 +46,28 @@ public class MeleeEnemyChaseState : StateMachineBehaviour
         {
             // If target is far to left or right us, move forward. If close (might be above
             // or below us) we just want to wait for them to either reach us
-            if (Mathf.Abs(displacement.x) > (m_scriptComp.attackRange * 0.25f))
+            if (Mathf.Abs(displacement.x) > (m_movementComp.bounds.size.x))
             {
-                m_movementComp.SetMoveInput(Mathf.Sign(displacement.x));
+                if (ShouldTryJump(displacement.y))
+                {
+                    m_movementComp.Jump();
+                }
+
+                m_movementComp.SetMoveInput(Mathf.Sign(displacement.x) * (m_movementComp.isGrounded ? 1f : 0.4f));
                 animator.SetBool("Idle", false);
             }
             else
             {
+                m_movementComp.SetMoveInput(0f);
                 animator.SetBool("Idle", true);
+
             }
         }
         else
         {
             animator.SetBool("Idle", true);
             m_movementComp.SetMoveInput(0f);
-        }      
+        }
 
         // Face our target
         float desiredRot = displacement.x > 0f ? 0f : 180f;
@@ -71,5 +79,17 @@ public class MeleeEnemyChaseState : StateMachineBehaviour
     {
         // Reset trigger we may have activated
         animator.ResetTrigger("Attack");
+    }
+
+    private bool ShouldTryJump(float displacementY)
+    {
+        if (!m_movementComp.isGrounded)
+        {
+            // Might already be jumping
+            if (!m_movementComp.CanJump() || m_movementComp.velocity.y > 0f)
+                return false;
+        }
+
+        return m_scriptComp.inJumpSpot && displacementY > 1f;
     }
 }

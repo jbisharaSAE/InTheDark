@@ -17,7 +17,7 @@ public class ProjectileEnemyTrackState : StateMachineBehaviour
     {
         // We can just exit this state now if target is not in sight,
         // as we most likely won't be moving 
-        GameObject target = m_targetComp.ConditionalGetTarget();
+        GameObject target = m_targetComp.target;
         if (!target)
         {
             animator.SetBool("HasTarget", false);

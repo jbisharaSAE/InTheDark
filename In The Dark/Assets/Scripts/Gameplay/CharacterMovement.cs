@@ -12,25 +12,26 @@ using UnityEditor;
 [RequireComponent(typeof(Rigidbody2D))]
 public class CharacterMovement : MonoBehaviour
 {
-    protected readonly float floorCheckExtent = 0.025f;
+    protected readonly float floorCheckExtent = 0.075f;
 
     [Header("Movement")]
     [SerializeField, Min(0f)] public float m_walkSpeed = 10f;               // Normal walk speed while on the ground
     [SerializeField, Min(0f)] public float m_airSpeed = 8f;                 // Speed while in the air
     [SerializeField, Min(0f)] protected float m_maxAcceleration = 40f;      // Acceleration for reaching walk/air speed
     [SerializeField, Min(0f)] protected float m_brakeFriction = 50f;        // Friction to apply when no input has been applied
-    [SerializeField, Min(0f)] protected float m_jumpPower = 5f;             // Power of jump, decides velocity
-    [SerializeField, Min(0)] private int m_maxAirJumps = 1;                 // Max number of times character can jump in air
+    [SerializeField, Min(0f)] public float m_jumpPower = 5f;                // Power of jump, decides velocity
+    [SerializeField, Min(0)] public int m_maxAirJumps = 1;                  // Max number of times character can jump in air
 
     [Header("Components")]
-    [SerializeField] protected Rigidbody2D m_rigidBody;                 // Rigidbody to move. Used to interact with world
+    [SerializeField] protected Rigidbody2D m_rigidBody;                     // Rigidbody to move. Used to interact with world
     [SerializeField] protected CapsuleCollider2D m_collider;                // Collider that we move. Used for collision checks
 
     [Header("Config")]
-    [SerializeField] protected bool m_orientateToMovement = false;                  // If to rotate transform based on movement direction
-    [SerializeField] protected LayerMask m_worldLayers = Physics2D.AllLayers;       // Layers of world geoemetry
+    [SerializeField] public bool m_orientateToMovement = false;                     // If to rotate transform based on movement direction
+    [SerializeField] public LayerMask m_worldLayers = Physics2D.AllLayers;          // Layers of world geoemetry
 
     protected float m_moveInput = 0f;           // Current input to apply next FixedUpdate()
+    protected byte m_inputDisabled = 0;         // If to ignore move input (treat is as zero)
     protected bool m_isGrounded = true;         // If we are grounded (start as default)
     protected bool m_aboutToJump = false;       // If about to jumping, used to prevent jumping multiple time
     protected int m_numAirJumps = 0;            // Number of air jumps that have been done since last being grounded
@@ -38,10 +39,48 @@ public class CharacterMovement : MonoBehaviour
     protected Collider2D m_floorCollider;               // Floor character is standing on
     protected Vector2 m_floorLocation = Vector2.zero;   // Location floor was when last updated
 
+    public new Rigidbody2D rigidbody2D { get { return m_rigidBody; } }
+    public CapsuleCollider2D capsule { get { return m_collider; } }
+
+    /// <summary>
+    /// The velocity of the character
+    /// </summary>
+    public Vector2 velocity { get { return m_rigidBody.velocity; } }
+
+    /// <summary>
+    /// The bounds of the character
+    /// </summary>
+    public Bounds bounds { get { return capsule.bounds; } }
+
+    /// <summary>
+    /// If character is moving horizontally (not falling)
+    /// </summary>
+    public bool isMoving { get { return !Mathf.Approximately(velocity.x, 0.1f); } }
+
+    /// <summary>
+    /// If character is falling (y velocity is negative)
+    /// </summary>
+    public bool isFalling { get { return velocity.y < 0f; } }
+
+    /// <summary>
+    /// If character is about to or is jumping
+    /// </summary>
+    public bool isJumping { get { return m_aboutToJump; } }
+
     /// <summary>
     /// If character is currently grounded
     /// </summary>
     public bool isGrounded { get { return m_isGrounded; } }
+
+    /// <summary>
+    /// If characters move input is disabled
+    /// </summary>
+    public bool inputDisabled { get { return m_inputDisabled > 0; } }
+
+    /// <summary>
+    /// Current input applied, considers if input is disabled
+    /// </summary>
+    public float currentInput { get { return inputDisabled ? 0f : m_moveInput; } }
 
     protected virtual void Awake()
     {
@@ -67,7 +106,8 @@ public class CharacterMovement : MonoBehaviour
 
         Vector2 velocity = m_rigidBody.velocity;
 
-        if (m_isGrounded && Mathf.Approximately(m_moveInput, 0f))
+        float input = currentInput;
+        if (m_isGrounded && Mathf.Approximately(input, 0f))
         {
             // Apply a braking friction force to auto slow us down
             velocity.x = Mathf.Lerp(velocity.x, 0f, m_brakeFriction * Time.fixedDeltaTime);
@@ -76,7 +116,7 @@ public class CharacterMovement : MonoBehaviour
         {
             float maxSpeed = GetMaxSpeed();
 
-            velocity.x += m_moveInput * m_maxAcceleration * Time.fixedDeltaTime;
+            velocity.x += input * m_maxAcceleration * Time.fixedDeltaTime;
             velocity.x = Mathf.Clamp(velocity.x, -maxSpeed, maxSpeed);
         }
 
@@ -86,7 +126,7 @@ public class CharacterMovement : MonoBehaviour
         // Rotate ourselves if desired
         if (m_orientateToMovement)
         {
-            if (m_moveInput != 0f)
+            if (input != 0f)
                 transform.localEulerAngles = Helpers.FlipRotation(m_moveInput);
         }
 
@@ -104,15 +144,27 @@ public class CharacterMovement : MonoBehaviour
     }
 
     /// <summary>
+    /// Set if move input is disabled (treated as zero)
+    /// </summary>
+    /// <param name="disable">If to disable input</param>
+    public void SetMoveInputDisabled(bool disable)
+    {
+        if (disable)
+            ++m_inputDisabled;
+        else
+            --m_inputDisabled;
+
+        if (m_inputDisabled < 0)
+            m_inputDisabled = 0;
+    }
+
+    /// <summary>
     /// Have character jump once if able to
     /// </summary>
     /// <returns>If a jump was performed</returns>
     public virtual bool Jump()
     {
-        if (m_aboutToJump)
-            return false;
-
-        if (m_isGrounded || m_numAirJumps < m_maxAirJumps)
+        if (CanJump())
         {
             Vector2 velocity = m_rigidBody.velocity;
             velocity.y = m_jumpPower; // Velocity change
@@ -127,6 +179,18 @@ public class CharacterMovement : MonoBehaviour
         }
 
         return false;
+    }
+
+    /// <summary>
+    /// If character is currently able to jump
+    /// </summary>
+    /// <returns>If character can jump</returns>
+    public virtual bool CanJump()
+    {
+        if (m_aboutToJump)
+            return false;
+
+        return m_isGrounded || m_numAirJumps < m_maxAirJumps;
     }
 
     /// <summary>
@@ -208,7 +272,7 @@ public class CharacterMovement : MonoBehaviour
     private IEnumerator PostFixedUpdate()
     {
         yield return new WaitForFixedUpdate();
-        UpdateIsGrounded(true);
+        //UpdateIsGrounded(true);
     }
 
     /// <summary>
