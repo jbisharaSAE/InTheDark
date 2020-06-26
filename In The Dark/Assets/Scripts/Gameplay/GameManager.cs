@@ -15,8 +15,14 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public static bool isPaused { get { return instance ? instance.m_isPaused : false; } }
 
+    /// <summary>
+    /// Check if input has been requested to be disabled
+    /// </summary>
+    public static bool inputDisabled { get { return instance ? instance.m_disableInput : false; } }
+
     private bool m_isPaused = false;            // If game is currently paused
     private float m_prevTimeScale = 1f;         // Time scale before game was paused
+    private bool m_disableInput = false;        // If input is requested to be ignored
 
     void Awake()
     {
@@ -119,6 +125,24 @@ public class GameManager : MonoBehaviour
 
         if (PlayerHUD.instance)
             PlayerHUD.instance.HidePauseScreen();
+    }
+
+    /// <summary>
+    /// If game input should be disabled globally (
+    /// </summary>
+    /// <param name="disable">If to disable input</param>
+    public static void SetInputDisabled(bool disable)
+    {
+        if (instance)
+            instance.SetInputDisabledImpl(disable);
+    }
+
+    /// <summary>
+    /// Implementation for disabling input
+    /// </summary>
+    private void SetInputDisabledImpl(bool disable)
+    {
+        m_disableInput = disable;
     }
 
     /// <summary>
