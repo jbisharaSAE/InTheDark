@@ -5,74 +5,61 @@ using UnityEngine;
 public class JB_SwordTrigger : MonoBehaviour
 {
     [SerializeField] private JB_ResourceManagement resourceScript;
-    public bool bAttack;
-    public bool bThirdattack;
+    [SerializeField] private LayerMask attackMask;
+    [SerializeField] private float attackRange;
+    [SerializeField] private DamageInfo firstPhaseAttackDamage;
+    [SerializeField] private DamageInfo lastPhaseAttackDamage;
 
-
-
-    //private void OnTriggerEnter2D(Collider2D collision)
-    //{
-    //    if (collision.gameObject.tag == "Enemy")
-    //    {
-    //        resourceScript.BasicSwordAttack();
-    //        // did the sword hit an enemy
-    //    }
-    //    else if (collision.gameObject.tag == "Boss")
-    //    {
-    //        // did the sword hit a boss
-    //    }
-    //}
-
-    private void OnTriggerStay2D(Collider2D collision)
+    public void PlayerAttack(int attackPhase)
     {
-        Debug.Log("testing collision stay");
-        // did the sword hit an enemy
-        if (collision.gameObject.tag == "Enemy")
+        Collider2D colInfo = Physics2D.OverlapCircle(transform.position, attackRange, attackMask);
+
+        if (colInfo != null)
         {
-            
-            // are we hitting with the third attack or first two
-            if (bAttack)
+            if (attackPhase == 1)
             {
-                bAttack = false;
-                // take enemy hp
-                // 2 for third attack
-                DamageEnemy(1, collision.gameObject);
-
+                DamageEnemy(1, colInfo);
             }
-            else if (bThirdattack)
+            else if (attackPhase == 2)
             {
-
-                bThirdattack = false;
                 RandomGeneratedCombo();
-                // take enemy hp
-                // 1 for non third attack
-                DamageEnemy(2, collision.gameObject);
+                DamageEnemy(2, colInfo);
             }
-
+        }
             
-        }
-        else if (collision.gameObject.tag == "Boss")
-        {
-            // did the sword hit a boss
-        }
+        
     }
+
 
     private void RandomGeneratedCombo()
     {
-        int rand = Random.Range(1, 4);
-        resourceScript.bThirdattack = true;
-        resourceScript.BasicSwordAttack(rand);
+
+        float randomN = Random.value;
+
+        // gives a player lower chance to gain 3 combo points
+        if (randomN < 0.15f)
+        {
+            resourceScript.BasicSwordAttack(3);
+        }
+        else
+        {
+            int rand = Random.Range(1, 3);
+            resourceScript.BasicSwordAttack(rand);
+        }
+
+        
+        
     }
 
-    private void DamageEnemy(int attackPhase, GameObject enemy)
+    private void DamageEnemy(int attackPhase, Collider2D enemy)
     {
         switch (attackPhase)
         {
             case 1:
-                enemy.GetComponent<HealthComponent>().ApplyDamage(10f);
+                enemy.GetComponent<HealthComponent>().ApplyDamage(firstPhaseAttackDamage);
                 break;
             case 2:
-                enemy.GetComponent<HealthComponent>().ApplyDamage(25f);
+                enemy.GetComponent<HealthComponent>().ApplyDamage(lastPhaseAttackDamage);
                 break;
         }
     }

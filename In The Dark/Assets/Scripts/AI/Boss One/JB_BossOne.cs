@@ -18,7 +18,7 @@ public class JB_BossOne : MonoBehaviour
     public float fallSpeed;
     public float bossVanishHeight = 100f;
     private float throwTimer = 7f;
-    public bool bVanished = true;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -36,19 +36,7 @@ public class JB_BossOne : MonoBehaviour
             throwTimer -= Time.deltaTime;
         }
 
-        if (bVanished)
-        {
-            
-            //transform.position = new Vector2(player.transform.position.x, transform.position.y);
-
-        }
-        else
-        {
-            
-            
-
-            
-        }
+    
     }
 
     public void LookAtPlayer()
@@ -95,13 +83,13 @@ public class JB_BossOne : MonoBehaviour
 
         if(rand < 0.25f)
         {
-            Debug.Log("testing random number generator");
+            
             Vector2 newPos = new Vector2(transform.position.x, transform.position.y + 2.52f);
             Instantiate(smokeBombPrefab, newPos, smokeBombPrefab.transform.rotation);
             transform.position = new Vector3(transform.position.x, transform.position.y + 60f, transform.position.z);
-            bVanished = true;
+            anim.SetBool("IsVanished", true);
             StartCoroutine(FindPlayerToLandOn());
-            //anim.SetTrigger("Vanish");
+            
         }
 
         anim.ResetTrigger("Vanish");
@@ -117,19 +105,18 @@ public class JB_BossOne : MonoBehaviour
 
         // finding distance between boss and player
         float distance = Vector2.Distance(rb.position, playerTargetLocation.position);
+        anim.SetBool("IsVanished", false);
+        Debug.Log("Testing While Loop");
 
+        // move boss to the player location
         while (distance > 0.1f)
         {
             distance = Vector2.Distance(rb.position, playerTargetLocation.position);
-            transform.position = Vector2.MoveTowards(rb.position, playerTargetLocation.transform.position, fallSpeed * Time.deltaTime);
+            transform.position = Vector2.MoveTowards(transform.position, playerTargetLocation.transform.position, fallSpeed * Time.deltaTime);
             //rb.MovePosition(newPos);
             yield return null;
         }
+        gameObject.GetComponent<JB_BossAttack>().BossAttack();
         
-        
-
-        
-        bVanished = false;
-        anim.SetBool("IsVanished", false);
     }
 }

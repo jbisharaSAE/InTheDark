@@ -5,6 +5,7 @@ using UnityEngine;
 /// <summary>
 /// A set of properties relating to damage, not the damage to apply itself
 /// </summary>
+[CreateAssetMenu]
 public class DamageInfo : ScriptableObject
 {
     [SerializeField] protected float m_damage = 10f;        // Amount of damage to apply

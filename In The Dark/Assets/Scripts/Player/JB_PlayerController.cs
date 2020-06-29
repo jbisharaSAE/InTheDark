@@ -7,7 +7,8 @@ using UnityEngine.UI;
 //This Script is intended for demoing and testing animations only.
 
 
-public class JB_PlayerController : MonoBehaviour {
+public class JB_PlayerController : MonoBehaviour
+{
 
     public Transform throwSpawn;
     public GameObject kunaiPrefab;
@@ -20,22 +21,20 @@ public class JB_PlayerController : MonoBehaviour {
     private float hSpeed = 10f;
 	private float moveXInput;
     private float attackTimer = 0.0f;
-    private float dashRecharge = 100.0f; // keep as float to adjust image bar
+    private float dashRecharge = 100.0f; 
     public float dashRefillSpeed;
     public int dashCharge = 2;
     public int attackPhase = 0;
-    private bool bFacingRight = true;
-    private Rigidbody2D rb;
+    private bool m_isFacingRight = true;
+    private Rigidbody2D m_rigidBody;
     private bool bDashing;
-    private BoxCollider2D playerBoxCollider;
     private Vector2 dir;
+    private CapsuleCollider2D playerBoxCollider;
     private JB_ResourceManagement resourceScript;
-    public JB_PauseMenu pauseScript;
-
-    [SerializeField]
-    private JB_SwordTrigger swordScript;
-
-
+    private AdvancedCharacterMovement advancedScript;
+    
+    [SerializeField] private JB_SwordTrigger swordScript;
+    
     //Used for flipping Character Direction
 	public static Vector3 playerScale;
 
@@ -46,18 +45,20 @@ public class JB_PlayerController : MonoBehaviour {
 	private float groundRadius = 0.15f;
 	private float jumpForce = 14f;
 
+    public bool isFacingRight { get { return m_isFacingRight; } }
 
-
-	// Use this for initialization
-	void Awake ()
+    // Use this for initialization
+    void Awake ()
 	{
-        rb = GetComponent<Rigidbody2D>();
+        m_rigidBody = GetComponent<Rigidbody2D>();
 
-        playerBoxCollider = GetComponent<BoxCollider2D>();
+        playerBoxCollider = GetComponent<CapsuleCollider2D>();
 
         anim = GetComponent<Animator> ();
 
         resourceScript = GetComponent<JB_ResourceManagement>();
+
+        advancedScript = GetComponent<AdvancedCharacterMovement>();
 
     }
 
@@ -72,7 +73,18 @@ public class JB_PlayerController : MonoBehaviour {
 
 	void Update()
 	{
-       #region player_input
+        #region player_input
+
+
+        //SetMoveInput(Input.GetAxis("Horizontal"));
+
+        //if (Input.GetButtonDown("Jump"))
+        //    Jump();
+
+        // Debug
+        //if (Input.GetKeyDown(KeyCode.F))
+          //  m_rigidBody.velocity = Vector2.zero;
+
 
         moveXInput = Input.GetAxis("Horizontal");
 
@@ -80,7 +92,8 @@ public class JB_PlayerController : MonoBehaviour {
         {
             anim.SetBool("ground", false);
 
-            GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.y, jumpForce);
+            //GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.y, jumpForce);
+            advancedScript.Jump();
         }
 
 
@@ -88,7 +101,7 @@ public class JB_PlayerController : MonoBehaviour {
         anim.SetFloat("vSpeed", GetComponent<Rigidbody2D>().velocity.y);
 
 
-        rb.velocity = new Vector2((moveXInput * hSpeed), rb.velocity.y);
+        //m_rigidBody.velocity = new Vector2((moveXInput * hSpeed), m_rigidBody.velocity.y);
 
         // left mouse button - attack
         if (Input.GetButtonDown("Fire1"))
@@ -106,14 +119,13 @@ public class JB_PlayerController : MonoBehaviour {
         else
         {
             attackPhase = 0;
-            resourceScript.attackPhase = attackPhase;
+            //resourceScript.attackPhase = attackPhase;
         }
-      
+
 
         // right mouse button - shuriken throw
-        if(Input.GetButtonDown("Fire2"))
+        if (Input.GetButtonDown("Fire2"))
         {
-            
 
             ThrowShuriken();
 
@@ -124,7 +136,7 @@ public class JB_PlayerController : MonoBehaviour {
         {
             anim.SetBool("Sprint", true);
             hSpeed = 25f;
-}
+        }
         else
         {
             anim.SetBool("Sprint", false);
@@ -132,13 +144,13 @@ public class JB_PlayerController : MonoBehaviour {
         }
 
         //Flipping direction character is facing based on players Input
-        if (moveXInput > 0 && !bFacingRight)
+        if (moveXInput > 0 && !m_isFacingRight)
         {
             Flip();
             dir = new Vector2(1f, 0f);
 
         }
-        else if (moveXInput < 0 && bFacingRight)
+        else if (moveXInput < 0 && m_isFacingRight)
         {
             Flip();
             dir = new Vector2(-1f, 0f);
@@ -153,12 +165,13 @@ public class JB_PlayerController : MonoBehaviour {
         if (Input.GetKeyDown(KeyCode.E))
         {
             StopAllCoroutines();
-            Dash(bFacingRight, hit);
-            Debug.Log("e button pushed");
+            Dash(m_isFacingRight, hit);
+            
         }
 
         //Debug.DrawRay(transform.position, dir*10f, Color.green);
 
+        // player abilities
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             resourceScript.PlayerAbilities(1);
@@ -171,22 +184,14 @@ public class JB_PlayerController : MonoBehaviour {
         {
             resourceScript.PlayerAbilities(3);
         }
-        if (Input.GetKeyDown(KeyCode.Alpha4))
-        {
-            resourceScript.PlayerAbilities(4 );
-        }
-
+        
+        // parry ability
         if (Input.GetKeyDown(KeyCode.Q))
         {
             StartCoroutine(ParryCollider());
         }
 
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            
-            pauseScript.TogglePauseMenu();
-        }
-
+        
         #endregion
 
         if (dashRecharge <= 100.0f)
@@ -211,6 +216,7 @@ public class JB_PlayerController : MonoBehaviour {
         }
 
     }
+
 
     IEnumerator ParryCollider()
     {
@@ -277,7 +283,7 @@ public class JB_PlayerController : MonoBehaviour {
     //Flipping direction of character
     void Flip()
 	{
-		bFacingRight = !bFacingRight;
+		m_isFacingRight = !m_isFacingRight;
 		playerScale = transform.localScale;
 		playerScale.x *= -1;
 		transform.localScale = playerScale;
@@ -294,21 +300,24 @@ public class JB_PlayerController : MonoBehaviour {
             switch (attackPhase)
             {
                 case 0:
-                    resourceScript.currentEnergy -= 10.0f;
+                    //resourceScript.currentEnergy -= 10.0f;
+                    resourceScript.UpdateEnergy(-10.0f);
                     Debug.Log(attackPhase + " case 0");
                     // attack animation 1
-                    swordScript.bAttack = true;
+                    swordScript.PlayerAttack(1);
                     break;
                 case 1:
-                    resourceScript.currentEnergy -= 20.0f;
+                    //resourceScript.currentEnergy -= 20.0f;
+                    resourceScript.UpdateEnergy(-20.0f);
                     Debug.Log(attackPhase + " case 1");
-                    swordScript.bAttack = true;
+                    swordScript.PlayerAttack(1);
                     // attack animation 2
                     break;
                 case 2:
-                    resourceScript.currentEnergy -= 25.0f;
+                    //resourceScript.currentEnergy -= 25.0f;
+                    resourceScript.UpdateEnergy(-25.0f);
                     //sword.GetComponent<JB_SwordTrigger>().bThirdattack = true;
-                    swordScript.bThirdattack = true;
+                    swordScript.PlayerAttack(2);
                     Debug.Log(attackPhase + " case 2");
                     
                     //UpdateComboPoints();
@@ -318,19 +327,24 @@ public class JB_PlayerController : MonoBehaviour {
             }
 
             ++attackPhase;
-            resourceScript.attackPhase = attackPhase;
+            //resourceScript.attackPhase = attackPhase;
         }
         
 
         if (attackPhase > 2)
         {
             attackPhase = 0;
-            resourceScript.attackPhase = attackPhase;
+            //resourceScript.attackPhase = attackPhase;
         }
         anim.SetTrigger("Punch");
     }
 
-   
+    //protected override void OnLanded()
+    //{
+    //    base.OnLanded();
+    //    m_lastWallJumpSide = WallJumpSide.None;
+    //}
+
 
     private void ThrowShuriken()
     {
@@ -343,10 +357,10 @@ public class JB_PlayerController : MonoBehaviour {
             resourceScript.UpdateComboPoints(-1);
 
             // throwing shuriken in right direction
-            if (bFacingRight)
+            if (m_isFacingRight)
             {
                 kunaiShuriken = Instantiate(kunaiPrefab, throwSpawn.position, kunaiPrefab.transform.rotation);
-                kunaiShuriken.GetComponent<JB_Shuriken>().facingRight = bFacingRight;
+                kunaiShuriken.GetComponent<JB_Shuriken>().facingRight = m_isFacingRight;
 
 
                 Vector3 newScale = kunaiShuriken.transform.localScale;
@@ -359,7 +373,7 @@ public class JB_PlayerController : MonoBehaviour {
             {
 
                 kunaiShuriken = Instantiate(kunaiPrefab, throwSpawn.position, kunaiPrefab.transform.rotation);
-                kunaiShuriken.GetComponent<JB_Shuriken>().facingRight = bFacingRight;
+                kunaiShuriken.GetComponent<JB_Shuriken>().facingRight = m_isFacingRight;
 
                 Vector3 newScale = kunaiShuriken.transform.localScale;
                 newScale.y *= -1;
