@@ -24,7 +24,7 @@ public class AdvancedCharacterMovement : CharacterMovement
 
     protected WallJumpSide m_lastWallJumpSide = WallJumpSide.None;          // Which side of the character was the wall we last jumped off
 
-    void Update()
+    protected override void Update()
     {
         // For now, handling inputs here
         {
@@ -32,11 +32,15 @@ public class AdvancedCharacterMovement : CharacterMovement
 
             if (Input.GetButtonDown("Jump"))
                 Jump();
+            else if (Input.GetButtonUp("Jump"))
+                StopJumping();
 
             // Debug
             if (Input.GetKeyDown(KeyCode.F))
                 m_rigidBody.velocity = Vector2.zero;
         }
+
+        base.Update();
     }
 
     protected override void OnLanded()

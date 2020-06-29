@@ -19,7 +19,10 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField, Min(0f)] public float m_airSpeed = 8f;                 // Speed while in the air
     [SerializeField, Min(0f)] protected float m_maxAcceleration = 40f;      // Acceleration for reaching walk/air speed
     [SerializeField, Min(0f)] protected float m_brakeFriction = 50f;        // Friction to apply when no input has been applied
+
+    [Header("Movement (Jumping)")]
     [SerializeField, Min(0f)] public float m_jumpPower = 5f;                // Power of jump, decides velocity
+    [SerializeField, Min(0f)] public float m_maxJumpHoldTime = 0.5f;        // Max amount of time jump can be held
     [SerializeField, Min(0)] public int m_maxAirJumps = 1;                  // Max number of times character can jump in air
 
     [Header("Components")]
@@ -35,6 +38,9 @@ public class CharacterMovement : MonoBehaviour
     protected bool m_isGrounded = true;         // If we are grounded (start as default)
     protected bool m_aboutToJump = false;       // If about to jumping, used to prevent jumping multiple time
     protected int m_numAirJumps = 0;            // Number of air jumps that have been done since last being grounded
+
+    protected bool m_isJumping = false;         // If character is jumping
+    protected float m_jumpHoldTime = 0f;        // Time jump has been active for
 
     protected Collider2D m_floorCollider;               // Floor character is standing on
     protected Vector2 m_floorLocation = Vector2.zero;   // Location floor was when last updated
@@ -65,7 +71,7 @@ public class CharacterMovement : MonoBehaviour
     /// <summary>
     /// If character is about to or is jumping
     /// </summary>
-    public bool isJumping { get { return m_aboutToJump; } }
+    public bool isJumping { get { return m_isJumping || m_aboutToJump; } }
 
     /// <summary>
     /// If character is currently grounded
@@ -97,6 +103,15 @@ public class CharacterMovement : MonoBehaviour
                 return;
             }
         }     
+    }
+
+    protected virtual void Update()
+    {
+        if (GameManager.isPaused)
+            return;
+
+        if (m_isJumping)
+            HandleContinuedJump(Time.deltaTime);
     }
 
     protected virtual void FixedUpdate()
@@ -159,26 +174,32 @@ public class CharacterMovement : MonoBehaviour
     }
 
     /// <summary>
-    /// Have character jump once if able to
+    /// Have character jump once if able to. Call multiple times
+    /// to increase
     /// </summary>
     /// <returns>If a jump was performed</returns>
     public virtual bool Jump()
     {
         if (CanJump())
         {
-            Vector2 velocity = m_rigidBody.velocity;
-            velocity.y = m_jumpPower; // Velocity change
-            m_rigidBody.velocity = velocity;
-
             // Consume an air jump
             if (!m_isGrounded)
                 ++m_numAirJumps;
 
             m_aboutToJump = true;
-            return true;
+            m_isJumping = true;
         }
 
-        return false;
+        return m_isJumping;
+    }
+
+    /// <summary>
+    /// Stops this character from jumping, this does not reset counters
+    /// </summary>
+    public virtual void StopJumping()
+    {
+        m_isJumping = false;
+        m_jumpHoldTime = 0f;
     }
 
     /// <summary>
@@ -187,10 +208,29 @@ public class CharacterMovement : MonoBehaviour
     /// <returns>If character can jump</returns>
     public virtual bool CanJump()
     {
-        if (m_aboutToJump)
+        // Already jumping, need to sto this jump first
+        if (m_isJumping)
             return false;
 
         return m_isGrounded || m_numAirJumps < m_maxAirJumps;
+    }
+
+    /// <summary>
+    /// Event called to handle a continued jump (if m_isJumping is true)
+    /// </summary>
+    /// <param name="deltaTime">Frame delta</param>
+    protected virtual void HandleContinuedJump(float deltaTime)
+    {
+        Vector2 velocity = m_rigidBody.velocity;
+        velocity.y = Mathf.Max(velocity.y, m_jumpPower);
+        m_rigidBody.velocity = velocity;
+
+        m_jumpHoldTime += Time.deltaTime;
+        if (m_jumpHoldTime >= m_maxJumpHoldTime)
+        {
+            m_jumpHoldTime = 0f;
+            m_isJumping = false;
+        }
     }
 
     /// <summary>

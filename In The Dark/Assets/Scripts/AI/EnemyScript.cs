@@ -8,7 +8,6 @@ using UnityEngine;
 public class EnemyScript : MonoBehaviour
 {
     [SerializeField] private bool m_canBeStunned = true;                    // If this enemy can be stunned while damaged
-    [SerializeField] private float m_damageStunTime = 0.25f;                // How long enemy is stunned for when damaged
     [SerializeField] private PickupComponent m_deathDrop = null;            // Pickup to spawn upon death
     [SerializeField, Range(0f, 1f)] private float m_dropChance = 0.1f;      // Chance of dropping pick up upon death
 
@@ -52,7 +51,7 @@ public class EnemyScript : MonoBehaviour
 
         if (m_healthComp)
         {
-            m_healthComp.OnHealthChanged += OnHealthChanged;
+            m_healthComp.OnDamaged += OnDamaged;
             m_healthComp.OnDeath += OnDeath;
         }
     }
@@ -63,13 +62,12 @@ public class EnemyScript : MonoBehaviour
         animatorComponent.SetBool("Airborne", !m_movementComp.isGrounded);
     }
 
-    protected virtual void OnHealthChanged(HealthComponent self, float newHealth, float delta)
+    protected virtual void OnDamaged(HealthComponent self, float damage, DamageInfo info)
     {
-        if (newHealth > 0f)
-        {
-            // Were we damaged?
-            if (delta < 0f && m_canBeStunned)
-                Stun(m_damageStunTime);
+        if (info && info.stunTime > 0f)
+        { 
+            if (m_canBeStunned)
+                Stun(info.stunTime);
         }
     }
 
