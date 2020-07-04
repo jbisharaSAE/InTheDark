@@ -145,6 +145,20 @@ public class GameManager : MonoBehaviour
         m_disableInput = disable;
     }
 
+    public static bool OpenLevel(string levelName)
+    {
+        if (instance)
+            return instance.OpenLevelImpl(levelName);
+
+        return false;
+    }
+
+    private bool OpenLevelImpl(string levelName)
+    {
+        SceneManager.LoadScene(levelName);
+        return true;
+    }
+
     /// <summary>
     /// Restarts the current session (basically reloading the current scene)
     /// </summary>
