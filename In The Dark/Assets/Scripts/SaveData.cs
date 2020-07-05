@@ -9,11 +9,11 @@ public class NinjasSaveData
 {
     // The levels the player had unlocked, should at least be one
     [SerializeField]
-    List<string> m_unlockedLevels;
+    public List<string> m_unlockedLevels = new List<string>();
 
     // The level the player is up to or last played
     [SerializeField]
-    string m_currentLevel;
+    public string m_currentLevel = string.Empty;
 
     public void Save()
     {
