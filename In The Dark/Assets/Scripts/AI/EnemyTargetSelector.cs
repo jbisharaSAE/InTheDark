@@ -11,13 +11,19 @@ public class EnemyTargetSelector : MonoBehaviour
     public bool m_focusSightOnTarget = false;
 
     private GameObject m_selectedTarget = null;
+    private GameObject m_overrideTarget = null;
     private Coroutine m_updateTargetRoutine = null;
     private float m_originalSightRotation = 0f;
 
     /// <summary>
     /// Target that has been selected for enemy to attack
     /// </summary>
-    public GameObject target { get { return m_selectedTarget; } }
+    public GameObject target { get { return overrideTarget ? overrideTarget : m_selectedTarget; } }
+
+    /// <summary>
+    /// Override target that takes priority over selected target
+    /// </summary>
+    public GameObject overrideTarget { get { return m_overrideTarget; } set { SetOverrideTarget(value); } }
 
     void Start()
     {
@@ -99,10 +105,18 @@ public class EnemyTargetSelector : MonoBehaviour
         {
             m_selectedTarget = null;
             if (m_animator)
-                m_animator.SetBool("HasTarget", false);
+                m_animator.SetBool("HasTarget", m_overrideTarget != null);
 
             if (m_sightPerception)
                 m_sightPerception.transform.localEulerAngles = new Vector3(0f, 0f, m_originalSightRotation);
         }
+    }
+
+    private void SetOverrideTarget(GameObject overrideTarget)
+    {
+        m_overrideTarget = overrideTarget;
+
+        if (m_animator)
+            m_animator.SetBool("HasTarget", target != null);
     }
 }

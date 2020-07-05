@@ -58,8 +58,11 @@ public class EnemyScript : MonoBehaviour
 
     protected virtual void Update()
     {
-        animatorComponent.SetBool("Jumping", m_movementComp.isJumping);
-        animatorComponent.SetBool("Airborne", !m_movementComp.isGrounded);
+        if (animatorComponent)
+        {
+            animatorComponent.SetBool("Jumping", m_movementComp.isJumping);
+            animatorComponent.SetBool("Airborne", !m_movementComp.isGrounded);
+        }
     }
 
     protected virtual void OnDamaged(HealthComponent self, float damage, DamageInfo info)

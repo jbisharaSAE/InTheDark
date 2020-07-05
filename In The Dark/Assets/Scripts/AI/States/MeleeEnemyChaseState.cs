@@ -42,7 +42,8 @@ public class MeleeEnemyChaseState : StateMachineBehaviour
             return;
         }
         // Only continue chasing if we are inside the patrol area
-        else if (m_patrolAreaComp.IsInChaseArea(animator.transform.position))
+        // Patrol area can be null if set to always chase the player (think of a boss battle)
+        else if (!m_patrolAreaComp || m_patrolAreaComp.IsInChaseArea(animator.transform.position))
         {
             // If target is far to left or right us, move forward. If close (might be above
             // or below us) we just want to wait for them to either reach us
