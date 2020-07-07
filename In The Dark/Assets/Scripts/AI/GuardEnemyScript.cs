@@ -26,6 +26,8 @@ public class GuardEnemyScript : EnemyScript
 
     protected override void Awake()
     {
+        base.Awake();
+
         if (!m_lookoutComp)
             m_lookoutComp = GetComponent<GuardLookoutRoutine>();
 
