@@ -63,7 +63,10 @@ public class EnemyMeleeAttack : MonoBehaviour
             // Do not hit ourselves
             GameObject hitObject = hitCollider.gameObject;
             if (hitObject == gameObject)
+            {
+                Debug.Log("you hit" + hitObject);
                 return;
+            }
 
             // Check if we should ignore this object
             if (m_hitObjects != null && m_hitObjects.Contains(hitObject))

@@ -63,4 +63,14 @@ public class JB_SwordTrigger : MonoBehaviour
                 break;
         }
     }
+
+    #region Debug
+    private void OnDrawGizmosSelected()
+    {
+        Vector3 position = transform.position;
+
+        Gizmos.color = Color.white;
+        Gizmos.DrawWireSphere(position, attackRange);
+    }
+    #endregion
 }
