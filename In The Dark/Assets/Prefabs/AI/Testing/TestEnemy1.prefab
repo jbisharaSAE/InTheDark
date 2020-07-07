@@ -216,6 +216,7 @@ MonoBehaviour:
   m_maxAcceleration: 40
   m_brakeFriction: 50
   m_jumpPower: 5
+  m_maxJumpHoldTime: 0.5
   m_maxAirJumps: 1
   m_rigidBody: {fileID: 6248066109406920554}
   m_collider: {fileID: 292083967252171959}
@@ -238,7 +239,6 @@ MonoBehaviour:
   m_animator: {fileID: 6248066109406920551}
   m_sightPerception: {fileID: 6248066108809503146}
   m_updateRate: 0.2
-  m_forgetTime: 1
   m_focusSightOnTarget: 0
 --- !u!114 &6248066109406920558
 MonoBehaviour:
@@ -270,9 +270,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a3b791e80b4e7146a1ed3a72f39c847, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_canBeStunned: 1
   m_deathDrop: {fileID: 0}
   m_dropChance: 0.1
   m_movementComp: {fileID: 0}
+  m_animatorComp: {fileID: 0}
   m_healthComp: {fileID: 0}
   m_patrolArea: {fileID: 0}
   m_idleTime: 2
