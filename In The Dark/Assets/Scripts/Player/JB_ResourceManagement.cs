@@ -175,10 +175,7 @@ public class JB_ResourceManagement : MonoBehaviour
                 AbilityThree();
                 Debug.Log("3rd ability activated");
                 break;
-            case 4:
-                // ability 4
-                Debug.Log("4th ability activated");
-                break;
+            
         }
 
     }
@@ -216,7 +213,7 @@ public class JB_ResourceManagement : MonoBehaviour
             // aoe slash
             // instantiate sprite
             if (aoeSlashPrefab != null)
-                Instantiate(aoeSlashPrefab, gameObject.transform);
+                Instantiate(aoeSlashPrefab, transform.position, Quaternion.identity);
 
             UpdateComboPoints(-3);
         }
