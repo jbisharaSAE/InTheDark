@@ -7,16 +7,12 @@ using TMPro;
 
 public class JB_DialogueManager : MonoBehaviour
 {
-    public Animator animator;
-
+    //public Animator animator;
+    public GameObject systemPanel;
     public TextMeshProUGUI dialogueText;
     public TextMeshProUGUI nameText;
-
-    public Sprite playerSprite;
-    public Sprite enemySprite;
-
     public Image characterImage;
-    public GameObject dialogueSystem;
+    
 
     private Queue<string> sentences;
     private Queue<string> names;
@@ -32,7 +28,9 @@ public class JB_DialogueManager : MonoBehaviour
 
     public void StartDialogue(JB_Dialogue dialogue)
     {
-        animator.SetBool("IsOpen", true);
+        //animator.SetBool("IsOpen", true);
+        systemPanel.SetActive(true);
+        //Time.timeScale = 0.0f;
 
         // clearing current queues to make sure we dont repeat previous dialogues
         names.Clear();
@@ -92,7 +90,8 @@ public class JB_DialogueManager : MonoBehaviour
 
     private void EndDialogue()
     {
-        animator.SetBool("IsOpen", false);
-
+        //animator.SetBool("IsOpen", false);
+        systemPanel.SetActive(false);
+        //Time.timeScale = 1f;
     }
 }

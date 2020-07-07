@@ -117,6 +117,7 @@ MonoBehaviour:
   speed: 35
   direction: -1
   facingRight: 1
+  shurikenDamage: {fileID: 11400000, guid: 65c906b86a1cbe441b4b7d40ea85570c, type: 2}
 --- !u!50 &4438939878484969208
 Rigidbody2D:
   serializedVersion: 4

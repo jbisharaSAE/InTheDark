@@ -16,6 +16,8 @@ GameObject:
   - component: {fileID: 1980499967200378140}
   - component: {fileID: 6653317164792595911}
   - component: {fileID: 1427468614120403484}
+  - component: {fileID: 5597391847332767833}
+  - component: {fileID: 1586540949876495565}
   m_Layer: 8
   m_Name: Guard
   m_TagString: Untagged
@@ -199,6 +201,43 @@ MonoBehaviour:
     type: 3}
   m_rechargeTime: 1
   m_offset: {x: 1, y: 0}
+--- !u!50 &5597391847332767833
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4676483582277047750}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 4
+--- !u!70 &1586540949876495565
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4676483582277047750}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 1.69, y: 2.56}
+  m_Direction: 0
 --- !u!1 &5669039350526364591
 GameObject:
   m_ObjectHideFlags: 0

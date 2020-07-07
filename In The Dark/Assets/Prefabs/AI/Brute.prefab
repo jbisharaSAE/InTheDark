@@ -239,8 +239,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_offset: {x: 1, y: 0}
-  m_radius: 1.25
-  m_damage: 20
+  m_radius: 3
+  m_damage: {fileID: 0}
   m_attackLayers:
     serializedVersion: 2
     m_Bits: 4294967295

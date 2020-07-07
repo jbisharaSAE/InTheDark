@@ -6,7 +6,7 @@ public class EnemyMeleeAttack : MonoBehaviour
 {
     public Vector2 m_offset = Vector2.zero;
     public float m_radius = 0.75f;
-    public float m_damage = 20f;
+    public DamageInfo m_damage;
     public LayerMask m_attackLayers = Physics2D.AllLayers;
 
     private HashSet<GameObject> m_hitObjects = null;

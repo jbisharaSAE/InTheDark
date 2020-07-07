@@ -8,6 +8,7 @@ public class JB_Shuriken : MonoBehaviour
     public float speed = 100f;
     public float direction = -1.0f;
     public bool facingRight = true;
+    public DamageInfo shurikenDamage;
 
     // Start is called before the first frame update
     void Start()
@@ -33,6 +34,10 @@ public class JB_Shuriken : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        if (collision.gameObject.GetComponent<HealthComponent>())
+        {
+            collision.gameObject.GetComponent<HealthComponent>().ApplyDamage(shurikenDamage);
+        }
         Destroy(gameObject);
     }
 }
