@@ -39,6 +39,8 @@ public class CharacterMovement : MonoBehaviour
     protected bool m_aboutToJump = false;       // If about to jumping, used to prevent jumping multiple time
     protected int m_numAirJumps = 0;            // Number of air jumps that have been done since last being grounded
 
+    protected bool m_customMoveMode = false;    // Set to true to avoid normal fixed update calculations
+
     protected bool m_isJumping = false;         // If character is jumping
     protected float m_jumpHoldTime = 0f;        // Time jump has been active for
 
@@ -121,18 +123,22 @@ public class CharacterMovement : MonoBehaviour
 
         Vector2 velocity = m_rigidBody.velocity;
 
-        float input = currentInput;
-        if (m_isGrounded && Mathf.Approximately(input, 0f))
+        float input = 0f;
+        if (!m_customMoveMode)
         {
-            // Apply a braking friction force to auto slow us down
-            velocity.x = Mathf.Lerp(velocity.x, 0f, m_brakeFriction * Time.fixedDeltaTime);
-        }
-        else
-        {
-            float maxSpeed = GetMaxSpeed();
+            input = currentInput;
+            if (m_isGrounded && Mathf.Approximately(input, 0f))
+            {
+                // Apply a braking friction force to auto slow us down
+                velocity.x = Mathf.Lerp(velocity.x, 0f, m_brakeFriction * Time.fixedDeltaTime);
+            }
+            else
+            {
+                float maxSpeed = GetMaxSpeed();
 
-            velocity.x += input * m_maxAcceleration * Time.fixedDeltaTime;
-            velocity.x = Mathf.Clamp(velocity.x, -maxSpeed, maxSpeed);
+                velocity.x += input * m_maxAcceleration * Time.fixedDeltaTime;
+                velocity.x = Mathf.Clamp(velocity.x, -maxSpeed, maxSpeed);
+            }
         }
 
         m_rigidBody.velocity = velocity;
@@ -144,9 +150,6 @@ public class CharacterMovement : MonoBehaviour
             if (input != 0f)
                 transform.localEulerAngles = Helpers.FlipRotation(m_moveInput);
         }
-
-        // Consume input
-        //m_moveInput = 0f;
     }
 
     /// <summary>
