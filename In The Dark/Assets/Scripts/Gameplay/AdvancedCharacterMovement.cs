@@ -26,6 +26,7 @@ public class AdvancedCharacterMovement : CharacterMovement
     [SerializeField, Min(0f)] protected float m_dashSpeed = 20f;            // Speed of the dash
     [SerializeField, Min(0f)] protected float m_dashTime = 0.2f;            // How long the dash lasts for
     [SerializeField] protected bool m_canDashInAir = true;                  // If we can dash in the air
+    [SerializeField] int[] m_ignoreLayersWhenDashing = null;                // Layers to ignore when dashing
 
     protected WallJumpSide m_lastWallJumpSide = WallJumpSide.None;          // Which side of the character was the wall we last jumped off
     protected bool m_isDashing = false;                                     // If currently dashing
@@ -97,6 +98,17 @@ public class AdvancedCharacterMovement : CharacterMovement
             {
                 m_isDashing = false;
                 m_customMoveMode = false;
+
+                if (m_ignoreLayersWhenDashing != null)
+                {
+                    foreach (int layer in m_ignoreLayersWhenDashing)
+                    {
+                        if (layer >= 31)
+                            continue;
+
+                        Physics2D.IgnoreLayerCollision(m_collider.gameObject.layer, layer, false);
+                    }
+                }
 
                 OnDashFinished();
             }
@@ -189,6 +201,17 @@ public class AdvancedCharacterMovement : CharacterMovement
                     // Using scale for now as this script will most likely only be used by the player script
                     // which uses scaling for 'flipping' the character
                     m_dashDir = Mathf.Sign(transform.lossyScale.x);
+                }
+            }
+
+            if (m_ignoreLayersWhenDashing != null)
+            {
+                foreach (int layer in m_ignoreLayersWhenDashing)
+                {
+                    if (layer >= 31)
+                        continue;
+
+                    Physics2D.IgnoreLayerCollision(m_collider.gameObject.layer, layer, true);
                 }
             }
 
