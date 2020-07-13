@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// Check if input has been requested to be disabled
     /// </summary>
-    public static bool inputDisabled { get { return instance ? instance.m_disableInput : false; } }
+    public static bool isInputDisabled { get { return instance ? instance.m_disableInput : false; } }
 
     private bool m_isPaused = false;            // If game is currently paused
     private float m_prevTimeScale = 1f;         // Time scale before game was paused

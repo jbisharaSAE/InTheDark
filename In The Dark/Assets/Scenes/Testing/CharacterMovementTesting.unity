@@ -2211,6 +2211,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2871
   m_wallJumpPower: 12
+  m_dashSpeed: 20
+  m_dashTime: 0.2
+  m_canDashInAir: 1
 --- !u!1 &982284301
 GameObject:
   m_ObjectHideFlags: 0

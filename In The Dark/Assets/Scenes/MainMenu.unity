@@ -2028,8 +2028,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5dc96de42e7145418dce84443281af0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_levelNames:
-  - Level - Discovery
+  m_levelsData:
+  - m_levelName: Level - Discovery
+    m_levelButton: {fileID: 216810714}
+  - m_levelName: 
+    m_levelButton: {fileID: 1071336764}
+  - m_levelName: 
+    m_levelButton: {fileID: 1260751253}
 --- !u!1 &1921936267
 GameObject:
   m_ObjectHideFlags: 0
