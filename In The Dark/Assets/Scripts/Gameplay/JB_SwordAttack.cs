@@ -40,7 +40,7 @@ public class JB_SwordAttack : MonoBehaviour
         {
             Debug.Log("testing health component");
             col.gameObject.GetComponent<HealthComponent>().ApplyDamage(m_dmgAmount);
-            Destroy(gameObject);
+            //Destroy(gameObject);
         }
     }
 

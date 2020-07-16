@@ -13,11 +13,12 @@ public class JB_Boss : MonoBehaviour
     private float throwTimer = 7f;
     private bool isFlipped = true;
     private PatrolArea addPatrolArea;
+    private HealthComponent shieldHP;
 
     [SerializeField] private BossType bossType;
     [SerializeField] private GameObject bossBombPrefab;
     [SerializeField] private GameObject bossAddPrefab;
-    [SerializeField] private GameObject bossShieldPrefab;
+    [SerializeField] private GameObject bossShield;
     [SerializeField] private GameObject shurikenPrefab;
     [SerializeField] private Transform shurikenSpawn;
     [SerializeField] private float m_moveSpeed;
@@ -28,22 +29,31 @@ public class JB_Boss : MonoBehaviour
 
     void Start()
     {
+        int bossInt = (int)bossType;
+
+        switch (bossInt)
+        {
+            case 0:
+                InvokeRepeating("BossVanish", 10f, 10f);
+                break;
+            case 1:
+                InvokeRepeating("BossSummon", 10f, 10f);
+                break;
+            case 2:
+                shieldHP = bossShield.GetComponent<HealthComponent>();
+                InvokeRepeating("BossShield", 10f, 10f);
+                break;
+        }
+
         player = GameObject.FindGameObjectWithTag("Player").transform;
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         addPatrolArea = GetComponent<PatrolArea>();
 
-        switch (bossType)
-        {
-            case BossType.bossOne:
-                InvokeRepeating("BossVanish", 10f, 10f);
-                break;
-            case BossType.bossTwo:
-                InvokeRepeating("BossSummon", 10f, 10f);
-                break;
-            case BossType.bossThree:
-                break;
-        }
+        
+        shieldHP.OnDeath += TurnInvincibleOff;
+
+        
         
     }
 
@@ -175,7 +185,15 @@ public class JB_Boss : MonoBehaviour
         if(rand < 0.25f)
         {
             // spawn a reflective shield  that needs to be destroyed before attacking boss
+            bossShield.SetActive(true);
+            gameObject.GetComponent<HealthComponent>().isInvincible = true;
         }
+    }
+
+    private void TurnInvincibleOff(HealthComponent hpComponent)
+    {
+        gameObject.GetComponent<HealthComponent>().isInvincible = false;
+        bossShield.SetActive(false);
     }
     #endregion
 

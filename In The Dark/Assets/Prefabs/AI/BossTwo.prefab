@@ -112,7 +112,7 @@ MonoBehaviour:
   shurikenPrefab: {fileID: 2645528879409822259, guid: e09b1230b91599a46ac1f119564c52dc,
     type: 3}
   shurikenSpawn: {fileID: 8889481010080168668}
-  m_moveSpeed: 25
+  m_moveSpeed: 10
   fallSpeed: 75
   bossVanishHeight: 60
 --- !u!114 &7434001076028026551

@@ -308,10 +308,6 @@ MonoBehaviour:
   dashCharge: 2
   attackPhase: 0
   swordScript: {fileID: 5189482154927268627}
-  groundCheck: {fileID: 417436}
-  whatIsGround:
-    serializedVersion: 2
-    m_Bits: 1079
 --- !u!114 &2898537014938462875
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -373,6 +369,7 @@ MonoBehaviour:
   m_maxAcceleration: 40
   m_brakeFriction: 50
   m_jumpPower: 5
+  m_maxJumpHoldTime: 0.5
   m_maxAirJumps: 1
   m_rigidBody: {fileID: 0}
   m_collider: {fileID: 0}
@@ -381,6 +378,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   m_wallJumpPower: 12
+  m_dashSpeed: 20
+  m_dashTime: 0.2
+  m_canDashInAir: 1
+  m_ignoreLayersWhenDashing: 
 --- !u!70 &6995812195280549758
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -531,7 +532,7 @@ MonoBehaviour:
   resourceScript: {fileID: 2898537014938462875}
   attackMask:
     serializedVersion: 2
-    m_Bits: 768
+    m_Bits: 66304
   attackRange: 6
   firstPhaseAttackDamage: {fileID: 11400000, guid: 1dd3e431c0a00e04aa0d99169d29277e,
     type: 2}

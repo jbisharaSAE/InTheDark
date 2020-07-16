@@ -89,7 +89,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 257334512, guid: 5b210609803658e488f512fc13a6163e, type: 3}
       propertyPath: m_moveSpeed
-      value: 25
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 257334512, guid: 5b210609803658e488f512fc13a6163e, type: 3}
       propertyPath: bossBombPrefab
@@ -107,7 +107,7 @@ PrefabInstance:
         type: 2}
     - target: {fileID: 1000011821036864, guid: 5b210609803658e488f512fc13a6163e, type: 3}
       propertyPath: m_Name
-      value: BossOne (1)
+      value: BossOne
       objectReference: {fileID: 0}
     - target: {fileID: 4000011826580284, guid: 5b210609803658e488f512fc13a6163e, type: 3}
       propertyPath: m_LocalPosition.x

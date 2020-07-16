@@ -601,10 +601,30 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 144656621863978358, guid: 5fd3d8ce21021d14da4b1ebe6553f21f,
+        type: 3}
+      propertyPath: attackMask.m_Bits
+      value: 1024
+      objectReference: {fileID: 0}
+    - target: {fileID: 1343546513305407911, guid: 5fd3d8ce21021d14da4b1ebe6553f21f,
+        type: 3}
+      propertyPath: m_invincible
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7051866896551077437, guid: 5fd3d8ce21021d14da4b1ebe6553f21f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7716591933384244424, guid: 5fd3d8ce21021d14da4b1ebe6553f21f,
         type: 3}
       propertyPath: m_Name
       value: BossThree
+      objectReference: {fileID: 0}
+    - target: {fileID: 7716591933384244424, guid: 5fd3d8ce21021d14da4b1ebe6553f21f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7717884466310012966, guid: 5fd3d8ce21021d14da4b1ebe6553f21f,
         type: 3}
@@ -661,7 +681,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6787184808650089624, guid: 5fd3d8ce21021d14da4b1ebe6553f21f, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 5fd3d8ce21021d14da4b1ebe6553f21f, type: 3}
 --- !u!1 &237333241
 GameObject:
@@ -5210,6 +5231,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerCharacter
       objectReference: {fileID: 0}
+    - target: {fileID: 189690, guid: 4fafe4882143b794d89de7a74ee788cb, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 424682, guid: 4fafe4882143b794d89de7a74ee788cb, type: 3}
       propertyPath: m_LocalPosition.x
       value: 20.17
@@ -5297,6 +5322,11 @@ PrefabInstance:
       propertyPath: comboPoints.Array.data[4]
       value: 
       objectReference: {fileID: 1131870881}
+    - target: {fileID: 5556191119478186715, guid: 4fafe4882143b794d89de7a74ee788cb,
+        type: 3}
+      propertyPath: m_invincible
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4fafe4882143b794d89de7a74ee788cb, type: 3}
 --- !u!1 &1702305916
@@ -6434,6 +6464,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: BossTwo
+      objectReference: {fileID: 0}
+    - target: {fileID: 1197517503926161223, guid: 420844371fbd31348a83b4f03a2688ac,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1282505903851342013, guid: 420844371fbd31348a83b4f03a2688ac,
         type: 3}
