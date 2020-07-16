@@ -9,11 +9,15 @@ using UnityEngine;
 public class ProjectileComponent : MonoBehaviour
 {
     public float m_speed = 15f;                 // Speed of this projectile
-    public float m_damage = 10f;                // Damage this projectile does upon impact
+    public DamageInfo m_damageInfo = null;      // Info of damage to automatically apply, can be null
     public float m_lifespan = 2f;               // Lifespan of projectile, gets destroyed after this time (0 = No lifespan)
+    public int m_autoDestroyAfter = 1;          // Destroy this projectile after hitting X objects (leave 0 or negative for inf)
 
     private Rigidbody2D m_rigidBody = null;     // Projectiles rigidbody
     private Collider2D m_collider = null;       // Projectiles collider (cached for ease of access)
+
+    private int m_numHits = 0;                  // Number of objects that has been hit
+    private bool m_pendingDestroy = false;      // If pending destroy
 
     /// <summary>
     /// The game object that spawned this projectile
@@ -43,28 +47,69 @@ public class ProjectileComponent : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
+        if (m_pendingDestroy)
+            return;
+
         // Ignore triggers
         if (collision.isTrigger)
             return;
 
         GameObject hitObject = collision.gameObject;
 
-        // Apply damage if we can
+        // TODO: Would be nicer to do something like collision.GetComponent<IProjectileCollisionHandler>()
+        // so objects individually could handle stuff, such as Parry
+        // For now ( Ideally if (collisionHandler.HandleCollision(this)) )
+        if (collision.tag == "ParryBox")
         {
-            HealthComponent healthComp = hitObject.GetComponent<HealthComponent>();
-            if (healthComp)
-                healthComp.ApplyDamage(m_damage);
+            // Negate velocity, simply reflect back
+            m_rigidBody.velocity *= -1f;
+
+            // TODO: Add some effects + sound
+
+            return;
         }
 
-        if(collision.tag == "ParryBox")
-        {
-            m_rigidBody.velocity *= -1;
-        }
+        ++m_numHits;
+
+        // We only auto destroy after hit X amount of objects
+        bool finalHit = m_autoDestroyAfter > 0 && m_numHits >= m_autoDestroyAfter;
+
+        // TODO: This is 'hit' world objects. We could ideally just check the layer
+        // but not all world collision might use it. We assume that world collision
+        // just does not have a rigidbody
+        if (hitObject.GetComponent<Rigidbody2D>() == null)
+            finalHit = true;
         else
+            OnObjectHit(hitObject, collision, finalHit);
+
+        if (finalHit)
         {
-            Destroy(gameObject);
+            OnFinalHit(hitObject, collision);
+            DestroySelf(false);
         }
-        
+    }
+
+    /// <summary>
+    /// Event that is called when this projectile hits an object
+    /// </summary>
+    /// <param name="hitObject">Game Object that was hit</param>
+    /// <param name="hitCollider">Collider that was hit</param>
+    /// <param name="finalHit">If this is the final hit before projectile is auto destroyed</param>
+    protected virtual void OnObjectHit(GameObject hitObject, Collider2D hitCollider, bool finalHit)
+    {
+        HealthComponent healthComp = hitObject.GetComponent<HealthComponent>();
+        if (healthComp)
+            healthComp.ApplyDamage(m_damageInfo);
+    }
+
+    /// <summary>
+    /// Event that is called only on the final hit before projectile auto destroys itself
+    /// </summary>
+    /// <param name="hitObject">Game Object that was hit</param>
+    /// <param name="hitCollider">Collider that was hit</param>
+    protected virtual void OnFinalHit(GameObject hitObject, Collider2D hitCollider)
+    {
+
     }
 
     /// <summary>
@@ -119,6 +164,19 @@ public class ProjectileComponent : MonoBehaviour
     private IEnumerator LifespanRoutine()
     {
         yield return new WaitForSeconds(m_lifespan);
+        DestroySelf(true);
+    }
+
+    /// <summary>
+    /// Destroys this projectile
+    /// </summary>
+    /// <param name="expired">If destroying the projectile due to it expiring</param>
+    protected virtual void DestroySelf(bool expired)
+    {
+        if (m_pendingDestroy)
+            return;
+
+        m_pendingDestroy = true;
         Destroy(gameObject);
     }
 }
