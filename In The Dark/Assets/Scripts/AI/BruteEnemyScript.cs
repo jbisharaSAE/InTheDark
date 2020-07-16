@@ -18,7 +18,17 @@ public class BruteEnemyScript : EnemyScript
     /// <summary>
     /// This brutess patrol area/chase limits
     /// </summary>
-    public PatrolArea patrolArea { get { return m_patrolArea; } }
+    public PatrolArea patrolArea
+    {
+        get
+        {
+            return m_patrolArea;
+        }
+        set
+        {
+            m_patrolArea = value;
+        }
+    }
 
     public bool inJumpSpot { get { return m_inJumpArea > 0; } }
 

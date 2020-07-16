@@ -59,6 +59,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03139e5fce935a84582cf1f534a27284, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speed: 25
+  shurikenDmg: {fileID: 11400000, guid: a144c812538b89446aa88b8fc4be3652, type: 2}
 --- !u!1001 &2645528879409714753
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -68,7 +70,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 175218, guid: c2efa7e45936145499bbb644bbdd32db, type: 3}
       propertyPath: m_Name
-      value: BossOneProjectile
+      value: BossProjectile
       objectReference: {fileID: 0}
     - target: {fileID: 475218, guid: c2efa7e45936145499bbb644bbdd32db, type: 3}
       propertyPath: m_LocalPosition.x

@@ -27,9 +27,6 @@ public class JB_PlayerController : MonoBehaviour
     public int attackPhase = 0;
     private bool m_isFacingRight = true;
     private Rigidbody2D m_rigidBody;
-    private bool bDashing;
-    private Vector2 dir;
-    private CapsuleCollider2D playerBoxCollider;
     private JB_ResourceManagement resourceScript;
     private AdvancedCharacterMovement advancedScript;
     
@@ -38,21 +35,12 @@ public class JB_PlayerController : MonoBehaviour
     //Used for flipping Character Direction
 	public static Vector3 playerScale;
 
-	//jumping 
-	public Transform groundCheck;
-	public LayerMask whatIsGround;
-	private bool bGrounded = false;
-	private float groundRadius = 0.15f;
-	private float jumpForce = 14f;
-
     public bool isFacingRight { get { return m_isFacingRight; } }
 
     // Use this for initialization
     void Awake ()
 	{
         m_rigidBody = GetComponent<Rigidbody2D>();
-
-        playerBoxCollider = GetComponent<CapsuleCollider2D>();
 
         anim = GetComponent<Animator> ();
 
@@ -62,33 +50,17 @@ public class JB_PlayerController : MonoBehaviour
 
     }
 
-	void FixedUpdate ()
-	{
-
-		bGrounded = Physics2D.OverlapCircle (groundCheck.position, groundRadius, whatIsGround);
-		anim.SetBool ("ground", bGrounded);
-
-
-	}
-
+	
 	void Update()
 	{
         #region player_input
 
 
-        //SetMoveInput(Input.GetAxis("Horizontal"));
-
-        //if (Input.GetButtonDown("Jump"))
-        //    Jump();
-
-        // Debug
-        //if (Input.GetKeyDown(KeyCode.F))
-          //  m_rigidBody.velocity = Vector2.zero;
-
-
         moveXInput = Input.GetAxis("Horizontal");
 
-        if ((bGrounded) && Input.GetButtonDown("Jump"))
+        anim.SetBool("ground", advancedScript.isGrounded);
+
+        if (advancedScript.isGrounded && Input.GetButtonDown("Jump"))
         {
             anim.SetBool("ground", false);
 
@@ -147,26 +119,24 @@ public class JB_PlayerController : MonoBehaviour
         if (moveXInput > 0 && !m_isFacingRight)
         {
             Flip();
-            dir = new Vector2(1f, 0f);
+            //dir = new Vector2(1f, 0f);
 
         }
         else if (moveXInput < 0 && m_isFacingRight)
         {
             Flip();
-            dir = new Vector2(-1f, 0f);
+            //dir = new Vector2(-1f, 0f);
 
         }
 
 
         // raycasting - 11 layer should be environment / ground
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, dir, Mathf.Infinity, 11);
+        //RaycastHit2D hit = Physics2D.Raycast(transform.position, dir, Mathf.Infinity, 11);
 
         // dash ability
         if (Input.GetKeyDown(KeyCode.E))
         {
-            StopAllCoroutines();
-            Dash(m_isFacingRight, hit);
-            
+            Dash();
         }
 
         //Debug.DrawRay(transform.position, dir*10f, Color.green);
@@ -210,7 +180,7 @@ public class JB_PlayerController : MonoBehaviour
         {
             dashCharge = 1;
         }
-        else
+        else if(dashRecharge == 100.0f)
         {
             dashCharge = 2;
         }
@@ -225,7 +195,7 @@ public class JB_PlayerController : MonoBehaviour
         parryColliderObj.SetActive(false);
     }
 
-    private void Dash(bool rightDir, RaycastHit2D hit)
+    private void Dash()
     {
         
 
@@ -233,51 +203,16 @@ public class JB_PlayerController : MonoBehaviour
         {
             --dashCharge;
             dashRecharge = 50.0f;
-            DashDirection(rightDir, hit);
+            advancedScript.Dash();
         }
         else if(dashCharge == 1)
         {
             --dashCharge;
             dashRecharge = 0.0f;
-            DashDirection(rightDir, hit);
+            advancedScript.Dash();
         }
 
        
-    }
-
-    private void DashDirection(bool rightDir, RaycastHit2D hit)
-    {
-        bDashing = true;
-        float dashDistance = 5f;
-        StartCoroutine(PlayDashAnim());
-
-        if (hit.collider != null)
-        {
-            float distance = Mathf.Abs(hit.point.x - transform.position.x);
-            if (distance < 5f)
-            {
-                dashDistance = distance;
-            }
-        }
-
-        if (rightDir)
-        {
-
-            transform.position += Vector3.right * dashDistance;
-        }
-        else
-        {
-            transform.position += Vector3.left * dashDistance;
-        }
-    }
-
-    IEnumerator PlayDashAnim()
-    {
-        // used to temporarily ignore enemy collisions while dashing
-        yield return new WaitForSeconds(0.5f);
-        // reapplies collision between enemy and player
-        bDashing = false;
-        Physics2D.IgnoreLayerCollision(10, 8, false);
     }
 
     //Flipping direction of character
@@ -295,8 +230,6 @@ public class JB_PlayerController : MonoBehaviour
         {
             attackTimer = 1.0f;
 
-            
-
             switch (attackPhase)
             {
                 case 0:
@@ -305,12 +238,14 @@ public class JB_PlayerController : MonoBehaviour
                     Debug.Log(attackPhase + " case 0");
                     // attack animation 1
                     swordScript.PlayerAttack(1);
+                    anim.SetTrigger("Punch");
                     break;
                 case 1:
                     //resourceScript.currentEnergy -= 20.0f;
                     resourceScript.UpdateEnergy(-20.0f);
                     Debug.Log(attackPhase + " case 1");
                     swordScript.PlayerAttack(1);
+                    anim.SetTrigger("Punch");
                     // attack animation 2
                     break;
                 case 2:
@@ -319,7 +254,7 @@ public class JB_PlayerController : MonoBehaviour
                     //sword.GetComponent<JB_SwordTrigger>().bThirdattack = true;
                     swordScript.PlayerAttack(2);
                     Debug.Log(attackPhase + " case 2");
-                    
+                    anim.SetTrigger("Punch");
                     //UpdateComboPoints();
                     // attack animation 3
                     break;
@@ -336,16 +271,10 @@ public class JB_PlayerController : MonoBehaviour
             attackPhase = 0;
             //resourceScript.attackPhase = attackPhase;
         }
-        anim.SetTrigger("Punch");
+        
     }
 
-    //protected override void OnLanded()
-    //{
-    //    base.OnLanded();
-    //    m_lastWallJumpSide = WallJumpSide.None;
-    //}
-
-
+  
     private void ThrowShuriken()
     {
         // throwing a shuriken requires a combo point, we are checking to see if we any to use
@@ -385,36 +314,6 @@ public class JB_PlayerController : MonoBehaviour
         
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        // if player hits enemy while dashing ignore collision
-        if (bDashing && collision.gameObject.tag == "Enemy")
-        {
-            Debug.Log("testing enemy collision");
-            // layer 10 is player, layer 8 is enemy
-            Physics2D.IgnoreLayerCollision(10, 8);
-        }
-        // if player hits boss while dashing ignore collision
-        if (bDashing && collision.gameObject.tag == "Boss")
-        {
-            Physics2D.IgnoreCollision(playerBoxCollider, collision.gameObject.GetComponent<BoxCollider2D>());
-        }
-    }
-
-    private void OnCollisionStay2D(Collision2D collision)
-    {
-        // if player hits enemy while dashing ignore collision
-        if (bDashing && collision.gameObject.tag == "Enemy")
-        {
-            Debug.Log("testing enemy collision");
-            // layer 10 is player, layer 8 is enemy
-            Physics2D.IgnoreLayerCollision(10, 8);
-        }
-        // if player hits boss while dashing ignore collision
-        if (bDashing && collision.gameObject.tag == "Boss")
-        {
-            Physics2D.IgnoreCollision(playerBoxCollider, collision.gameObject.GetComponent<BoxCollider2D>());
-        }
-    }
+   
 
 }

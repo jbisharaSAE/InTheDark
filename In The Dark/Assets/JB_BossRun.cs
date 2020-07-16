@@ -10,7 +10,7 @@ public class JB_BossRun : StateMachineBehaviour
     private float speed;
     private Transform player;
     private Rigidbody2D rb;
-    private JB_BossOne bossScript;
+    private JB_Boss bossScript;
     
 
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
@@ -18,8 +18,8 @@ public class JB_BossRun : StateMachineBehaviour
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
         rb = animator.GetComponent<Rigidbody2D>();
-        bossScript = animator.GetComponent<JB_BossOne>();
-        speed = animator.GetComponent<JB_BossOne>().moveSpeed;
+        bossScript = animator.GetComponent<JB_Boss>();
+        speed = animator.GetComponent<JB_Boss>().moveSpeed;
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
@@ -33,23 +33,27 @@ public class JB_BossRun : StateMachineBehaviour
 
         float distance = Vector2.Distance(player.position, rb.position);
 
-        if (distance <= attackRange)
+        if (!GameManager.isInputDisabled)
         {
-            // attack
-            animator.SetTrigger("Attack");
-        }
-        else
-        {
-            // move towards player
-            rb.MovePosition(newPos);
+            if (distance <= attackRange)
+            {
+                // attack
+                animator.SetTrigger("Attack");
+            }
+            else
+            {
+                // move towards player
+                rb.MovePosition(newPos);
 
-        }
+            }
 
-        if (distance > 10f)
-        {
-            // run throw script if far away enough from player
-            bossScript.ThrowShuriken();
+            if (distance > 10f)
+            {
+                // run throw script if far away enough from player
+                bossScript.ThrowShuriken();
+            }
         }
+            
 
     }
 

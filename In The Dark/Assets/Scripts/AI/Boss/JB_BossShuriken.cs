@@ -6,7 +6,7 @@ public class JB_BossShuriken : MonoBehaviour
 {
     private Rigidbody2D rb;
     [SerializeField] private float speed = 25f;
-    [SerializeField] private float shurikenDmg = 10f;
+    [SerializeField] private DamageInfo shurikenDmg;
 
     // Start is called before the first frame update
     void Start()

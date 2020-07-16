@@ -92,6 +92,7 @@ public class JB_DialogueManager : MonoBehaviour
     {
         //animator.SetBool("IsOpen", false);
         systemPanel.SetActive(false);
+        GameManager.SetInputDisabled(false);
         //Time.timeScale = 1f;
     }
 }

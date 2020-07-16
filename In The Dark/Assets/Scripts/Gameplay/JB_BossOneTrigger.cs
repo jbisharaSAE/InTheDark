@@ -5,13 +5,17 @@ using UnityEngine;
 public class JB_BossOneTrigger : MonoBehaviour
 {
     [SerializeField] private GameObject bossOne;
-    [SerializeField] private GameManager gameManagerScript;
+    
 
+    
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.gameObject.tag == "Player")
         {
             bossOne.SetActive(true);
+
+            GameManager.SetInputDisabled(true);
+            //GameManager.inputDisabled;
         }
     }
 
