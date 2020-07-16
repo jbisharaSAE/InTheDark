@@ -8,7 +8,7 @@ public class LevelSelectMenu : MonoBehaviour
     [System.Serializable]
     class LevelData
     {
-        public string m_levelName = string.Empty;
+        public int m_levelIndex = -1;
         public Button m_levelButton = null;
 
         public void UpdateButtonStatus(NinjasSaveData saveData)
@@ -16,7 +16,7 @@ public class LevelSelectMenu : MonoBehaviour
             if (!m_levelButton)
                 return;
 
-            bool unlockedLevel = saveData.m_unlockedLevels.Contains(m_levelName);
+            bool unlockedLevel = saveData.HasUnlockedLevelAtIndex(m_levelIndex);
             m_levelButton.interactable = unlockedLevel;
         }
     }
@@ -24,62 +24,74 @@ public class LevelSelectMenu : MonoBehaviour
     [SerializeField] private List<LevelData> m_levelsData = new List<LevelData>();          // List of all the levels that can be played
 
     private NinjasSaveData m_saveData = null;       // Loaded save data
+    private CampaignConfig m_config = null;         // Loaded campaign config
 
     void OnEnable()
     {
         m_saveData = NinjasSaveData.Load();
 
-        // No save data exist
+        // Create new save data if none exists
         if (m_saveData == null)
-        {
-            // Create new save data, save first level as current and unlocked
             m_saveData = new NinjasSaveData();
-
-            if (m_levelsData.Count > 0)
-                m_saveData.m_unlockedLevels.Add(m_levelsData[0].m_levelName);
-
-            m_saveData.Save();
-        }
 
         for (int i = 0; i < m_levelsData.Count; ++i)
             m_levelsData[i].UpdateButtonStatus(m_saveData);
+
+        m_config = CampaignConfig.GetConfig();
     }
 
     void OnDisable()
     {
+        CampaignConfig.UnloadConfig();
+
         m_saveData = null;
+        m_config = null;
     }
 
     public void ContinueProgress()
     {
-        if (m_saveData == null)
+        if (m_saveData == null || m_config == null)
             return;
 
-        // Might be dealing with a "New Game)
-        string levelName = m_saveData.m_currentLevel;
-        if (levelName == string.Empty)
-        {
-            if (m_levelsData.Count > 0)
-                levelName = m_levelsData[0].m_levelName;
-        }
+        // Zero as default, as 0 signals start a new game
+        int levelIndex = 0;
+        if (!m_saveData.IsNewGame())
+            levelIndex = m_saveData.currentLevelIndex;
 
-        if (GameManager.OpenLevel(levelName))
-        {
-            m_saveData.m_currentLevel = levelName;
-            m_saveData.Save();
-        }
+        // Is this level even valid?
+        if (!m_config.IsValidLevelIndex(levelIndex))
+            return;
+
+        TryOpenLevelAndSave(levelIndex);
     }
 
     public void SelectLevel(int levelIndex)
     {
-        if (levelIndex >= 0 && levelIndex < m_levelsData.Count)
+        if (m_saveData == null || m_config == null)
+            return;
+
+        // Have we unlocked this level?
+        if (!m_saveData.HasUnlockedLevelAtIndex(levelIndex))
+            return;
+
+        // Is this level even valid?
+        if (!m_config.IsValidLevelIndex(levelIndex))
+            return;
+
+        TryOpenLevelAndSave(levelIndex);
+    }
+
+    public bool TryOpenLevelAndSave(int levelIndex)
+    {
+        if (GameManager.OpenCampaignLevel(levelIndex))
         {
-            LevelData data = m_levelsData[levelIndex];
-            if (GameManager.OpenLevel(data.m_levelName))
-            {
-                m_saveData.m_currentLevel = data.m_levelName;
-                m_saveData.Save();
-            }
+            m_saveData.SetLevelUnlocked(levelIndex);
+            m_saveData.SetLastPlayedLevel(levelIndex);
+            m_saveData.Save();
+
+            return true;
         }
+
+        return false;
     }
 }

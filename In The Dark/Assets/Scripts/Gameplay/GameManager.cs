@@ -6,6 +6,13 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     /// <summary>
+    /// Event for when the game is paused
+    /// </summary>
+    /// <param name="isPaused">If game is paused/unpaused</param>
+    public delegate void OnGamePaused(bool isPaused);
+    public static OnGamePaused onPaused;
+
+    /// <summary>
     /// Singleton access to Game Manager. May not be valid
     /// </summary>
     public static GameManager instance { get; private set; }
@@ -107,6 +114,9 @@ public class GameManager : MonoBehaviour
 
         if (PlayerHUD.instance)
             PlayerHUD.instance.DisplayPauseScreen();
+
+        if (onPaused != null)
+            onPaused.Invoke(true);
     }
 
     /// <summary>
@@ -125,6 +135,9 @@ public class GameManager : MonoBehaviour
 
         if (PlayerHUD.instance)
             PlayerHUD.instance.HidePauseScreen();
+
+        if (onPaused != null)
+            onPaused.Invoke(false);
     }
 
     /// <summary>
@@ -145,18 +158,69 @@ public class GameManager : MonoBehaviour
         m_disableInput = disable;
     }
 
-    public static bool OpenLevel(string levelName)
+    /// <summary>
+    /// Opens the campaign level at specified index.
+    /// </summary>
+    /// <param name="levelIndex">Index of campaign level to open</param>
+    /// <returns>If level was requested to load</returns>
+    public static bool OpenCampaignLevel(int levelIndex)
     {
-        if (instance)
-            return instance.OpenLevelImpl(levelName);
+        CampaignConfig config = CampaignConfig.GetConfig();
+        if (!config)
+            return false;
 
-        return false;
+        return OpenLevel(config.GetLevelName(levelIndex));
     }
 
-    private bool OpenLevelImpl(string levelName)
+    /// <summary>
+    /// Opens a level
+    /// </summary>
+    /// <param name="levelName">Name of the level</param>
+    /// <returns>If level was requested to load</returns>
+    public static bool OpenLevel(string levelName)
     {
-        SceneManager.LoadScene(levelName);
+        if (levelName == string.Empty)
+            return false;
+
+        SceneManager.LoadScene(levelName, LoadSceneMode.Single);
         return true;
+    }
+
+    // temp here, for testing (maybe keep here)
+    public static bool FinishCampaignLevel()
+    {
+        CampaignConfig config = CampaignConfig.GetConfig();
+        if (!config)
+            return false;
+
+        string currentLevel = SceneManager.GetActiveScene().name;
+        int curLevelIndex = config.GetLevelIndex(currentLevel);
+        if (curLevelIndex == -1)
+            return false;
+
+        // next level
+        int nextLevelIndex = curLevelIndex + 1;
+        if (!config.IsValidLevelIndex(nextLevelIndex))
+            // TODO: End of campaign
+            return false;
+
+        // TODO: Would need to make sure level is actually valid (we can open the scene)
+        // If not, just iterate to the next level (also need to make sure that game isn't finished)
+
+        CampaignConfig.UnloadConfig();
+
+        // for now
+        if (OpenLevel(config.GetLevelName(nextLevelIndex)))
+        {
+            NinjasSaveData saveData = NinjasSaveData.Load(true);
+            saveData.SetLevelUnlocked(nextLevelIndex);
+            saveData.SetLastPlayedLevel(nextLevelIndex);
+            saveData.Save();
+
+            return true;
+        }
+
+        return false;
     }
 
     /// <summary>

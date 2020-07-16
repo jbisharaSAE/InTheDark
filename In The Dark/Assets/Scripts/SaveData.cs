@@ -5,15 +5,30 @@ using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
 [System.Serializable]
+public class LevelStatsData
+{
+    // Time it took player to complete the level
+    [SerializeField]
+    public float m_completionTime = -1f;
+}
+
+[System.Serializable]
 public class NinjasSaveData
 {
-    // The levels the player had unlocked, should at least be one
+    // Index of furthest campaign level unlocked
     [SerializeField]
-    public List<string> m_unlockedLevels = new List<string>();
+    private int m_campaignProgressIndex = -1;
+    
+    // Index of current level being played
+    [SerializeField]
+    private int m_currentLevelIndex = -1;
 
-    // The level the player is up to or last played
+    // Stats for individual levels
     [SerializeField]
-    public string m_currentLevel = string.Empty;
+    private List<LevelStatsData> m_levelStats = new List<LevelStatsData>();
+
+    public int campaignProgressIndex { get { return m_campaignProgressIndex; } }
+    public int currentLevelIndex { get { return m_currentLevelIndex; } }
 
     public void Save()
     {
@@ -26,7 +41,7 @@ public class NinjasSaveData
         stream.Close();
     }
 
-    public static NinjasSaveData Load()
+    public static NinjasSaveData Load(bool createNewIfRequired = false)
     {
         string fullPath = GetFullPath();
         if (File.Exists(fullPath))
@@ -39,6 +54,10 @@ public class NinjasSaveData
 
             return saveData;
         }
+        else if (createNewIfRequired)
+        {
+            return new NinjasSaveData();
+        }
 
         return null;
     }
@@ -46,7 +65,41 @@ public class NinjasSaveData
     private static string GetFullPath()
     {
         string partialPath = Application.persistentDataPath;
-        string fullPath = partialPath + "/save.fun";
-        return fullPath;
+        return partialPath + "/save.fun";
+    }
+
+    public bool HasUnlockedLevelAtIndex(int levelIndex)
+    {
+        // If less than zero, means New Game is awaiting
+        if (IsNewGame())
+            return false;
+
+        return levelIndex <= m_campaignProgressIndex;
+    }
+
+    public bool IsLastPlayedLevel(int levelIndex)
+    {
+        // If less than zero, means New Game is awaiting
+        if (IsNewGame())
+            return false;
+
+        return levelIndex == m_currentLevelIndex;
+    }
+
+    public bool IsNewGame()
+    {
+        return m_campaignProgressIndex < 0;
+    }
+
+    public void SetLevelUnlocked(int levelIndex)
+    {
+        levelIndex = Mathf.Max(levelIndex, -1);
+        m_campaignProgressIndex = Mathf.Max(m_campaignProgressIndex, levelIndex);
+    }
+
+    public void SetLastPlayedLevel(int levelIndex)
+    {
+        levelIndex = Mathf.Max(levelIndex, -1);
+        m_currentLevelIndex = levelIndex;
     }
 }
