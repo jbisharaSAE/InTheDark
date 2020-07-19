@@ -4,12 +4,42 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
+// Stats tracked per level playthrough
 [System.Serializable]
 public class LevelStatsData
 {
     // Time it took player to complete the level
     [SerializeField]
-    public float m_completionTime = -1f;
+    public float m_completionTime = float.MaxValue;
+}
+
+// Stats general from general play
+[System.Serializable]
+public class GeneralStatsData
+{
+    // Total playtime
+    [SerializeField]
+    public float m_playTime = 0f;
+
+    // Amount of levels completed
+    [SerializeField]
+    public int m_levelsCompleted = 0;
+
+    // Total amount of enemies killed
+    [SerializeField]
+    public int m_enemyKills = 0;
+
+    // Total amount of times the player has died
+    [SerializeField]
+    public int m_numDeaths = 0;
+
+    public void Combine(GeneralStatsData other)
+    {
+        m_playTime += other.m_playTime;
+        m_levelsCompleted += other.m_levelsCompleted;
+        m_enemyKills += other.m_enemyKills;
+        m_numDeaths += other.m_numDeaths;
+    }
 }
 
 [System.Serializable]
@@ -27,8 +57,13 @@ public class NinjasSaveData
     [SerializeField]
     private List<LevelStatsData> m_levelStats = new List<LevelStatsData>();
 
+    // Stats from all gameplay
+    [SerializeField]
+    private GeneralStatsData m_generalStats = new GeneralStatsData();
+
     public int campaignProgressIndex { get { return m_campaignProgressIndex; } }
     public int currentLevelIndex { get { return m_currentLevelIndex; } }
+    public GeneralStatsData generalStats { get { return m_generalStats; } }
 
     public void Save()
     {
@@ -51,6 +86,9 @@ public class NinjasSaveData
 
             NinjasSaveData saveData = formatter.Deserialize(stream) as NinjasSaveData;
             stream.Close();
+
+            if (saveData.m_generalStats == null)
+                saveData.m_generalStats = new GeneralStatsData();
 
             return saveData;
         }
@@ -101,5 +139,29 @@ public class NinjasSaveData
     {
         levelIndex = Mathf.Max(levelIndex, -1);
         m_currentLevelIndex = levelIndex;
+    }
+
+    public LevelStatsData getLevelStatsData(int levelIndex, bool createIfNeeded)
+    {
+        if (!createIfNeeded)
+        {
+            if (levelIndex < m_levelStats.Count)
+                return m_levelStats[levelIndex];
+            else
+                return null;
+        }
+
+        // Fill up level stats, use null to signal that no actual stats exist
+        while (levelIndex >= m_levelStats.Count)
+            m_levelStats.Add(null);
+
+        LevelStatsData statsData = m_levelStats[levelIndex];
+        if (statsData == null)
+        {
+            statsData = new LevelStatsData();
+            m_levelStats[levelIndex] = statsData;
+        }
+
+        return statsData;
     }
 }

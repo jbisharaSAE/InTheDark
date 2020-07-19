@@ -35,7 +35,7 @@ public class GameManager : MonoBehaviour
     {
         if (instance != null)
         {
-            Destroy(gameObject);
+            Destroy(this);
             return;
         }
 
@@ -209,18 +209,67 @@ public class GameManager : MonoBehaviour
 
         CampaignConfig.UnloadConfig();
 
-        // for now
-        if (OpenLevel(config.GetLevelName(nextLevelIndex)))
+        // Save the game
         {
             NinjasSaveData saveData = NinjasSaveData.Load(true);
+
+            LevelStatsTracker levelStatsTracker = LevelStatsTracker.instance;
+            if (levelStatsTracker)
+            {
+                levelStatsTracker.StopTracking();
+
+                // for now, just do this here
+                saveData.generalStats.m_levelsCompleted++;
+
+                saveData.generalStats.Combine(levelStatsTracker.generalStats);
+
+                LevelStatsData levelStats = saveData.getLevelStatsData(curLevelIndex, true);
+                levelStatsTracker.ReplaceIfBetterTime(levelStats);
+            }
+
             saveData.SetLevelUnlocked(nextLevelIndex);
             saveData.SetLastPlayedLevel(nextLevelIndex);
             saveData.Save();
-
-            return true;
         }
 
-        return false;
+        return OpenLevel(config.GetLevelName(nextLevelIndex));
+    }
+
+    public static bool RestartCampaignLevel(bool gameOver)
+    {
+        CampaignConfig config = CampaignConfig.GetConfig();
+        if (!config)
+            return false;
+
+        // Make sure this is actually a campaign level
+        string currentLevel = SceneManager.GetActiveScene().name;
+        int curLevelIndex = config.GetLevelIndex(currentLevel);
+        if (curLevelIndex == -1)
+            return false;
+
+        CampaignConfig.UnloadConfig();
+
+        // Save the game
+        {
+            NinjasSaveData saveData = NinjasSaveData.Load(true);
+
+            LevelStatsTracker levelStatsTracker = LevelStatsTracker.instance;
+            if (levelStatsTracker)
+            {
+                levelStatsTracker.StopTracking();
+
+                // for now, just do it here (the death)
+                if (gameOver)
+                    saveData.generalStats.m_numDeaths++;
+
+                saveData.generalStats.Combine(levelStatsTracker.generalStats);
+            }
+
+            saveData.Save();
+        }
+
+        // for now
+        return OpenLevel(config.GetLevelName(curLevelIndex));
     }
 
     /// <summary>

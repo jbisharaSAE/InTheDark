@@ -9,6 +9,6 @@ public class GameOverMenu : MonoBehaviour
     /// </summary>
     public void RestartSession()
     {
-        GameManager.RestartSession();
+        GameManager.RestartCampaignLevel(true);
     }
 }
