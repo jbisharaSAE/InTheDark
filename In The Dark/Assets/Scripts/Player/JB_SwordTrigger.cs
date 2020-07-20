@@ -53,13 +53,14 @@ public class JB_SwordTrigger : MonoBehaviour
 
     private void DamageEnemy(int attackPhase, Collider2D enemy)
     {
+        DamageEvent damageEvent = new DamageEvent(gameObject, transform.root.position);
         switch (attackPhase)
         {
             case 1:
-                enemy.GetComponent<HealthComponent>().ApplyDamage(firstPhaseAttackDamage);
+                enemy.GetComponent<HealthComponent>().ApplyDamage(firstPhaseAttackDamage, damageEvent);
                 break;
             case 2:
-                enemy.GetComponent<HealthComponent>().ApplyDamage(lastPhaseAttackDamage);
+                enemy.GetComponent<HealthComponent>().ApplyDamage(lastPhaseAttackDamage, damageEvent);
                 break;
         }
     }

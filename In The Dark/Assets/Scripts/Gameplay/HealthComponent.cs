@@ -16,7 +16,7 @@ public class HealthComponent : MonoBehaviour
     public OnHealthChangedEvent OnHealthChanged;
 
     // Event that is called when damaged. This gets called after OnHealthChanged but before OnDeath (if damaged killed)
-    public delegate void OnDamagedEvent(HealthComponent self, float damage, DamageInfo info);
+    public delegate void OnDamagedEvent(HealthComponent self, float damage, DamageInfo info, DamageEvent args);
     public OnDamagedEvent OnDamaged;
 
     // Event that is called upon death of the object. This will get called after OnHealthChanged and OnDamaged
@@ -66,24 +66,26 @@ public class HealthComponent : MonoBehaviour
     /// Applies damage to this object. Will do nothing if dead.
     /// </summary>
     /// <param name="amount">Amount of damage to apply</param>
+    /// <param name="args">Additional arguments to provide about the damage</param>
     /// <returns>Amount of damage applied</returns>
-    public float ApplyDamage(DamageInfo damage)
+    public float ApplyDamage(DamageInfo damage, DamageEvent args = null)
     {
-        return ApplyDamageImpl(damage);
+        return ApplyDamageImpl(damage, args);
     }
 
     /// <summary>
     /// Applies damage to this object. Will do nothing if dead.
     /// </summary>
     /// <param name="amount">Amount of damage to apply</param>
+    /// <param name="args">Additiona arguments to provide about the damage</param>
     /// <returns>Amount of damage applied</returns>
     [System.Obsolete("Please use DamageInfo overload instead of single float value", false)]
-    public float ApplyDamage(float amount)
+    public float ApplyDamage(float amount, DamageEvent args = null)
     {
         if (amount > 0)
         {
             DamageInfo damageInfo = DamageInfo.MakeDamageInfo(amount);
-            return ApplyDamageImpl(damageInfo);
+            return ApplyDamageImpl(damageInfo, args);
         }
 
         return 0f;
@@ -110,7 +112,7 @@ public class HealthComponent : MonoBehaviour
         // Value will be positive
         amount = m_health - OldHealth;
 
-        InvokeEvents(amount, null);
+        InvokeEvents(amount, null, null);
         return amount;
     }
 
@@ -118,8 +120,9 @@ public class HealthComponent : MonoBehaviour
     /// Implementation for applying damage, takes in a damage info instance
     /// </summary>
     /// <param name="info">Info containing details for damage</param>
+    /// <param name="args">Event causing the damage</param>
     /// <returns>Amount of damage applied</returns>
-    private float ApplyDamageImpl(DamageInfo info)
+    private float ApplyDamageImpl(DamageInfo info, DamageEvent args)
     {
         if (!info)
             return 0f;
@@ -139,7 +142,7 @@ public class HealthComponent : MonoBehaviour
         // Value will be negative
         damage = m_health - OldHealth;
 
-        InvokeEvents(damage, info);
+        InvokeEvents(damage, info, args);
         return -damage;
     }
 
@@ -148,14 +151,15 @@ public class HealthComponent : MonoBehaviour
     /// </summary>
     /// <param name="delta">Delta of health change</param>
     /// <param name="damageInfo">Damage info if damaged</param>
-    private void InvokeEvents(float delta, DamageInfo damageInfo)
+    /// <param name="damageArgs">Damage args if damaged</param>
+    private void InvokeEvents(float delta, DamageInfo damageInfo, DamageEvent damageArgs)
     {
         if (OnHealthChanged != null)
             OnHealthChanged.Invoke(this, m_health, delta);
 
         if (delta < 0f)
             if (OnDamaged != null)
-                OnDamaged.Invoke(this, Mathf.Abs(delta), damageInfo);
+                OnDamaged.Invoke(this, Mathf.Abs(delta), damageInfo, damageArgs);
 
         if (isDead)
             if (OnDeath != null)

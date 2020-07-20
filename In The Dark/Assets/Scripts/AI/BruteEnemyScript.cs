@@ -13,6 +13,7 @@ public class BruteEnemyScript : EnemyScript
     [SerializeField] private float m_chaseSpeed = 8f;       // Speed of this enemy when chasing
     [SerializeField] private float m_attackRange = 5f;      // Attack range target must be within // TODO: Move to EnemyMeleeAttack?
 
+    private bool m_isChasing = false;
     private byte m_inJumpArea = 0;
 
     /// <summary>
@@ -49,6 +50,8 @@ public class BruteEnemyScript : EnemyScript
 
     public void OnEnterPatrol()
     {
+        m_isChasing = false;
+
         if (movementComponent)
         {
             movementComponent.m_orientateToMovement = true;
@@ -60,6 +63,8 @@ public class BruteEnemyScript : EnemyScript
 
     public void OnEnterChase()
     {
+        m_isChasing = true;
+
         if (movementComponent)
         {
             movementComponent.m_orientateToMovement = false;
@@ -67,5 +72,40 @@ public class BruteEnemyScript : EnemyScript
         }
 
         GetComponent<EnemyTargetSelector>().m_focusSightOnTarget = true;
+    }
+
+    protected override void OnDamaged(HealthComponent self, float damage, DamageInfo info, DamageEvent args)
+    {
+        base.OnDamaged(self, damage, info, args);
+
+        // Still turn around if stunned
+        if (self.isDead || m_isChasing)
+            return;
+
+        // Turn around to face the direction we were hit. Do this by default as it's likely we would already
+        // be chasing the instigator if already facing them (thus meaning we are most likely facing away)
+        if (args != null)
+        {
+            Vector2 displacement = args.m_hitLocation - (Vector2)transform.position;
+            float desiredRot = displacement.x > 0f ? 0f : 180f;
+            if (transform.eulerAngles.y != desiredRot)
+                transform.eulerAngles = new Vector3(0f, desiredRot, 0f);
+        }
+        else
+        {
+            float desiredRot = transform.eulerAngles.y > 0f ? 0f : 180f;
+            transform.eulerAngles = new Vector3(0f, desiredRot, 0f);
+        }
+
+        animatorComponent.SetBool("Idle", true);
+        StartCoroutine(WaitTillNextTick());
+    }
+
+    IEnumerator WaitTillNextTick()
+    {
+        bool wasOrientateToMovement = movementComponent.m_orientateToMovement;
+        movementComponent.m_orientateToMovement = false;
+        yield return null;
+        //movementComponent.m_orientateToMovement = wasOrientateToMovement;
     }
 }

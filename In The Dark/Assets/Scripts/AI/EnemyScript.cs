@@ -47,14 +47,9 @@ public class EnemyScript : MonoBehaviour
 
     protected virtual void Awake()
     {
-        //if (!m_movementComp)
-            m_movementComp = GetComponent<CharacterMovement>();
-
-        //if (!m_animatorComp)
-            m_animatorComp = GetComponent<Animator>();
-
-        //if (!m_healthComp)
-            m_healthComp = GetComponent<HealthComponent>();
+        m_movementComp = GetComponent<CharacterMovement>();
+        m_animatorComp = GetComponent<Animator>();
+        m_healthComp = GetComponent<HealthComponent>();
 
         if (m_healthComp)
         {
@@ -72,7 +67,7 @@ public class EnemyScript : MonoBehaviour
         }
     }
 
-    protected virtual void OnDamaged(HealthComponent self, float damage, DamageInfo info)
+    protected virtual void OnDamaged(HealthComponent self, float damage, DamageInfo info, DamageEvent args)
     {
         if (info && info.stunTime > 0f)
         { 

@@ -23,7 +23,7 @@ public class MeleeEnemyPatrolState : StateMachineBehaviour
         m_patrolAreaComp = m_scriptComp.patrolArea;
         if (!m_patrolAreaComp)
         {
-            Debug.LogError("Missing Patrol Area Component! Will be unable to properly function!", this);
+            Debug.LogWarning("Missing Patrol Area Component! Will be unable to properly function!", this);
             return;
         }
 
