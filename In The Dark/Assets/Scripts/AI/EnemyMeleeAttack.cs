@@ -47,7 +47,10 @@ public class EnemyMeleeAttack : MonoBehaviour
     public void AttackOnce()
     {
         StopAttack();
+
+        m_hitObjects = new HashSet<GameObject>();
         AttackImpl();
+        m_hitObjects = null;
     }
 
     /// <summary>
@@ -57,29 +60,28 @@ public class EnemyMeleeAttack : MonoBehaviour
     {
         Vector2 center = GetAttackCenter();
 
-        Collider2D hitCollider = Physics2D.OverlapCircle(center, m_radius, m_attackLayers);
-        if (hitCollider)
-        {
-            // Do not hit ourselves
-            GameObject hitObject = hitCollider.gameObject;
-            if (hitObject == gameObject)
+        Collider2D[] hits = Physics2D.OverlapCircleAll(center, m_radius, m_attackLayers);
+        if (hits != null && hits.Length > 0)
+            foreach (Collider2D hitCollider in hits)
             {
-                Debug.Log("you hit" + hitObject);
-                return;
+                // Do not hit ourselves
+                GameObject hitObject = hitCollider.gameObject;
+                if (hitObject == gameObject)
+                    return;
+
+                // Check if we should ignore this object
+                if (m_hitObjects != null && m_hitObjects.Contains(hitObject))
+                    return;
+
+                // Try applying damage to it
+                HealthComponent healthComp = hitObject.GetComponent<HealthComponent>();
+                if (healthComp)
+                    healthComp.ApplyDamage(m_damage);
+
+                if (m_hitObjects != null)
+                    m_hitObjects.Add(hitObject);
+
             }
-
-            // Check if we should ignore this object
-            if (m_hitObjects != null && m_hitObjects.Contains(hitObject))
-                return;
-
-            // Try applying damage to it
-            HealthComponent healthComp = hitObject.GetComponent<HealthComponent>();
-            if (healthComp)
-                healthComp.ApplyDamage(m_damage);
-
-            if (m_hitObjects != null)
-                m_hitObjects.Add(hitObject);
-        }
     }
 
     /// <summary>
