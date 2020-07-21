@@ -7,6 +7,13 @@ using UnityEngine;
 /// </summary>
 public class EnemyScript : MonoBehaviour
 {
+    /// <summary>
+    /// Event that is called when an enemy dies
+    /// </summary>
+    /// <param name="enemy">Enemy that died</param>
+    public delegate void OnEnemyDeath(EnemyScript enemy);
+    public static OnEnemyDeath onEnemyDeath;
+
     [SerializeField] private bool m_canBeStunned = true;                    // If this enemy can be stunned while damaged
     [SerializeField] private PickupComponent m_deathDrop = null;            // Pickup to spawn upon death
     [SerializeField, Range(0f, 1f)] private float m_dropChance = 0.1f;      // Chance of dropping pick up upon death
@@ -40,14 +47,9 @@ public class EnemyScript : MonoBehaviour
 
     protected virtual void Awake()
     {
-        if (!m_movementComp)
-            m_movementComp = GetComponent<CharacterMovement>();
-
-        if (!m_animatorComp)
-            m_animatorComp = GetComponent<Animator>();
-
-        if (!m_healthComp)
-            m_healthComp = GetComponent<HealthComponent>();
+        m_movementComp = GetComponent<CharacterMovement>();
+        m_animatorComp = GetComponent<Animator>();
+        m_healthComp = GetComponent<HealthComponent>();
 
         if (m_healthComp)
         {
@@ -65,7 +67,7 @@ public class EnemyScript : MonoBehaviour
         }
     }
 
-    protected virtual void OnDamaged(HealthComponent self, float damage, DamageInfo info)
+    protected virtual void OnDamaged(HealthComponent self, float damage, DamageInfo info, DamageEvent args)
     {
         if (info && info.stunTime > 0f)
         { 
@@ -77,6 +79,10 @@ public class EnemyScript : MonoBehaviour
     protected virtual void OnDeath(HealthComponent self)
     {
         TryDroppingPickup();
+
+        if (onEnemyDeath != null)
+            onEnemyDeath.Invoke(this);
+
         Destroy(gameObject);
     }
 

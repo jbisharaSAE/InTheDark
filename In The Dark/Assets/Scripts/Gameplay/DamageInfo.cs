@@ -49,3 +49,25 @@ public class DamageInfo : ScriptableObject
         return info;
     }
 }
+
+/// <summary>
+/// Small class containing details about why damage occured.
+/// Can be inherited from to provide additional details
+/// </summary>
+public class DamageEvent
+{
+    public DamageEvent()
+    {
+
+    }
+
+    public DamageEvent(GameObject instigator, Vector2 hitLocation)
+    {
+        m_instigator = instigator;
+        m_hitLocation = hitLocation;
+    }
+
+    public GameObject m_instigator = null;          // Instigator that caused the damaged
+    public Vector2 m_hitLocation = Vector2.zero;    // Where the damaged occured
+}
+

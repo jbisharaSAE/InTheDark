@@ -2,6 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public class ShurikenDamageEvent : DamageEvent
+{ 
+}
+
+
 public class JB_Shuriken : MonoBehaviour
 {
     private Rigidbody2D rb;
@@ -36,7 +41,8 @@ public class JB_Shuriken : MonoBehaviour
     {
         if (collision.gameObject.GetComponent<HealthComponent>())
         {
-            collision.gameObject.GetComponent<HealthComponent>().ApplyDamage(shurikenDamage);
+            collision.gameObject.GetComponent<HealthComponent>().ApplyDamage(shurikenDamage, 
+                new ShurikenDamageEvent{ m_instigator = gameObject, m_hitLocation = transform.position });
         }
         Destroy(gameObject);
     }
