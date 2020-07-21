@@ -12,7 +12,7 @@ public class AdvancedCharacterMovement : CharacterMovement
 {
     protected readonly float wallCheckExtent = 0.1f;
 
-    protected enum WallJumpSide
+    public enum WallJumpSide
     {
         None,
         Left,
@@ -34,13 +34,22 @@ public class AdvancedCharacterMovement : CharacterMovement
     protected float m_dashEnd = -1f;                                        // When dash is expected to end
 
     /// <summary>
+    /// Last wall the character had jumped on
+    /// </summary>
+    public WallJumpSide lastWallJumpSide { get { return m_lastWallJumpSide; } }
+
+    /// <summary>
     /// If this character is currently dashing
     /// </summary>
     public bool isDashing { get { return m_isDashing; } }
 
+    [Header("Debug")]
+    public bool m_useDebugControls = false;         // If to use debug controls
+
     protected override void Update()
     {
         // For now, handling inputs here
+        if (m_useDebugControls)
         {
             SetMoveInput(Input.GetAxisRaw("Horizontal"));
 
@@ -147,9 +156,10 @@ public class AdvancedCharacterMovement : CharacterMovement
             if (m_lastWallJumpSide != WallJumpSide.Left && CanWallJump(WallJumpSide.Left))
             {
                 // Jump to the right
-                Vector2 velocity = m_rigidBody.velocity;
-                velocity = new Vector2(0.77f, 0.77f) * m_wallJumpPower; // Velocity change
+                Vector2 velocity = new Vector2(1f, 0.77f) * m_wallJumpPower; // Velocity change
                 m_rigidBody.velocity = velocity;
+
+                m_moveInput = 0f;
 
                 m_aboutToJump = true;
                 m_lastWallJumpSide = WallJumpSide.Left;
@@ -158,9 +168,10 @@ public class AdvancedCharacterMovement : CharacterMovement
             else if (m_lastWallJumpSide != WallJumpSide.Right && CanWallJump(WallJumpSide.Right))
             {
                 // Jump to the left
-                Vector2 velocity = m_rigidBody.velocity;
-                velocity = new Vector2(-0.77f, 0.77f) * m_wallJumpPower; // Velocity change
+                Vector2 velocity = new Vector2(-0.77f, 0.77f) * m_wallJumpPower; // Velocity change
                 m_rigidBody.velocity = velocity;
+
+                m_moveInput = 0f;
 
                 m_aboutToJump = true;
                 m_lastWallJumpSide = WallJumpSide.Right;
@@ -279,12 +290,12 @@ public class AdvancedCharacterMovement : CharacterMovement
         if (!m_collider)
             return new Bounds(transform.position, Vector3.one);
 
-        Vector2 position = transform.position;
+        Vector2 position = (Vector2)transform.position + (Vector2)transform.TransformVector(m_collider.offset);
         Vector2 extents = m_collider.bounds.extents;
         float multiplier = side == WallJumpSide.Left ? -1f : 1f;
 
         // Position at side of collider
-        position.x += (extents.x * m_collider.transform.lossyScale.x) * multiplier;
+        position.x += (extents.x * Mathf.Abs(m_collider.transform.lossyScale.x)) * multiplier;
 
         // Push further to side to compensate for bounds horizontal size
         position.x += wallCheckExtent * multiplier;
@@ -302,9 +313,11 @@ public class AdvancedCharacterMovement : CharacterMovement
         if (!m_collider)
             return;
 
+        Gizmos.color = Color.red;
         Bounds leftWallCheckBounds = GetWallCheckBounds(WallJumpSide.Left);
         Gizmos.DrawWireCube(leftWallCheckBounds.center, leftWallCheckBounds.size);
 
+        Gizmos.color = Color.blue;
         Bounds rightWallCheckBounds = GetWallCheckBounds(WallJumpSide.Right);
         Gizmos.DrawWireCube(rightWallCheckBounds.center, rightWallCheckBounds.size);
     }
@@ -320,6 +333,8 @@ public class AdvancedCharacterMovementEditor : CharacterMovementEditor
         base.PrintRuntimeValues(movement);
 
         AdvancedCharacterMovement advancedMovement = movement as AdvancedCharacterMovement;
+        EditorGUILayout.Toggle("Is Dashing", advancedMovement.isDashing);
+        EditorGUILayout.EnumPopup("Last Wall Jump Side", advancedMovement.lastWallJumpSide);
     }
 }
 #endif

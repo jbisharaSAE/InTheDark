@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6248066108809503141}
   - component: {fileID: 6248066108809503146}
+  - component: {fileID: 3205694242895623258}
   m_Layer: 8
   m_Name: Sight
   m_TagString: Untagged
@@ -53,6 +54,23 @@ MonoBehaviour:
   m_visibleLayers:
     serializedVersion: 2
     m_Bits: 55
+--- !u!114 &3205694242895623258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6248066108809503140}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb7d99421e3fe8f4db1de3be3793c5bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_worldLayers:
+    serializedVersion: 2
+    m_Bits: 6913
+  m_detectionDistance: 1.5
+  m_slopeLimit: 0.5
 --- !u!1 &6248066109406920545
 GameObject:
   m_ObjectHideFlags: 0
@@ -254,7 +272,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_offset: {x: 1, y: 0}
   m_radius: 1.25
-  m_damage: 20
+  m_damage: {fileID: 0}
   m_attackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -277,6 +295,7 @@ MonoBehaviour:
   m_animatorComp: {fileID: 0}
   m_healthComp: {fileID: 0}
   m_patrolArea: {fileID: 0}
+  m_wallDetection: {fileID: 0}
   m_idleTime: 2
   m_patrolSpeed: 4
   m_chaseSpeed: 8

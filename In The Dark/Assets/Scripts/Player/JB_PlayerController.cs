@@ -57,12 +57,13 @@ public class JB_PlayerController : MonoBehaviour
 
 
         moveXInput = Input.GetAxis("Horizontal");
+        advancedScript.SetMoveInput(moveXInput);
 
         anim.SetBool("ground", advancedScript.isGrounded);
 
-        if (advancedScript.isGrounded && Input.GetButtonDown("Jump"))
+        if (Input.GetButtonDown("Jump"))
         {
-            anim.SetBool("ground", false);
+            //anim.SetBool("ground", false);
 
             //GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.y, jumpForce);
             advancedScript.Jump();

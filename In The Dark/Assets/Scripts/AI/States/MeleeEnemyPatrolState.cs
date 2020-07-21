@@ -27,12 +27,22 @@ public class MeleeEnemyPatrolState : StateMachineBehaviour
             return;
         }
 
+        bool noInput = Mathf.Approximately(m_movementInput, 0f);
+        bool inPatrolArea = m_patrolAreaComp.IsInPatrolArea(animator.transform.position);
+
         // First time entering this state, just starting moving in any direction
-        if (Mathf.Approximately(m_movementInput, 0f) && m_patrolAreaComp.IsInPatrolArea(animator.transform.position))
+        if (noInput && inPatrolArea)
             m_movementInput = 1f;
         // Keep following way we were going if we can
-        else if (!m_patrolAreaComp.IsInPatrolArea(animator.transform.position))
+        else if (!inPatrolArea)
             m_movementInput = Mathf.Sign((m_patrolAreaComp.position - (Vector2)animator.transform.position).x);
+        else if (IsBlockedFromMoving() && !noInput)
+                // If wall is in front of us, go the other way
+                m_movementInput = -m_movementInput;
+
+        float desiredRot = m_movementInput > 0f ? 0f : 180f;
+        if (animator.transform.eulerAngles.y != desiredRot)
+            animator.transform.eulerAngles = new Vector3(0f, desiredRot, 0f);
 
         if (m_touchComp)
             m_touchComp.OnPerceptionUpdated += OnTouchedByObject;
@@ -44,6 +54,13 @@ public class MeleeEnemyPatrolState : StateMachineBehaviour
     {
         // Keep moving until we are barely just outside of the patrol area
         if (m_patrolAreaComp && m_patrolAreaComp.HasPassedPatrolArea(animator.transform.position, m_movementInput))
+        {
+            animator.SetBool("Idle", true);
+            return;
+        }
+
+        // Might blocked by a wall
+        if (IsBlockedFromMoving())
         {
             animator.SetBool("Idle", true);
             return;
@@ -62,5 +79,13 @@ public class MeleeEnemyPatrolState : StateMachineBehaviour
     private void OnTouchedByObject(GameObject detectedObject, float side)
     {
         m_movementInput = side;
+    }
+
+    private bool IsBlockedFromMoving()
+    {
+        if (m_scriptComp && m_scriptComp.wallDetection)
+            return m_scriptComp.wallDetection.IsAtWall(m_movementInput);
+
+        return false;
     }
 }

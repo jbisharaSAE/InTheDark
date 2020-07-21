@@ -327,7 +327,7 @@ public class CharacterMovement : MonoBehaviour
         if (!m_collider)
             return new Bounds(transform.position, Vector3.one);
 
-        Vector2 position = transform.position;
+        Vector2 position = (Vector2)transform.position + (Vector2)transform.TransformVector(m_collider.offset);
         Vector2 extents = m_collider.size * 0.5f;
         
         // Position now at foot level
@@ -338,7 +338,7 @@ public class CharacterMovement : MonoBehaviour
         position.y -= float.Epsilon;
 
         // Cut small little bit off the horizontal side so we don't check walls for being floors
-        return new Bounds(position, new Vector3(extents.x * 0.95f, floorCheckExtent, 0f) * 2f);
+        return new Bounds(position, new Vector3(extents.x * 0.9f, floorCheckExtent, 0f) * 2f);
     }
 
     /// <summary>

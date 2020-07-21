@@ -5,7 +5,8 @@ using UnityEngine;
 public class BruteEnemyScript : EnemyScript
 {
     [Header("Components", order = 0)]
-    [SerializeField] private PatrolArea m_patrolArea = null;    // Area this enemy must stay within
+    [SerializeField] private PatrolArea m_patrolArea = null;                    // Area this enemy must stay within
+    [SerializeField] private WallDetectionComponent m_wallDetection = null;     // Used for detecting obstacles
 
     [Header("Brute Attributes")]
     [SerializeField] private float m_idleTime = 2f;         // How long to remain idle for
@@ -31,10 +32,20 @@ public class BruteEnemyScript : EnemyScript
         }
     }
 
+    public WallDetectionComponent wallDetection { get { return m_wallDetection; } }
+
     public bool inJumpSpot { get { return m_inJumpArea > 0; } }
 
     public float idleTime { get { return m_idleTime; } }
     public float attackRange { get { return m_attackRange; } }
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        if (!m_wallDetection)
+            m_wallDetection = GetComponentInChildren<WallDetectionComponent>();
+    }
 
     void OnTriggerEnter2D(Collider2D collision)
     {
@@ -54,7 +65,7 @@ public class BruteEnemyScript : EnemyScript
 
         if (movementComponent)
         {
-            movementComponent.m_orientateToMovement = true;
+            //movementComponent.m_orientateToMovement = true;
             movementComponent.m_walkSpeed = m_patrolSpeed;
         }
 
@@ -67,7 +78,7 @@ public class BruteEnemyScript : EnemyScript
 
         if (movementComponent)
         {
-            movementComponent.m_orientateToMovement = false;
+            //movementComponent.m_orientateToMovement = false;
             movementComponent.m_walkSpeed = m_chaseSpeed;
         }
 
