@@ -5,12 +5,32 @@ using UnityEngine;
 /// <summary>
 /// This component handles how the players character is percepted (sight) by the AI
 /// </summary>
-// TODO: Rename this to something bettert
+// TODO: Rename this to something better
 public class PlayerSightPerceptionSource : ShadowAreaListener, ISightPerceptible
 {
+    private bool m_cachedHidden = false;    // If currently hidden
     private short m_numSeenBy = 0;          // Number of times we have been seen
+    private bool m_canGoInvis = false;      // If can go hidden (invis) at this time
 
-    [SerializeField] private HealthComponent m_healthComp = null;       // Owners health component
+    [SerializeField] private HealthComponent m_healthComp = null;                   // Owners health component
+    [SerializeField] private AdvancedCharacterMovement m_movementComp = null;       // Owners movement component
+
+    void Awake()
+    {
+        if (!m_healthComp)
+            m_healthComp = GetComponent<HealthComponent>();
+
+        if (!m_movementComp)
+            m_movementComp = GetComponent<AdvancedCharacterMovement>();
+    }
+
+    void Update()
+    {
+        if (GameManager.isPaused)
+            return;
+
+        UpdateInvisState();
+    }
 
     public bool CanBeDetected()
     {
@@ -18,8 +38,7 @@ public class PlayerSightPerceptionSource : ShadowAreaListener, ISightPerceptible
         if (m_healthComp && m_healthComp.isDead)
             return false;
 
-        // If already seen by a enemy, we should be visible to all enemies
-        return m_numSeenBy > 0 || !inShadows;
+        return !m_cachedHidden;
     }
 
     public Transform GetTransform()
@@ -30,34 +49,68 @@ public class PlayerSightPerceptionSource : ShadowAreaListener, ISightPerceptible
     public void OnVisibleToSightPerception(SightPerception sightPerception)
     {
         ++m_numSeenBy;
+        UpdateInvisState();
     }
 
     public void OnNotVisibleToSightPerception(SightPerception sightPerception)
     {
         --m_numSeenBy;
+        UpdateInvisState();
     }
 
     protected override void OnEnterShadows()
     {
-        // This is testing (TODO: stuff like this we would only want to do when in the shadows while not detected)
-        Renderer renderer = GetComponent<Renderer>();
-        if (renderer)
-        {
-            Color color = renderer.material.color;
-            color.a = 0.7f;
-            renderer.material.color = color;
-        }
+        UpdateInvisState();
     }
 
     protected override void OnLeftShadows()
     {
-        // This is testing (TODO: stuff like this we would only want to do when in the shadows while not detected)
-        Renderer renderer = GetComponent<Renderer>();
-        if (renderer)
+        UpdateInvisState();
+    }
+
+    private void UpdateInvisState()
+    {
+        if (m_healthComp && m_healthComp.isDead)
         {
-            Color color = renderer.material.color;
-            color.a = 1f;
-            renderer.material.color = color;
+            m_canGoInvis = false;
+            m_cachedHidden = false;
+            return;
         }
+
+        bool canGoInvis = CheckInvisState();
+        if (canGoInvis != m_canGoInvis)
+        {
+            if (canGoInvis)
+                OnBecomeHidden();
+            else
+                OnBecomeVisible();
+
+            m_canGoInvis = canGoInvis;
+        }
+
+        m_cachedHidden = canGoInvis;
+    }
+
+    private bool CheckInvisState()
+    {
+        // Fully visible while dashing
+        if (m_movementComp && m_movementComp.isDashing)
+            return false;
+
+        // If already seen by a enemy, we should be visible to all enemies
+        if (m_numSeenBy > 0)
+            return false;
+
+        return inShadows;
+    }
+
+    protected virtual void OnBecomeHidden()
+    {
+        Debug.Log("Now Hidden");
+    }
+
+    protected virtual void OnBecomeVisible()
+    {
+        Debug.Log("Now Visible");
     }
 }
