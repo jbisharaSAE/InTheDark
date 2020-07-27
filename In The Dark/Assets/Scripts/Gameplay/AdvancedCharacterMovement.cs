@@ -123,6 +123,7 @@ public class AdvancedCharacterMovement : CharacterMovement
             }
 
             m_rigidBody.velocity = velocity;
+            CheckIfAtStep();
         }
     }
 

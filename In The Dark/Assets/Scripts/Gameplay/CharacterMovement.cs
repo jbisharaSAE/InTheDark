@@ -19,6 +19,7 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField, Min(0f)] public float m_airSpeed = 8f;                 // Speed while in the air
     [SerializeField, Min(0f)] protected float m_maxAcceleration = 40f;      // Acceleration for reaching walk/air speed
     [SerializeField, Min(0f)] protected float m_brakeFriction = 50f;        // Friction to apply when no input has been applied
+    [SerializeField, Min(0f)] protected float m_maxStepHeight = 0.2f;       // Max height character can step
 
     [Header("Movement (Jumping)")]
     [SerializeField, Min(0f)] public float m_jumpPower = 5f;                // Power of jump, decides velocity
@@ -139,9 +140,11 @@ public class CharacterMovement : MonoBehaviour
                 velocity.x += input * m_maxAcceleration * Time.fixedDeltaTime;
                 velocity.x = Mathf.Clamp(velocity.x, -maxSpeed, maxSpeed);
             }
-        }
 
-        m_rigidBody.velocity = velocity;
+            m_rigidBody.velocity = velocity;
+            CheckIfAtStep();
+        }
+   
         m_aboutToJump = false;
 
         // Rotate ourselves if desired
@@ -149,7 +152,7 @@ public class CharacterMovement : MonoBehaviour
         {
             if (input != 0f)
                 transform.localEulerAngles = Helpers.FlipRotation(m_moveInput);
-        }
+        } 
     }
 
     /// <summary>
@@ -353,6 +356,38 @@ public class CharacterMovement : MonoBehaviour
         return m_walkSpeed;
     }
 
+    Vector2 hitSpot = Vector2.zero;
+
+    protected void CheckIfAtStep()
+    {
+        if (!isGrounded || (!isMoving && currentInput != 0f))
+            return;
+
+        Vector2 velocity = m_rigidBody.velocity;
+        Vector2 dir = new Vector2(Mathf.Sign(velocity.x), 0f);
+
+        RaycastHit2D[] hits = new RaycastHit2D[1];
+        int numHits = m_collider.Cast(dir, hits, Mathf.Abs(velocity.x) * Time.fixedDeltaTime);
+        if (numHits > 0)
+        {
+            Vector2 capsuleBottom = (Vector2)transform.position - new Vector2(0f, m_collider.size.y + m_collider.offset.y);
+
+            for (int i = 0; i < numHits; ++i)
+            {
+                RaycastHit2D hit = hits[i];
+                hitSpot = hit.point;
+
+                float yOffset = hit.point.y - capsuleBottom.y;
+                if (yOffset <= 0f || yOffset > m_maxStepHeight)
+                    continue;
+
+                Vector2 newPosition = m_rigidBody.position + new Vector2(0f, yOffset);
+                m_rigidBody.MovePosition(newPosition);
+            }
+        }
+
+    }
+
     #region Debug
     protected virtual void OnDrawGizmos()
     {
@@ -363,6 +398,9 @@ public class CharacterMovement : MonoBehaviour
 
         Gizmos.color = Color.green;
         Gizmos.DrawWireCube(floorCheckBounds.center, floorCheckBounds.size);
+
+        Gizmos.color = Color.white;
+        Gizmos.DrawSphere(hitSpot, 0.2f);
     }
     #endregion
 }
