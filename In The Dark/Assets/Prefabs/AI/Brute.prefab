@@ -35,7 +35,7 @@ Transform:
   m_GameObject: {fileID: 7789554410778016530}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1}
+  m_LocalScale: {x: 0.83, y: 1.5, z: 1}
   m_Children:
   - {fileID: 7789554411128514006}
   m_Father: {fileID: 0}
@@ -80,7 +80,7 @@ SpriteRenderer:
   m_SortingLayerID: -81371999
   m_SortingLayer: -2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300042, guid: de23c1a681bab624bb18ebd7213dd4e6, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4436e8c459c32e04d8dc48d6a71b641a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -144,8 +144,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 1.3, y: 2}
+  m_Offset: {x: 0, y: 0.06}
+  m_Size: {x: 2.46, y: 4.11}
   m_Direction: 0
 --- !u!114 &2766724929520273124
 MonoBehaviour:
@@ -166,6 +166,7 @@ MonoBehaviour:
   m_animatorComp: {fileID: 7789554410778016532}
   m_healthComp: {fileID: 5212055258882051733}
   m_patrolArea: {fileID: 0}
+  m_wallDetection: {fileID: 0}
   m_idleTime: 2
   m_patrolSpeed: 4
   m_chaseSpeed: 8
@@ -186,6 +187,7 @@ MonoBehaviour:
   m_airSpeed: 8
   m_maxAcceleration: 40
   m_brakeFriction: 50
+  m_maxStepHeight: 0.2
   m_jumpPower: 5
   m_maxJumpHoldTime: 0.5
   m_maxAirJumps: 1

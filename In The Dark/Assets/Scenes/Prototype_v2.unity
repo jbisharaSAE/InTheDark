@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -4120,6 +4120,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_healthComp: {fileID: 0}
+  m_movementComp: {fileID: 0}
 --- !u!114 &393706868
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10577,11 +10578,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb7d99421e3fe8f4db1de3be3793c5bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_collider: {fileID: 0}
   m_worldLayers:
     serializedVersion: 2
     m_Bits: 2103
-  m_detectionOffset: 2
+  m_detectionDistance: 1.5
+  m_slopeLimit: 0.5
 --- !u!1 &1216581505
 GameObject:
   m_ObjectHideFlags: 0
@@ -10655,7 +10656,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bossOne: {fileID: 991218427}
-  gameManagerScript: {fileID: 0}
 --- !u!212 &1216581509
 SpriteRenderer:
   m_ObjectHideFlags: 0
