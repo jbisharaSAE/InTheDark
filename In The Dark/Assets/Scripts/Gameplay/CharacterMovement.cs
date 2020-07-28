@@ -356,8 +356,6 @@ public class CharacterMovement : MonoBehaviour
         return m_walkSpeed;
     }
 
-    Vector2 hitSpot = Vector2.zero;
-
     protected void CheckIfAtStep()
     {
         if (!isGrounded || (!isMoving && currentInput != 0f))
@@ -370,18 +368,18 @@ public class CharacterMovement : MonoBehaviour
         int numHits = m_collider.Cast(dir, hits, Mathf.Abs(velocity.x) * Time.fixedDeltaTime);
         if (numHits > 0)
         {
-            Vector2 capsuleBottom = (Vector2)transform.position - new Vector2(0f, m_collider.size.y + m_collider.offset.y);
+            float capsuleSize = m_collider.size.y * 0.5f * transform.lossyScale.y;
+            Vector2 capsuleBottom = (Vector2)transform.position + (Vector2)transform.TransformVector(m_collider.offset) - new Vector2(0f, capsuleSize);
 
             for (int i = 0; i < numHits; ++i)
             {
                 RaycastHit2D hit = hits[i];
-                hitSpot = hit.point;
 
                 float yOffset = hit.point.y - capsuleBottom.y;
                 if (yOffset <= 0f || yOffset > m_maxStepHeight)
                     continue;
 
-                Vector2 newPosition = m_rigidBody.position + new Vector2(0f, yOffset);
+                Vector2 newPosition = m_rigidBody.position += new Vector2(0f, yOffset * 0.5f);
                 m_rigidBody.MovePosition(newPosition);
             }
         }
@@ -398,9 +396,6 @@ public class CharacterMovement : MonoBehaviour
 
         Gizmos.color = Color.green;
         Gizmos.DrawWireCube(floorCheckBounds.center, floorCheckBounds.size);
-
-        Gizmos.color = Color.white;
-        Gizmos.DrawSphere(hitSpot, 0.2f);
     }
     #endregion
 }
