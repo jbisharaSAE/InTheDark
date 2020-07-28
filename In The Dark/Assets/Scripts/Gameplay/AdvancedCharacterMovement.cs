@@ -20,6 +20,7 @@ public class AdvancedCharacterMovement : CharacterMovement
     }
 
     [Header("Advanced (Wall Jump)")]
+    [SerializeField] protected bool m_limitWallJumpSide = false;            // If wall jump side should be limited to once
     [SerializeField, Min(0f)] protected float m_wallJumpPower = 12f;        // Power of jump if wall jumping
 
     [Header("Advanced (Dash)")]
@@ -154,10 +155,16 @@ public class AdvancedCharacterMovement : CharacterMovement
         // First check if we can wall jump
         if (!m_isGrounded)
         {
-            if (m_lastWallJumpSide != WallJumpSide.Left && CanWallJump(WallJumpSide.Left))
+            bool allowLeftJump = !m_limitWallJumpSide || m_lastWallJumpSide != WallJumpSide.Left;
+            bool allowRightJump = !m_limitWallJumpSide || m_lastWallJumpSide != WallJumpSide.Right;
+            if (allowLeftJump && CanWallJump(WallJumpSide.Left))
             {
+                Vector2 angle = new Vector2(0.77f, 0.77f);
+                if (m_lastWallJumpSide == WallJumpSide.Left)
+                    angle = new Vector2(0.175f, 0.98f);
+
                 // Jump to the right
-                Vector2 velocity = new Vector2(1f, 0.77f) * m_wallJumpPower; // Velocity change
+                Vector2 velocity = angle * m_wallJumpPower; // Velocity change
                 m_rigidBody.velocity = velocity;
 
                 m_moveInput = 0f;
@@ -166,10 +173,14 @@ public class AdvancedCharacterMovement : CharacterMovement
                 m_lastWallJumpSide = WallJumpSide.Left;
                 return true;
             }
-            else if (m_lastWallJumpSide != WallJumpSide.Right && CanWallJump(WallJumpSide.Right))
+            else if (allowRightJump && CanWallJump(WallJumpSide.Right))
             {
+                Vector2 angle = new Vector2(-0.77f, 0.77f);
+                if (m_lastWallJumpSide == WallJumpSide.Right)
+                    angle = new Vector2(-0.175f, 0.98f);
+
                 // Jump to the left
-                Vector2 velocity = new Vector2(-0.77f, 0.77f) * m_wallJumpPower; // Velocity change
+                Vector2 velocity = angle * m_wallJumpPower; // Velocity change
                 m_rigidBody.velocity = velocity;
 
                 m_moveInput = 0f;
@@ -304,6 +315,11 @@ public class AdvancedCharacterMovement : CharacterMovement
 
         // Cut the veritcal check size off a bit (we don't want to confuse ground/roof with walls
         return new Bounds(position, new Vector3(wallCheckExtent, extents.y * 0.8f, 0f) * 2f);
+    }
+
+    protected override void CheckIfAtStep()
+    {
+        // For some reason, player is getting stuck due to this
     }
 
     #region Debug

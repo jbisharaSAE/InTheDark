@@ -5,9 +5,10 @@ using UnityEngine;
 /// <summary>
 /// This component handles how the players character is percepted (sight) by the AI
 /// </summary>
-// TODO: Rename this to something better
 public class PlayerSightPerceptionSource : ShadowAreaListener, ISightPerceptible
 {
+    [SerializeField] private List<string> m_layersToIgnoreWhenHideen = new List<string>();      // Layers to ignore when hidden
+
     private bool m_cachedHidden = false;    // If currently hidden
     private short m_numSeenBy = 0;          // Number of times we have been seen
     private bool m_canGoInvis = false;      // If can go hidden (invis) at this time
@@ -106,11 +107,21 @@ public class PlayerSightPerceptionSource : ShadowAreaListener, ISightPerceptible
 
     protected virtual void OnBecomeHidden()
     {
-        Debug.Log("Now Hidden");
+        UpdateLayerCollisions(true);
     }
 
     protected virtual void OnBecomeVisible()
     {
-        Debug.Log("Now Visible");
+        UpdateLayerCollisions(false);
+    }
+
+    private void UpdateLayerCollisions(bool ignore)
+    {
+        foreach (string layerName in m_layersToIgnoreWhenHideen)
+        {
+            int layerId = LayerMask.NameToLayer(layerName);
+            if (layerId >= 0)
+                Physics2D.IgnoreLayerCollision(gameObject.layer, layerId, ignore);
+        }
     }
 }

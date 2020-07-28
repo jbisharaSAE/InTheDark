@@ -19,7 +19,7 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField, Min(0f)] public float m_airSpeed = 8f;                 // Speed while in the air
     [SerializeField, Min(0f)] protected float m_maxAcceleration = 40f;      // Acceleration for reaching walk/air speed
     [SerializeField, Min(0f)] protected float m_brakeFriction = 50f;        // Friction to apply when no input has been applied
-    [SerializeField, Min(0f)] protected float m_maxStepHeight = 0.2f;       // Max height character can step
+    [SerializeField, Min(0f)] protected float m_maxStepHeight = 0.75f;      // Max height character can step
 
     [Header("Movement (Jumping)")]
     [SerializeField, Min(0f)] public float m_jumpPower = 5f;                // Power of jump, decides velocity
@@ -277,7 +277,7 @@ public class CharacterMovement : MonoBehaviour
         {
             // Make sure we aren't colliding with ourself
             foreach(Collider2D col in hits)
-                if (col.gameObject != gameObject)
+                if (col.gameObject != gameObject && !col.isTrigger)
                 {
                     m_isGrounded = true;
                     m_floorCollider = col;
@@ -356,7 +356,7 @@ public class CharacterMovement : MonoBehaviour
         return m_walkSpeed;
     }
 
-    protected void CheckIfAtStep()
+    protected virtual void CheckIfAtStep()
     {
         if (!isGrounded || (!isMoving && currentInput != 0f))
             return;
