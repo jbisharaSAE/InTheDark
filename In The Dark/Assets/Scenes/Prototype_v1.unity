@@ -5279,6 +5279,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 424682, guid: 4fafe4882143b794d89de7a74ee788cb, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 11427360, guid: 4fafe4882143b794d89de7a74ee788cb, type: 3}
       propertyPath: dashBar
       value: 
@@ -5287,6 +5291,14 @@ PrefabInstance:
       propertyPath: pauseScript
       value: 
       objectReference: {fileID: 1798984529}
+    - target: {fileID: 902845812, guid: 4fafe4882143b794d89de7a74ee788cb, type: 3}
+      propertyPath: m_jumpPower
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 902845812, guid: 4fafe4882143b794d89de7a74ee788cb, type: 3}
+      propertyPath: m_maxJumpHoldTime
+      value: 0.2
+      objectReference: {fileID: 0}
     - target: {fileID: 2898537014938462875, guid: 4fafe4882143b794d89de7a74ee788cb,
         type: 3}
       propertyPath: energyBar
