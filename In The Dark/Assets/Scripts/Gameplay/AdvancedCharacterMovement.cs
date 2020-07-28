@@ -171,6 +171,8 @@ public class AdvancedCharacterMovement : CharacterMovement
 
                 m_aboutToJump = true;
                 m_lastWallJumpSide = WallJumpSide.Left;
+
+                StartCoroutine(DisableInputAfterWallJump());
                 return true;
             }
             else if (allowRightJump && CanWallJump(WallJumpSide.Right))
@@ -187,6 +189,7 @@ public class AdvancedCharacterMovement : CharacterMovement
 
                 m_aboutToJump = true;
                 m_lastWallJumpSide = WallJumpSide.Right;
+                StartCoroutine(DisableInputAfterWallJump());
                 return true;
             }
         }
@@ -315,6 +318,13 @@ public class AdvancedCharacterMovement : CharacterMovement
 
         // Cut the veritcal check size off a bit (we don't want to confuse ground/roof with walls
         return new Bounds(position, new Vector3(wallCheckExtent, extents.y * 0.8f, 0f) * 2f);
+    }
+
+    private IEnumerator DisableInputAfterWallJump()
+    {
+        SetMoveInputDisabled(true);
+        yield return new WaitForSeconds(0.1f);
+        SetMoveInputDisabled(false);
     }
 
     protected override void CheckIfAtStep()
