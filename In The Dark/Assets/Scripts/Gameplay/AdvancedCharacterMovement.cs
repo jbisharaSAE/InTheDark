@@ -24,15 +24,17 @@ public class AdvancedCharacterMovement : CharacterMovement
     [SerializeField, Min(0f)] protected float m_wallJumpPower = 12f;        // Power of jump if wall jumping
 
     [Header("Advanced (Dash)")]
-    [SerializeField, Min(0f)] protected float m_dashSpeed = 20f;            // Speed of the dash
-    [SerializeField, Min(0f)] protected float m_dashTime = 0.2f;            // How long the dash lasts for
-    [SerializeField] protected bool m_canDashInAir = true;                  // If we can dash in the air
-    [SerializeField] int[] m_ignoreLayersWhenDashing = null;                // Layers to ignore when dashing
+    [SerializeField, Min(0f)] protected float m_dashSpeed = 20f;                                // Speed of the dash
+    [SerializeField, Min(0f)] protected float m_dashTime = 0.2f;                                // How long the dash lasts for
+    [SerializeField] protected bool m_canDashInAir = true;                                      // If we can dash in the air
+    [SerializeField] private List<string> m_layersToIgnoreWhenDashing = new List<string>();     // Layers to ignore when dashing
 
     protected WallJumpSide m_lastWallJumpSide = WallJumpSide.None;          // Which side of the character was the wall we last jumped off
     protected bool m_isDashing = false;                                     // If currently dashing
     protected float m_dashDir = 0f;                                         // The direction to dash in
     protected float m_dashEnd = -1f;                                        // When dash is expected to end
+
+    private Dictionary<int, int> m_layersDisabled = new Dictionary<int, int>();
 
     /// <summary>
     /// Last wall the character had jumped on
@@ -111,16 +113,7 @@ public class AdvancedCharacterMovement : CharacterMovement
                 m_isDashing = false;
                 m_customMoveMode = false;
 
-                if (m_ignoreLayersWhenDashing != null)
-                {
-                    foreach (int layer in m_ignoreLayersWhenDashing)
-                    {
-                        if (layer >= 31)
-                            continue;
-
-                        Physics2D.IgnoreLayerCollision(m_collider.gameObject.layer, layer, false);
-                    }
-                }
+                SetIgnoreLayers(m_layersToIgnoreWhenDashing, false);
 
                 OnDashFinished();
             }
@@ -232,16 +225,7 @@ public class AdvancedCharacterMovement : CharacterMovement
                 }
             }
 
-            if (m_ignoreLayersWhenDashing != null)
-            {
-                foreach (int layer in m_ignoreLayersWhenDashing)
-                {
-                    if (layer >= 31)
-                        continue;
-
-                    Physics2D.IgnoreLayerCollision(m_collider.gameObject.layer, layer, true);
-                }
-            }
+            SetIgnoreLayers(m_layersToIgnoreWhenDashing, true);
 
             m_rigidBody.gravityScale = 0f;
 
@@ -327,6 +311,45 @@ public class AdvancedCharacterMovement : CharacterMovement
         SetMoveInputDisabled(true);
         yield return new WaitForSeconds(0.1f);
         SetMoveInputDisabled(false);
+    }
+
+    public void SetIgnoreLayers(List<string> layers, bool ignore)
+    {
+        if (layers == null || layers.Count == 0)
+            return;
+
+        if (!m_collider)
+            return;
+
+        int colliderLayerId = m_collider.gameObject.layer;
+        foreach (string layer in layers)
+        {
+            int layerId = LayerMask.NameToLayer(layer);
+            if (layerId < 0)
+                continue;
+
+            int numTimesIgnored = -1;
+            if (m_layersDisabled.TryGetValue(layerId, out numTimesIgnored))
+            {
+                if (ignore)
+                    ++numTimesIgnored;
+                else
+                    --numTimesIgnored;
+
+                if (numTimesIgnored > 0)
+                    m_layersDisabled[layerId]++;
+                else
+                {
+                    Physics2D.IgnoreLayerCollision(colliderLayerId, layerId, false);
+                    m_layersDisabled.Remove(layerId);
+                }
+            }
+            else if (ignore)
+            {
+                Physics2D.IgnoreLayerCollision(colliderLayerId, layerId);
+                m_layersDisabled.Add(layerId, 1);
+            }
+        }
     }
 
     #region Debug

@@ -7,7 +7,7 @@ using UnityEngine;
 /// </summary>
 public class PlayerSightPerceptionSource : ShadowAreaListener, ISightPerceptible
 {
-    [SerializeField] private List<string> m_layersToIgnoreWhenHideen = new List<string>();      // Layers to ignore when hidden
+    [SerializeField] private List<string> m_layersToIgnoreWhenHidden = new List<string>();      // Layers to ignore when hidden
 
     private bool m_cachedHidden = false;    // If currently hidden
     private short m_numSeenBy = 0;          // Number of times we have been seen
@@ -117,11 +117,7 @@ public class PlayerSightPerceptionSource : ShadowAreaListener, ISightPerceptible
 
     private void UpdateLayerCollisions(bool ignore)
     {
-        foreach (string layerName in m_layersToIgnoreWhenHideen)
-        {
-            int layerId = LayerMask.NameToLayer(layerName);
-            if (layerId >= 0)
-                Physics2D.IgnoreLayerCollision(gameObject.layer, layerId, ignore);
-        }
+        if (m_movementComp)
+            m_movementComp.SetIgnoreLayers(m_layersToIgnoreWhenHidden, ignore);
     }
 }

@@ -385,7 +385,8 @@ MonoBehaviour:
   m_dashSpeed: 20
   m_dashTime: 0.2
   m_canDashInAir: 1
-  m_ignoreLayersWhenDashing: 
+  m_layersToIgnoreWhenDashing:
+  - Enemy
   m_useDebugControls: 0
 --- !u!70 &6995812195280549758
 CapsuleCollider2D:
@@ -415,7 +416,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 747886a8cebc8a9479da598da8413f00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_layersToIgnoreWhenHideen:
+  m_layersToIgnoreWhenHidden:
   - Enemy
   m_healthComp: {fileID: 5556191119478186715}
   m_movementComp: {fileID: 902845812}
