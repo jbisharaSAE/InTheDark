@@ -19,7 +19,6 @@ public class JB_ResourceManagement : MonoBehaviour
 
     private bool m_isFacingRight;
     private bool bAdjustHealth = false;
-    private float healthAdjust;
     private float m_currentEnergy = 100.0f;
     private float currentHealth = 0f;
     private float maxHealth = 0f;
@@ -69,11 +68,7 @@ public class JB_ResourceManagement : MonoBehaviour
 
         UpdateHealth();
 
-        
-        if (Input.GetKeyDown(KeyCode.F5))
-        {
-            healthScript.ApplyDamage(healthScript.health);
-        }
+
     }
 
     public void UpdateEnergy(float amount)

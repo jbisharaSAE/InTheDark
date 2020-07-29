@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class JB_Boss : MonoBehaviour
 {
@@ -14,7 +15,12 @@ public class JB_Boss : MonoBehaviour
     private bool isFlipped = true;
     private PatrolArea addPatrolArea;
     private HealthComponent shieldHP;
+    private HealthComponent healthScript = null;
+    private bool bAdjustHealth = false;
+    private float currentHealth = 0f;
+    private float maxHealth = 0f;
 
+    [SerializeField] private Image bossHealthBar;
     [SerializeField] private BossType bossType;
     [SerializeField] private GameObject bossBombPrefab;
     [SerializeField] private GameObject bossAddPrefab;
@@ -24,12 +30,15 @@ public class JB_Boss : MonoBehaviour
     [SerializeField] private float m_moveSpeed;
     [SerializeField] private float fallSpeed;
     [SerializeField] private float bossVanishHeight = 100f;
+    [SerializeField] private float hpRefillSpeed = 25;
 
     public float moveSpeed { get { return m_moveSpeed; } }
 
     void Start()
     {
         int bossInt = (int)bossType;
+        healthScript = GetComponent<HealthComponent>();
+        anim = GetComponent<Animator>();
 
         switch (bossInt)
         {
@@ -50,11 +59,14 @@ public class JB_Boss : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         addPatrolArea = GetComponent<PatrolArea>();
 
-        
+        maxHealth = healthScript.maxHealth;
+        currentHealth = healthScript.health;
+
+        healthScript.OnHealthChanged += OnHealthChanged;
+        healthScript.OnDeath += BossDead;
+
         shieldHP.OnDeath += TurnInvincibleOff;
 
-        
-        
     }
 
     private void Update()
@@ -64,7 +76,34 @@ public class JB_Boss : MonoBehaviour
             throwTimer -= Time.deltaTime;
         }
 
-    
+        if (bossHealthBar)
+            bossHealthBar.fillAmount = currentHealth / maxHealth;
+
+        UpdateHealth();
+    }
+
+    private void OnHealthChanged(HealthComponent self, float newHealth, float delta)
+    {
+        bAdjustHealth = true;
+    }
+
+    private void BossDead(HealthComponent self)
+    {
+        anim.SetBool("IsDead", true);
+    }
+
+    private void UpdateHealth()
+    {
+        if (bAdjustHealth)
+        {
+            currentHealth = Mathf.Lerp(currentHealth, healthScript.health, hpRefillSpeed * Time.deltaTime);
+            // Disable ourselves once close to actual health value
+            if (Mathf.Approximately(currentHealth, healthScript.health))
+            {
+                bAdjustHealth = false;
+            }
+
+        }
     }
 
     public void LookAtPlayer()
