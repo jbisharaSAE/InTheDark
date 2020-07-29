@@ -49,6 +49,8 @@ public class AdvancedCharacterMovement : CharacterMovement
 
     protected override void Update()
     {
+        m_maxStepHeight = 0f;
+
         // For now, handling inputs here
         if (m_useDebugControls)
         {
@@ -325,11 +327,6 @@ public class AdvancedCharacterMovement : CharacterMovement
         SetMoveInputDisabled(true);
         yield return new WaitForSeconds(0.1f);
         SetMoveInputDisabled(false);
-    }
-
-    protected override void CheckIfAtStep()
-    {
-        // For some reason, player is getting stuck due to this
     }
 
     #region Debug

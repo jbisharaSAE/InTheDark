@@ -379,8 +379,8 @@ public class CharacterMovement : MonoBehaviour
                 if (yOffset <= 0f || yOffset > m_maxStepHeight)
                     continue;
 
-                Vector2 newPosition = m_rigidBody.position += new Vector2(0f, yOffset * 0.5f);
-                m_rigidBody.MovePosition(newPosition);
+                Vector2 newPosition = m_rigidBody.position + new Vector2(0f, yOffset * 0.5f);
+                m_rigidBody.position = newPosition;
             }
         }
 
