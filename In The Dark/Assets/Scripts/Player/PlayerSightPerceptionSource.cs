@@ -7,6 +7,8 @@ using UnityEngine;
 /// </summary>
 public class PlayerSightPerceptionSource : ShadowAreaListener, ISightPerceptible
 {
+    [SerializeField, Range(0f, 1f)] private float m_hiddenOpacity = 0.6f;                       // Opacity of players sprite when hidden
+    [SerializeField, Min(0f)] private float m_hiddenFadeTime = 0.25f;                           // Time it takes to fully change opacity when hidden
     [SerializeField] private List<string> m_layersToIgnoreWhenHidden = new List<string>();      // Layers to ignore when hidden
 
     private bool m_cachedHidden = false;    // If currently hidden
@@ -15,6 +17,9 @@ public class PlayerSightPerceptionSource : ShadowAreaListener, ISightPerceptible
 
     [SerializeField] private HealthComponent m_healthComp = null;                   // Owners health component
     [SerializeField] private AdvancedCharacterMovement m_movementComp = null;       // Owners movement component
+    private Renderer m_rendererComp = null;
+
+    private Coroutine m_fadeOpacityRoutine = null;
 
     void Awake()
     {
@@ -23,6 +28,8 @@ public class PlayerSightPerceptionSource : ShadowAreaListener, ISightPerceptible
 
         if (!m_movementComp)
             m_movementComp = GetComponent<AdvancedCharacterMovement>();
+
+        m_rendererComp = GetComponent<Renderer>();
     }
 
     void Update()
@@ -108,16 +115,87 @@ public class PlayerSightPerceptionSource : ShadowAreaListener, ISightPerceptible
     protected virtual void OnBecomeHidden()
     {
         UpdateLayerCollisions(true);
+        StartFadeRoutine(m_hiddenOpacity);
     }
 
     protected virtual void OnBecomeVisible()
     {
         UpdateLayerCollisions(false);
+
+        // If becoming visible due to dashing, instantly revert the opacity
+        if (m_movementComp && m_movementComp.isDashing)
+        {
+            if (m_fadeOpacityRoutine != null)
+            {
+                StopCoroutine(m_fadeOpacityRoutine);
+                m_fadeOpacityRoutine = null;
+            }
+
+            UpdateSpriteOpacity(1f);
+        }
+        else
+        {
+            StartFadeRoutine(1f);
+        }
     }
 
     private void UpdateLayerCollisions(bool ignore)
     {
         if (m_movementComp)
             m_movementComp.SetIgnoreLayers(m_layersToIgnoreWhenHidden, ignore);
+    }
+
+    private void UpdateSpriteOpacity(float alpha)
+    {
+        if (m_rendererComp && m_rendererComp.material)
+        {
+            Color color = m_rendererComp.material.color;
+            color.a = alpha;
+            m_rendererComp.material.color = color;
+        }
+    }
+
+    private void StartFadeRoutine(float alpha)
+    {
+        if (m_fadeOpacityRoutine != null)
+            StopCoroutine(m_fadeOpacityRoutine);
+
+        m_fadeOpacityRoutine = StartCoroutine(FadeRoutine(alpha));
+    }
+
+    private IEnumerator FadeRoutine(float alphaToTarget)
+    {
+        if (!m_rendererComp || !m_rendererComp.material)
+            yield break;
+
+        Material mat = m_rendererComp.material;
+        Color matCol = mat.color;
+
+        float from = matCol.a;
+
+        float startTime = Time.time;
+        float endTime = startTime + m_hiddenFadeTime;
+        while (Time.time < endTime)
+        {
+            float t = (Time.time - startTime) / m_hiddenFadeTime;
+            float newAlpha = Mathf.Lerp(from, alphaToTarget, t);
+            matCol.a = newAlpha;
+            mat.color = matCol;
+
+            yield return null;
+
+            // Quick hack for fixing issue if fading back to 1 then dashing
+            if (m_movementComp && m_movementComp.isDashing)
+            {
+                alphaToTarget = 1f;
+                break;
+            }
+            
+        }
+
+        matCol.a = alphaToTarget;
+        mat.color = matCol;
+
+        m_fadeOpacityRoutine = null;
     }
 }
