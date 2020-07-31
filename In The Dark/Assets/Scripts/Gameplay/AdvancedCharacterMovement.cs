@@ -116,6 +116,7 @@ public class AdvancedCharacterMovement : CharacterMovement
                 SetIgnoreLayers(m_layersToIgnoreWhenDashing, false);
 
                 OnDashFinished();
+                velocity.y = 0.1f;
             }
 
             m_rigidBody.velocity = velocity;
@@ -253,8 +254,12 @@ public class AdvancedCharacterMovement : CharacterMovement
         {
             // Make sure we aren't detecting ourself
             foreach (Collider2D col in hits)
-                if (col.gameObject != gameObject)
-                    return true;
+            {
+                if (col.gameObject == gameObject)
+                    return false;
+
+                return true;             
+            }
         }
 
         return false;
@@ -337,7 +342,7 @@ public class AdvancedCharacterMovement : CharacterMovement
                     --numTimesIgnored;
 
                 if (numTimesIgnored > 0)
-                    m_layersDisabled[layerId]++;
+                    m_layersDisabled[layerId] = numTimesIgnored;
                 else
                 {
                     Physics2D.IgnoreLayerCollision(colliderLayerId, layerId, false);
