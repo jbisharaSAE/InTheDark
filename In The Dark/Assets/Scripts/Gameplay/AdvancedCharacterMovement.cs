@@ -98,7 +98,7 @@ public class AdvancedCharacterMovement : CharacterMovement
 
                 traceStart.x += extents.x;
 
-                RaycastHit2D result = Physics2D.Raycast(traceStart, Vector2.down, distance);
+                RaycastHit2D result = Physics2D.Raycast(traceStart, Vector2.down, distance, m_worldLayers);
                 if (result.point.y < traceStart.y - extents.y)
                 {
                     Vector2 position = m_rigidBody.position;

@@ -379,7 +379,7 @@ MonoBehaviour:
   m_orientateToMovement: 0
   m_worldLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 2049
   m_limitWallJumpSide: 0
   m_wallJumpPower: 12
   m_dashSpeed: 20
@@ -416,6 +416,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 747886a8cebc8a9479da598da8413f00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_hiddenOpacity: 0.6
+  m_hiddenFadeTime: 0.25
   m_layersToIgnoreWhenHidden:
   - Enemy
   m_healthComp: {fileID: 5556191119478186715}
