@@ -64,6 +64,14 @@ public class ProjectileComponent : MonoBehaviour
             // Negate velocity, simply reflect back
             m_rigidBody.velocity *= -1f;
 
+            // Need to allow projectile to hit original instigator first
+            ignoreInstigator = false;
+            // Then update instigator to player and ignore again
+            instigator = collision.transform.root.gameObject;
+            ignoreInstigator = true;
+
+            gameObject.layer = LayerMask.NameToLayer("ReflectedProjectile");
+
             // TODO: Add some effects + sound
 
             return;

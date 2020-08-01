@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4897515094519355875}
   - component: {fileID: 4897515094519355876}
   - component: {fileID: 4897515094519355877}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: GuardProjectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -84,8 +84,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_speed: 15
-  m_damage: 10
+  m_damageInfo: {fileID: 0}
   m_lifespan: 4
+  m_autoDestroyAfter: 1
 --- !u!1 &4897515094728771097
 GameObject:
   m_ObjectHideFlags: 0
@@ -96,7 +97,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4897515094728771096}
   - component: {fileID: 4897515094728771095}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
