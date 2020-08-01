@@ -8,8 +8,12 @@ public class EnemyMeleeAttack : MonoBehaviour
     public float m_radius = 0.75f;
     public DamageInfo m_damage;
     public LayerMask m_attackLayers = Physics2D.AllLayers;
+    [Min(0f)] public float m_cooldown = 0.75f;
 
     private HashSet<GameObject> m_hitObjects = null;
+    private float m_cooldownStart = -1f;
+
+    public bool isInCooldown { get { return m_cooldownStart >= 0f && Time.time < m_cooldownStart + m_cooldown; } }
 
     void Awake()
     {
@@ -39,6 +43,8 @@ public class EnemyMeleeAttack : MonoBehaviour
     {
         enabled = false;
         m_hitObjects = null;
+
+        m_cooldownStart = Time.time;
     }
 
     /// <summary>
@@ -51,6 +57,8 @@ public class EnemyMeleeAttack : MonoBehaviour
         m_hitObjects = new HashSet<GameObject>();
         AttackImpl();
         m_hitObjects = null;
+
+        m_cooldownStart = Time.time;
     }
 
     /// <summary>

@@ -30,7 +30,9 @@ public class ProjectileEnemyTrackState : StateMachineBehaviour
         EnemyProjectileAttack attackComp = m_scriptComp.attackComponent;
         if (attackComp && attackComp.canThrowProjectile)
         {
-            animator.SetTrigger("Attack");
+            //animator.SetTrigger("Attack");
+            // temp, while waiting on animations
+            m_scriptComp.ThrowProjectile();
             return;
         }
     }

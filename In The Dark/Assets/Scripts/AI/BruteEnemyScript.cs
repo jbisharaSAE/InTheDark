@@ -7,6 +7,7 @@ public class BruteEnemyScript : EnemyScript
     [Header("Components", order = 0)]
     [SerializeField] private PatrolArea m_patrolArea = null;                    // Area this enemy must stay within
     [SerializeField] private WallDetectionComponent m_wallDetection = null;     // Used for detecting obstacles
+    [SerializeField] private EnemyMeleeAttack m_meleeAttack = null;             // Used for attacking
 
     [Header("Brute Attributes")]
     [SerializeField] private float m_idleTime = 2f;         // How long to remain idle for
@@ -33,6 +34,7 @@ public class BruteEnemyScript : EnemyScript
     }
 
     public WallDetectionComponent wallDetection { get { return m_wallDetection; } }
+    public EnemyMeleeAttack meleeAttack { get { return m_meleeAttack; } }
 
     public bool inJumpSpot { get { return m_inJumpArea > 0; } }
 
@@ -45,6 +47,9 @@ public class BruteEnemyScript : EnemyScript
 
         if (!m_wallDetection)
             m_wallDetection = GetComponentInChildren<WallDetectionComponent>();
+
+        if (!m_meleeAttack)
+            m_meleeAttack = GetComponentInChildren<EnemyMeleeAttack>();
     }
 
     void OnTriggerEnter2D(Collider2D collision)

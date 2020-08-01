@@ -9,7 +9,7 @@ public class MeleeEnemyChaseState : StateMachineBehaviour
     private CharacterMovement m_movementComp = null;
     private PatrolArea m_patrolAreaComp = null;
     private EnemyTargetSelector m_selectorComp = null;
-
+    private EnemyMeleeAttack m_meleeComp = null;
 
     public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
@@ -17,6 +17,7 @@ public class MeleeEnemyChaseState : StateMachineBehaviour
 
         m_movementComp = m_scriptComp.movementComponent;
         m_patrolAreaComp = m_scriptComp.patrolArea;
+        m_meleeComp = m_scriptComp.meleeAttack;
 
         m_selectorComp = animator.GetComponent<EnemyTargetSelector>();
 
@@ -33,9 +34,16 @@ public class MeleeEnemyChaseState : StateMachineBehaviour
             return;
         }
 
+        if (m_scriptComp.isStunned)
+        {
+            m_movementComp.SetMoveInput(0f);
+            return;
+        }
+
         // Try attacking if in range
         Vector2 displacement = target.transform.position - animator.transform.position;
-        if (displacement.sqrMagnitude <= (m_scriptComp.attackRange * m_scriptComp.attackRange))
+        if (!m_meleeComp.isInCooldown &&
+            displacement.sqrMagnitude <= (m_scriptComp.attackRange * m_scriptComp.attackRange))
         {
             m_movementComp.SetMoveInput(0f);
             animator.SetTrigger("Attack");
