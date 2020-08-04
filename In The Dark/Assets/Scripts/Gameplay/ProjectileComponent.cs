@@ -162,7 +162,7 @@ public class ProjectileComponent : MonoBehaviour
         {
             Collider2D instigatorCollider = instigator.GetComponent<Collider2D>();
             if (instigatorCollider)
-                Physics2D.IgnoreCollision(m_collider, instigatorCollider);
+                Physics2D.IgnoreCollision(m_collider, instigatorCollider, ignore);
         }
     }
 
