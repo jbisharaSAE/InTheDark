@@ -20,8 +20,9 @@ public class AdvancedCharacterMovement : CharacterMovement
     }
 
     [Header("Advanced (Wall Jump)")]
-    [SerializeField] protected bool m_limitWallJumpSide = false;            // If wall jump side should be limited to once
-    [SerializeField, Min(0f)] protected float m_wallJumpPower = 12f;        // Power of jump if wall jumping
+    [SerializeField] protected bool m_limitWallJumpSide = false;                // If wall jump side should be limited to once
+    [SerializeField, Min(0f)] protected float m_wallJumpPower = 12f;            // Power of jump if wall jumping
+    [SerializeField] private LayerMask m_wallJumpLayers = Physics2D.AllLayers;  // Layers of collision player can wall jump off of
 
     [Header("Advanced (Dash)")]
     [SerializeField, Min(0f)] protected float m_dashSpeed = 20f;                                // Speed of the dash
@@ -86,26 +87,26 @@ public class AdvancedCharacterMovement : CharacterMovement
             velocity.x = m_dashSpeed * m_dashDir;
             velocity.y = 0f;
 
-            // Keep grounded (we might be going down a small slope)
-            if (isGrounded)
-            {
-                Vector2 traceStart = m_rigidBody.position + (velocity * Time.fixedDeltaTime);
+            //// Keep grounded (we might be going down a small slope)
+            //if (isGrounded)
+            //{
+            //    Vector2 traceStart = m_rigidBody.position + (velocity * Time.fixedDeltaTime);
 
-                Vector2 extents = m_collider.size * 0.5f;
-                extents *= (Vector2)transform.lossyScale;
+            //    Vector2 extents = m_collider.size * 0.5f;
+            //    extents *= (Vector2)transform.lossyScale;
 
-                float distance = extents.y * 1.5f;
+            //    float distance = extents.y * 1.5f;
 
-                traceStart.x += extents.x;
+            //    traceStart.x += extents.x;
 
-                RaycastHit2D result = Physics2D.Raycast(traceStart, Vector2.down, distance, m_worldLayers);
-                if (result.point.y < traceStart.y - extents.y)
-                {
-                    Vector2 position = m_rigidBody.position;
-                    position.y = result.point.y + extents.y;
-                    m_rigidBody.position = position;
-                }
-            }
+            //    RaycastHit2D result = Physics2D.Raycast(traceStart, Vector2.down, distance, m_worldLayers);
+            //    if (result.point.y < traceStart.y - extents.y)
+            //    {
+            //        Vector2 position = m_rigidBody.position;
+            //        position.y = result.point.y + extents.y;
+            //        m_rigidBody.position = position;
+            //    }
+            //}
             
             // Finish dashing if time has elapsed
             if (Time.time >= m_dashEnd)
@@ -249,7 +250,7 @@ public class AdvancedCharacterMovement : CharacterMovement
 
         Bounds wallCheckBounds = GetWallCheckBounds(side);
 
-        Collider2D[] hits = Physics2D.OverlapBoxAll(wallCheckBounds.center, wallCheckBounds.size, 0f, m_worldLayers);
+        Collider2D[] hits = Physics2D.OverlapBoxAll(wallCheckBounds.center, wallCheckBounds.size, 0f, m_wallJumpLayers);
         if (hits != null && hits.Length > 0)
         {
             // Make sure we aren't detecting ourself

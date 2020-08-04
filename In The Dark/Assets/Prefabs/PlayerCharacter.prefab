@@ -367,12 +367,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_walkSpeed: 10
-  m_airSpeed: 8
+  m_airSpeed: 12
   m_maxAcceleration: 40
   m_brakeFriction: 50
   m_maxStepHeight: 0.75
-  m_jumpPower: 5
-  m_maxJumpHoldTime: 0.5
+  m_jumpPower: 10
+  m_maxJumpHoldTime: 0.2
   m_maxAirJumps: 1
   m_rigidBody: {fileID: 0}
   m_collider: {fileID: 0}
@@ -381,8 +381,11 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2049
   m_limitWallJumpSide: 0
-  m_wallJumpPower: 12
-  m_dashSpeed: 20
+  m_wallJumpPower: 24
+  m_wallJumpLayers:
+    serializedVersion: 2
+    m_Bits: 2049
+  m_dashSpeed: 40
   m_dashTime: 0.2
   m_canDashInAir: 1
   m_layersToIgnoreWhenDashing:
