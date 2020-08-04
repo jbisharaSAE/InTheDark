@@ -75,11 +75,11 @@ public class EnemyMeleeAttack : MonoBehaviour
                 // Do not hit ourselves
                 GameObject hitObject = hitCollider.gameObject;
                 if (hitObject == gameObject)
-                    return;
+                    continue;
 
                 // Check if we should ignore this object
                 if (m_hitObjects != null && m_hitObjects.Contains(hitObject))
-                    return;
+                    continue;
 
                 // Try applying damage to it
                 HealthComponent healthComp = hitObject.GetComponent<HealthComponent>();
