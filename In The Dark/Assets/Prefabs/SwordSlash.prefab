@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 8616602221927075293}
   - component: {fileID: 5691004416109726339}
   - component: {fileID: 7509633512880200666}
-  - component: {fileID: 9044554677993896891}
   - component: {fileID: 7095962879743303294}
   - component: {fileID: 3991819908695000223}
+  - component: {fileID: 7576051926891373374}
   m_Layer: 12
   m_Name: SwordSlash
   m_TagString: Untagged
@@ -111,18 +111,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 11.77, y: 14}
   m_EdgeRadius: 0
---- !u!114 &9044554677993896891
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 744953840303490751}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 026ec4c4dc173c742bc85a65420367c5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!50 &7095962879743303294
 Rigidbody2D:
   serializedVersion: 4
@@ -157,5 +145,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_attackType: 0
-  speed: 25
+  speed: 30
   m_dmgAmount: {fileID: 11400000, guid: 78af52291d61dbe4198c84cb787dbfb6, type: 2}
+--- !u!114 &7576051926891373374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 744953840303490751}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9cf66f859b204d498d52f5bfc8d4e5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_speed: 15
+  m_damageInfo: {fileID: 11400000, guid: 78af52291d61dbe4198c84cb787dbfb6, type: 2}
+  m_lifespan: 10
+  m_autoDestroyAfter: 0

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2111751651166282540}
   - component: {fileID: 4828002678353991869}
   - component: {fileID: 8774020694867528681}
+  - component: {fileID: 668519017826058647}
   m_Layer: 12
   m_Name: AoeSlash
   m_TagString: Untagged
@@ -49,7 +50,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_attackType: 1
   speed: 25
-  m_dmgAmount: {fileID: 11400000, guid: ea035768423c5d44cb72b323fdc028dd, type: 2}
 --- !u!61 &4828002678353991869
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -97,6 +97,22 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &668519017826058647
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2660505472519480908}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9cf66f859b204d498d52f5bfc8d4e5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_speed: 15
+  m_damageInfo: {fileID: 11400000, guid: ea035768423c5d44cb72b323fdc028dd, type: 2}
+  m_lifespan: 0.2
+  m_autoDestroyAfter: 0
 --- !u!1 &3523619813341792795
 GameObject:
   m_ObjectHideFlags: 0
