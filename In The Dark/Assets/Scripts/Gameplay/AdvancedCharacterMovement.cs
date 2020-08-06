@@ -29,6 +29,7 @@ public class AdvancedCharacterMovement : CharacterMovement
     [SerializeField, Min(0f)] protected float m_dashTime = 0.2f;                                // How long the dash lasts for
     [SerializeField] protected bool m_canDashInAir = true;                                      // If we can dash in the air
     [SerializeField] private List<string> m_layersToIgnoreWhenDashing = new List<string>();     // Layers to ignore when dashing
+    [SerializeField] private AudioSource m_dashAudioSource = null;                              // Audio to play when dashing
 
     protected WallJumpSide m_lastWallJumpSide = WallJumpSide.None;          // Which side of the character was the wall we last jumped off
     protected bool m_isDashing = false;                                     // If currently dashing
@@ -230,6 +231,9 @@ public class AdvancedCharacterMovement : CharacterMovement
             SetIgnoreLayers(m_layersToIgnoreWhenDashing, true);
 
             m_rigidBody.gravityScale = 0f;
+
+            if (m_dashAudioSource)
+                m_dashAudioSource.Play();
 
             m_customMoveMode = true;
             return true;
