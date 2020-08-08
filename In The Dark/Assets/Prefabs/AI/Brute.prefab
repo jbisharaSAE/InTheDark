@@ -245,7 +245,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_offset: {x: 1, y: 0}
   m_radius: 3
-  m_damage: {fileID: 0}
+  m_damage: {fileID: 11400000, guid: 0b917ca05b3d99e47b1e679dcfefc5b5, type: 2}
   m_attackLayers:
     serializedVersion: 2
     m_Bits: 4294967295

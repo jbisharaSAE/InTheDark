@@ -35,6 +35,7 @@ public class AdvancedCharacterMovement : CharacterMovement
     protected bool m_isDashing = false;                                     // If currently dashing
     protected float m_dashDir = 0f;                                         // The direction to dash in
     protected float m_dashEnd = -1f;                                        // When dash is expected to end
+    private float m_originalGravityScale = 1f;                              // Gravity scale of rigidbody before dash
 
     private Dictionary<int, int> m_layersDisabled = new Dictionary<int, int>();
 
@@ -137,7 +138,7 @@ public class AdvancedCharacterMovement : CharacterMovement
         m_dashEnd = -1f;
         m_dashDir = 0f;
 
-        m_rigidBody.gravityScale = 1f;
+        m_rigidBody.gravityScale = m_originalGravityScale;
     }
 
     /// <summary>
@@ -230,6 +231,7 @@ public class AdvancedCharacterMovement : CharacterMovement
 
             SetIgnoreLayers(m_layersToIgnoreWhenDashing, true);
 
+            m_originalGravityScale = m_rigidBody.gravityScale;
             m_rigidBody.gravityScale = 0f;
 
             if (m_dashAudioSource)
