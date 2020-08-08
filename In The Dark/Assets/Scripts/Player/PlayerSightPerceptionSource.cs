@@ -17,7 +17,11 @@ public class PlayerSightPerceptionSource : ShadowAreaListener, ISightPerceptible
 
     [SerializeField] private HealthComponent m_healthComp = null;                   // Owners health component
     [SerializeField] private AdvancedCharacterMovement m_movementComp = null;       // Owners movement component
-    private Renderer m_rendererComp = null;
+    [SerializeField] private Renderer m_rendererComp = null;
+
+    [SerializeField] private AudioSource m_hideSoundSource = null;
+    [SerializeField] private AudioClip m_hideSound = null;
+    [SerializeField] private AudioClip m_visibleSound = null;
 
     private Coroutine m_fadeOpacityRoutine = null;
 
@@ -116,6 +120,8 @@ public class PlayerSightPerceptionSource : ShadowAreaListener, ISightPerceptible
     {
         UpdateLayerCollisions(true);
         StartFadeRoutine(m_hiddenOpacity);
+
+        PlayHideSound(m_hideSound);
     }
 
     protected virtual void OnBecomeVisible()
@@ -137,6 +143,18 @@ public class PlayerSightPerceptionSource : ShadowAreaListener, ISightPerceptible
         {
             StartFadeRoutine(1f);
         }
+
+        PlayHideSound(m_visibleSound);
+    }
+
+    private void PlayHideSound(AudioClip clip)
+    {
+        if (!m_hideSoundSource || !clip)
+            return;
+
+        m_hideSoundSource.Stop();
+        m_hideSoundSource.clip = clip;
+        m_hideSoundSource.Play();
     }
 
     private void UpdateLayerCollisions(bool ignore)
