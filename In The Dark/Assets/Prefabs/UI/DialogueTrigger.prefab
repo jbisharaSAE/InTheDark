@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 3501701928538831548}
   - component: {fileID: 3501701928538831547}
   - component: {fileID: 3501701928538831544}
-  - component: {fileID: 3501701928538831546}
   m_Layer: 0
   m_Name: DialogueTrigger
   m_TagString: Untagged
@@ -123,16 +122,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogue: {fileID: 11400000, guid: 34eea04d35f8771428548fbd54574189, type: 2}
---- !u!114 &3501701928538831546
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3501701928538831551}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e237608c7757a4140ade7d6ba3e3221f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bossOne: {fileID: 0}

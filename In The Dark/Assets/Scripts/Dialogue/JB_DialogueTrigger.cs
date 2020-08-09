@@ -22,7 +22,8 @@ public class JB_DialogueTrigger : MonoBehaviour
         if (collision.gameObject.tag == "Player")
         {
             TriggerDialogue();
-
+            Debug.Log("testing");
+            Destroy(gameObject);
 
         }
 
