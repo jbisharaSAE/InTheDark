@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BossOne
   m_EditorClassIdentifier: 
   interactions:
-  - characterSprite: {fileID: 21300000, guid: ec8620e0b2d94f541acba2761698c712, type: 3}
+  - characterSprite: {fileID: 21300000, guid: 7fe104ad6a9a9aa4f84f0fe79b125a99, type: 3}
     name: Tatsu
     sentences: My vengeance shall begin with you ...
   - characterSprite: {fileID: 21300000, guid: 3721c351de6fa164cae96303b5165880, type: 3}
