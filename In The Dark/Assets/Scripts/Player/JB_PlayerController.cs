@@ -54,12 +54,44 @@ public class JB_PlayerController : MonoBehaviour
 	void Update()
 	{
         #region player_input
-
-
-        moveXInput = Input.GetAxis("Horizontal");
-        advancedScript.SetMoveInput(moveXInput);
+        UpdateInput();
+        #endregion
 
         anim.SetBool("ground", advancedScript.isGrounded);
+
+        if (dashRecharge <= 100.0f)
+        {
+            dashRecharge += Time.deltaTime * dashRefillSpeed;
+        }
+
+        if (dashBar)
+            dashBar.fillAmount = dashRecharge / 100.0f;
+
+        if(dashRecharge < 50.0f)
+        {
+            dashCharge = 0;
+        }
+        else if(dashRecharge >= 50.0f && dashRecharge < 100.0f)
+        {
+            dashCharge = 1;
+        }
+        else if(dashRecharge == 100.0f)
+        {
+            dashCharge = 2;
+        }
+
+    }
+
+    void UpdateInput()
+    {
+        if (GameManager.isInputDisabled)
+        {
+            advancedScript.SetMoveInput(0f);
+            return;
+        }
+
+        moveXInput = Input.GetAxisRaw("Horizontal");
+        advancedScript.SetMoveInput(moveXInput);
 
         if (Input.GetButtonDown("Jump"))
         {
@@ -79,13 +111,13 @@ public class JB_PlayerController : MonoBehaviour
         // left mouse button - attack
         if (Input.GetButtonDown("Fire1"))
         {
-            
+
             Attack();
-            
+
         }
 
         // used to measure attack animation with mouse click
-        if(attackTimer >= 0)
+        if (attackTimer >= 0)
         {
             attackTimer -= Time.deltaTime;
         }
@@ -155,39 +187,13 @@ public class JB_PlayerController : MonoBehaviour
         {
             resourceScript.PlayerAbilities(3);
         }
-        
+
         // parry ability
         if (Input.GetKeyDown(KeyCode.Q))
         {
             StartCoroutine(ParryCollider());
         }
-
-        
-        #endregion
-
-        if (dashRecharge <= 100.0f)
-        {
-            dashRecharge += Time.deltaTime * dashRefillSpeed;
-        }
-
-        if (dashBar)
-            dashBar.fillAmount = dashRecharge / 100.0f;
-
-        if(dashRecharge < 50.0f)
-        {
-            dashCharge = 0;
-        }
-        else if(dashRecharge >= 50.0f && dashRecharge < 100.0f)
-        {
-            dashCharge = 1;
-        }
-        else if(dashRecharge == 100.0f)
-        {
-            dashCharge = 2;
-        }
-
     }
-
 
     IEnumerator ParryCollider()
     {

@@ -40,7 +40,7 @@ public class GuardEnemyScript : EnemyScript
     public void ThrowProjectile()
     {
         if (m_attackComp)
-            m_attackComp.TryThrowProjectile(GetEyeSightDirection());
+            m_attackComp.TryThrowProjectile(GetDirectionToTarget());
     }
 
     /// <summary>
@@ -53,5 +53,14 @@ public class GuardEnemyScript : EnemyScript
             return m_sightPerception.transform.right;
         else
             return transform.right;
+    }
+
+    private Vector2 GetDirectionToTarget()
+    {
+        EnemyTargetSelector selector = GetComponent<EnemyTargetSelector>();
+        if (selector && selector.target)
+            return (selector.target.transform.position - transform.position).normalized;
+
+        return Vector2.right;
     }
 }

@@ -48,6 +48,8 @@ public class JB_DialogueManager : MonoBehaviour
 
 
         DisplayNextSentence();
+
+        GameManager.SetInputDisabled(true);
     }
 
     public void DisplayNextSentence()
