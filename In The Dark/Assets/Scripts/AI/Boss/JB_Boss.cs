@@ -14,8 +14,8 @@ public class JB_Boss : MonoBehaviour
     private float throwTimer = 7f;
     private bool isFlipped = true;
     private PatrolArea addPatrolArea;
-    private HealthComponent shieldHP;
-    private HealthComponent healthScript = null;
+    [SerializeField] private HealthComponent shieldHP;
+    [SerializeField] private HealthComponent healthScript = null;
     private bool bAdjustHealth = false;
     private float currentHealth = 0f;
     private float maxHealth = 0f;
@@ -65,7 +65,8 @@ public class JB_Boss : MonoBehaviour
         healthScript.OnHealthChanged += OnHealthChanged;
         healthScript.OnDeath += BossDead;
 
-        shieldHP.OnDeath += TurnInvincibleOff;
+        if (shieldHP)
+            shieldHP.OnDeath += TurnInvincibleOff;
 
     }
 

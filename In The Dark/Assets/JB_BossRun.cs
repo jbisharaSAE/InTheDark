@@ -16,7 +16,10 @@ public class JB_BossRun : StateMachineBehaviour
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+        if (playerObj)
+            player = playerObj.transform;
+
         rb = animator.GetComponent<Rigidbody2D>();
         bossScript = animator.GetComponent<JB_Boss>();
         speed = animator.GetComponent<JB_Boss>().moveSpeed;
@@ -25,6 +28,9 @@ public class JB_BossRun : StateMachineBehaviour
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        if (!player)
+            return;
+
         bossScript.LookAtPlayer();
 
         Vector2 target = new Vector2(player.position.x, rb.position.y);
