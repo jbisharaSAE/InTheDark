@@ -97,6 +97,7 @@ public class JB_PlayerController : MonoBehaviour
         if (GameManager.isInputDisabled)
         {
             advancedScript.SetMoveInput(0f);
+            moveXInput = 0f;
             return;
         }
 

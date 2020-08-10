@@ -15,7 +15,10 @@ public class SingleSound : MonoBehaviour
             m_audioSource = GetComponent<AudioSource>();
 
         if (!m_audioSource)
+        {
             m_audioSource = gameObject.AddComponent<AudioSource>();
+            m_audioSource.spatialize = false;
+        }
     }
 
     void Start()
@@ -28,6 +31,7 @@ public class SingleSound : MonoBehaviour
         if (!m_audioSource.clip)
             return;
 
+        m_audioSource.Play();
         Invoke("FinishedPlayingAudio", m_audioSource.clip.length);
     }
 

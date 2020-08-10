@@ -62,14 +62,14 @@ public class JB_ResourceManagement : MonoBehaviour
             m_currentEnergy += Time.deltaTime * energyRefillSpeed;
         }
 
-        if (energyBar)
+        if (energyBar && energyIndicatorBar)
         {
             energyBar.fillAmount = m_currentEnergy / 100.0f;
             energyIndicatorBar.fillAmount = m_currentEnergy / 100.0f;
         }
             
 
-        if (healthBar)
+        if (healthBar && healthIndicatorBar)
         {
             healthBar.fillAmount = currentHealth / maxHealth;
             healthIndicatorBar.fillAmount = currentHealth / maxHealth;
