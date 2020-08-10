@@ -90,6 +90,23 @@ public class JB_Boss : MonoBehaviour
 
     private void BossDead(HealthComponent self)
     {
+        int bossInt = (int)bossType;
+
+        switch (bossInt)
+        {
+            case 0:
+                CancelInvoke("BossVanish");
+                break;
+            case 1:
+                CancelInvoke("BossSummon");
+                break;
+            case 2:
+                CancelInvoke("BossShield");
+                break;
+        }
+        
+        
+        
         anim.SetBool("IsDead", true);
     }
 
