@@ -29,11 +29,20 @@ public class JB_PlayerController : MonoBehaviour
     private Rigidbody2D m_rigidBody;
     private JB_ResourceManagement resourceScript;
     private AdvancedCharacterMovement advancedScript;
-    
+    private AudioSource audioSource;
+
+
     [SerializeField] private JB_SwordTrigger swordScript;
-    
+
+    [Header("Audio: SFX")]
+    [SerializeField] private AudioClip[] swordSwings;
+    [SerializeField] private AudioClip shurikenThrowSFX;
+    [SerializeField] private AudioClip swordSlashSFX;
+    [SerializeField] private AudioClip aoeSlash;
+    [SerializeField] private AudioClip healSFX;
+
     //Used for flipping Character Direction
-	public static Vector3 playerScale;
+    public static Vector3 playerScale;
 
     public bool isFacingRight { get { return m_isFacingRight; } }
 
@@ -48,6 +57,7 @@ public class JB_PlayerController : MonoBehaviour
 
         advancedScript = GetComponent<AdvancedCharacterMovement>();
 
+        audioSource = GetComponent<AudioSource>();
     }
 
 	
@@ -177,14 +187,23 @@ public class JB_PlayerController : MonoBehaviour
         // player abilities
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
+            // play sword slash sfx
+            audioSource.PlayOneShot(swordSlashSFX);
+
             resourceScript.PlayerAbilities(1);
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
+            // play aoe slash sfx
+            //audioSource.PlayOneShot(aoeSlash);
+
             resourceScript.PlayerAbilities(2);
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
+            // play heal sfx
+            audioSource.PlayOneShot(healSFX);
+
             resourceScript.PlayerAbilities(3);
         }
 
@@ -240,30 +259,39 @@ public class JB_PlayerController : MonoBehaviour
             switch (attackPhase)
             {
                 case 0:
-                    //resourceScript.currentEnergy -= 10.0f;
                     resourceScript.UpdateEnergy(-10.0f);
-                    Debug.Log(attackPhase + " case 0");
-                    // attack animation 1
+
+                    // play sound
+                    audioSource.PlayOneShot(swordSwings[0]);
+
                     swordScript.PlayerAttack(1);
+                    
+                    // attack animation 1
                     anim.SetTrigger("Punch");
                     break;
                 case 1:
-                    //resourceScript.currentEnergy -= 20.0f;
                     resourceScript.UpdateEnergy(-20.0f);
-                    Debug.Log(attackPhase + " case 1");
+
+                    // play sound
+                    audioSource.PlayOneShot(swordSwings[1]);
+
                     swordScript.PlayerAttack(1);
-                    anim.SetTrigger("Punch");
+                    
                     // attack animation 2
+                    anim.SetTrigger("Punch");
                     break;
                 case 2:
-                    //resourceScript.currentEnergy -= 25.0f;
+                    
                     resourceScript.UpdateEnergy(-25.0f);
-                    //sword.GetComponent<JB_SwordTrigger>().bThirdattack = true;
+
+                    // play sound
+                    audioSource.PlayOneShot(swordSwings[2]);
+
                     swordScript.PlayerAttack(2);
-                    Debug.Log(attackPhase + " case 2");
-                    anim.SetTrigger("Punch");
-                    //UpdateComboPoints();
+
                     // attack animation 3
+                    anim.SetTrigger("Punch");
+                    
                     break;
 
             }
@@ -288,6 +316,9 @@ public class JB_PlayerController : MonoBehaviour
         if(resourceScript.currentCombo > 0)
         {
             anim.SetTrigger("Throw");
+
+            // play shuriken throw sound
+            audioSource.PlayOneShot(shurikenThrowSFX);
 
             // calls function to adjust combo point
             resourceScript.UpdateComboPoints(-1);

@@ -8,6 +8,8 @@ public class JB_ResourceManagement : MonoBehaviour
     // UI elements
     [SerializeField] private Image energyBar;
     [SerializeField] private Image healthBar;
+    [SerializeField] private Image energyIndicatorBar;
+    [SerializeField] private Image healthIndicatorBar;
     [SerializeField] private Image[] comboPoints;
     [SerializeField] private float energyRefillSpeed = 25.0f;
     [SerializeField] private float hpRefillSpeed = 5f;
@@ -61,10 +63,18 @@ public class JB_ResourceManagement : MonoBehaviour
         }
 
         if (energyBar)
+        {
             energyBar.fillAmount = m_currentEnergy / 100.0f;
+            energyIndicatorBar.fillAmount = m_currentEnergy / 100.0f;
+        }
+            
 
         if (healthBar)
+        {
             healthBar.fillAmount = currentHealth / maxHealth;
+            healthIndicatorBar.fillAmount = currentHealth / maxHealth;
+        }
+            
 
         UpdateHealth();
 
