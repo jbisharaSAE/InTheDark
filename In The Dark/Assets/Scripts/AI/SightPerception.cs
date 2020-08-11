@@ -105,6 +105,20 @@ public class SightPerception : MonoBehaviour
         Physics2D.queriesHitTriggers = queriesHitTriggers;
     }
 
+    void OnDestroy()
+    {
+        foreach (GameObject gameObject in m_objectsInSight)
+        {
+            if (gameObject == null)
+                continue;
+
+            // Possible that component that implemented interface is no longer present
+            ISightPerceptible perceptable = gameObject.GetComponent<ISightPerceptible>();
+            if (perceptable != null)
+                perceptable.OnNotVisibleToSightPerception(this);
+        }
+    }
+
     /// <summary>
     /// Gets all the objects that may potentially be in our sight
     /// </summary>
