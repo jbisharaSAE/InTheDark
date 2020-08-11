@@ -111,6 +111,10 @@ public class JB_PlayerController : MonoBehaviour
             //GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.y, jumpForce);
             advancedScript.Jump();
         }
+        else if (Input.GetButtonUp("Jump"))
+        {
+            advancedScript.StopJumping();
+        }
 
 
         anim.SetFloat("HSpeed", Mathf.Abs(moveXInput));

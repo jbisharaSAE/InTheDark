@@ -336,6 +336,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   energyBar: {fileID: 0}
   healthBar: {fileID: 0}
+  energyIndicatorBar: {fileID: 0}
+  healthIndicatorBar: {fileID: 0}
   comboPoints:
   - {fileID: 0}
   - {fileID: 0}
@@ -379,11 +381,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_walkSpeed: 10
-  m_airSpeed: 20
+  m_airSpeed: 12
   m_maxAcceleration: 40
   m_brakeFriction: 50
   m_maxStepHeight: 0.75
-  m_jumpPower: 17.5
+  m_jumpPower: 8
   m_maxJumpHoldTime: 0.4
   m_maxAirJumps: 1
   m_rigidBody: {fileID: 0}
@@ -393,7 +395,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2049
   m_limitWallJumpSide: 0
-  m_wallJumpPower: 30
+  m_wallJumpPower: 12
   m_wallJumpLayers:
     serializedVersion: 2
     m_Bits: 2049
