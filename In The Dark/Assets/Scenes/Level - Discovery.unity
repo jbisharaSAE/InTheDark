@@ -128,6 +128,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 222370590}
     m_Modifications:
+    - target: {fileID: 2469753404556588924, guid: c96c39ca46efca2458f99284f04307c8,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -12.300049
+      objectReference: {fileID: 0}
     - target: {fileID: 6107736643901804173, guid: c96c39ca46efca2458f99284f04307c8,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -188,15 +193,25 @@ PrefabInstance:
       propertyPath: m_Name
       value: BossOne
       objectReference: {fileID: 0}
-    - target: {fileID: 6111017878905893105, guid: c96c39ca46efca2458f99284f04307c8,
+    - target: {fileID: 6375554228788678658, guid: c96c39ca46efca2458f99284f04307c8,
         type: 3}
-      propertyPath: m_IsActive
-      value: 0
+      propertyPath: m_AnchoredPosition.x
+      value: -8.967224
       objectReference: {fileID: 0}
-    - target: {fileID: 7611516339272411842, guid: c96c39ca46efca2458f99284f04307c8,
+    - target: {fileID: 6375554228788678658, guid: c96c39ca46efca2458f99284f04307c8,
         type: 3}
-      propertyPath: m_health
-      value: 1
+      propertyPath: m_AnchoredPosition.y
+      value: -271.63727
+      objectReference: {fileID: 0}
+    - target: {fileID: 6375554228788678658, guid: c96c39ca46efca2458f99284f04307c8,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: -640.12537
+      objectReference: {fileID: 0}
+    - target: {fileID: 6375554228788678658, guid: c96c39ca46efca2458f99284f04307c8,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: -96.33443
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c96c39ca46efca2458f99284f04307c8, type: 3}
@@ -212,23 +227,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 7587926}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &7587936
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7587927}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bcd764819168aa840b6bd2976c95f3d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_walls:
-  - {fileID: 65875338}
-  - {fileID: 565968383}
-  m_cameraLocation: {fileID: 909378997}
-  m_orthographicSize: 18
 --- !u!1 &22958546
 GameObject:
   m_ObjectHideFlags: 0
