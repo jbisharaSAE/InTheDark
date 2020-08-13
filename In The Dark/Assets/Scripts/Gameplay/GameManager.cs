@@ -182,7 +182,7 @@ public class GameManager : MonoBehaviour
         if (levelName == string.Empty)
             return false;
 
-        SceneManager.LoadScene(levelName, LoadSceneMode.Single);
+        SceneManager.LoadScene(levelName);
         return true;
     }
 
