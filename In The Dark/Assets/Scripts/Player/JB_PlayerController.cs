@@ -272,7 +272,7 @@ public class JB_PlayerController : MonoBehaviour
                     swordScript.PlayerAttack(1);
                     
                     // attack animation 1
-                    anim.SetTrigger("Punch");
+                    anim.SetTrigger("attackOne");
                     break;
                 case 1:
                     resourceScript.UpdateEnergy(-20.0f);
@@ -283,7 +283,7 @@ public class JB_PlayerController : MonoBehaviour
                     swordScript.PlayerAttack(1);
                     
                     // attack animation 2
-                    anim.SetTrigger("Punch");
+                    anim.SetTrigger("attackTwo");
                     break;
                 case 2:
                     
@@ -295,7 +295,7 @@ public class JB_PlayerController : MonoBehaviour
                     swordScript.PlayerAttack(2);
 
                     // attack animation 3
-                    anim.SetTrigger("Punch");
+                    anim.SetTrigger("stab");
                     
                     break;
 

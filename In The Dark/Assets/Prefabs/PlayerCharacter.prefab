@@ -318,7 +318,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: b728d45697cb3044bad2c94cbc80f7f5, type: 3}
   - {fileID: 8300000, guid: f2f25e2413f322941ba0e7d73a3869f1, type: 3}
   - {fileID: 8300000, guid: a8a0047b83031fb4aadb7fd818460258, type: 3}
-  shurikenThrowSFX: {fileID: 8300000, guid: 805363d3c0b101f45acb4cf0d94fb78a, type: 3}
+  shurikenThrowSFX: {fileID: 8300000, guid: a067aea1e24ff4247a332ae95d0c48f7, type: 3}
   swordSlashSFX: {fileID: 8300000, guid: 70a2ca4c43603b443b69d79291203afb, type: 3}
   aoeSlash: {fileID: 0}
   healSFX: {fileID: 8300000, guid: afc3c4eb6363ff74e916e31dda8f8c15, type: 3}
