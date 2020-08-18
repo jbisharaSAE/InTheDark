@@ -46,7 +46,7 @@ public class JB_PlayerController : MonoBehaviour
     public static Vector3 playerScale;
 
     public bool isFacingRight { get { return m_isFacingRight; } }
-    public bool isAttacking { get { return m_isAttacking; } set { m_isAttacking = value} }
+    public bool isAttacking { get { return m_isAttacking; } set { m_isAttacking = value; } }
 
     // Use this for initialization
     void Awake ()
