@@ -95,8 +95,8 @@ public class EnemyScript : MonoBehaviour
             return;
 
         // Test our luck
-        float failChance = 1f - m_dropChance;
-        if (failChance * 10f < Random.Range(0f, 100f))
+        float failChance = m_dropChance;
+        if (failChance * 100f < Random.Range(0f, 100f))
             return;
 
         // Spawn the pickup right where we are

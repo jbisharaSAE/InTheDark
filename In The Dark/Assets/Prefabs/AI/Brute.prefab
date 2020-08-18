@@ -162,7 +162,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_canBeStunned: 1
-  m_deathDrop: {fileID: 0}
+  m_deathDrop: {fileID: 5031717600064766766, guid: a5c8f9fe2bbabd94a857f769af34e98f,
+    type: 3}
   m_dropChance: 0.1
   m_movementComp: {fileID: 7789554410778016533}
   m_animatorComp: {fileID: 7789554410778016532}
