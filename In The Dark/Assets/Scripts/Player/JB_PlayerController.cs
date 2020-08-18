@@ -90,6 +90,10 @@ public class JB_PlayerController : MonoBehaviour
             dashCharge = 2;
         }
 
+        
+
+
+
     }
 
     void UpdateInput()
@@ -329,29 +333,31 @@ public class JB_PlayerController : MonoBehaviour
             resourceScript.UpdateComboPoints(-1);
 
             // throwing shuriken in right direction
-            if (m_isFacingRight)
-            {
-                kunaiShuriken = Instantiate(kunaiPrefab, throwSpawn.position, kunaiPrefab.transform.rotation);
-                kunaiShuriken.GetComponent<JB_Shuriken>().facingRight = m_isFacingRight;
+            //if (m_isFacingRight)
+            //{
+            //    kunaiShuriken = Instantiate(kunaiPrefab, throwSpawn.position, kunaiPrefab.transform.rotation);
+            //    kunaiShuriken.GetComponent<JB_Shuriken>().facingRight = m_isFacingRight;
 
 
-                Vector3 newScale = kunaiShuriken.transform.localScale;
-                newScale.y *= 1;
+            //    Vector3 newScale = kunaiShuriken.transform.localScale;
+            //    newScale.y *= 1;
 
-                kunaiShuriken.GetComponent<Transform>().transform.localScale = newScale;
-            }
-            // throwing shuriken in left direction
-            else
-            {
+            //    kunaiShuriken.GetComponent<Transform>().transform.localScale = newScale;
+            //}
+            //// throwing shuriken in left direction
+            //else
+            //{
 
-                kunaiShuriken = Instantiate(kunaiPrefab, throwSpawn.position, kunaiPrefab.transform.rotation);
-                kunaiShuriken.GetComponent<JB_Shuriken>().facingRight = m_isFacingRight;
+            //    kunaiShuriken = Instantiate(kunaiPrefab, throwSpawn.position, kunaiPrefab.transform.rotation);
+            //    kunaiShuriken.GetComponent<JB_Shuriken>().facingRight = m_isFacingRight;
 
-                Vector3 newScale = kunaiShuriken.transform.localScale;
-                newScale.y *= -1;
+            //    Vector3 newScale = kunaiShuriken.transform.localScale;
+            //    newScale.y *= -1;
 
-                kunaiShuriken.GetComponent<Transform>().transform.localScale = newScale;
-            }
+            //    kunaiShuriken.GetComponent<Transform>().transform.localScale = newScale;
+            //}
+
+            
         }
         
         

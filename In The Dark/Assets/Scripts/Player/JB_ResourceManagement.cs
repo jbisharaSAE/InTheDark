@@ -137,12 +137,12 @@ public class JB_ResourceManagement : MonoBehaviour
         // turning on / off image combo points
         for (int i = 0; i < m_currentCombo; ++i)
         {
-            //comboPoints[i].enabled = true;
+            comboPoints[i].enabled = true;
             
         }
         for(int i = m_currentCombo; i <5; ++i)
         {
-            //comboPoints[i].enabled = false;
+            comboPoints[i].enabled = false;
         }
 
     }
