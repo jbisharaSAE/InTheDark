@@ -69,6 +69,8 @@ public class JB_PlayerController : MonoBehaviour
         UpdateInput();
         #endregion
 
+        
+
         anim.SetBool("ground", advancedScript.isGrounded);
 
         if (dashRecharge <= 100.0f)
@@ -153,8 +155,9 @@ public class JB_PlayerController : MonoBehaviour
         // right mouse button - shuriken throw
         if (Input.GetButtonDown("Fire2"))
         {
+            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-            ThrowShuriken();
+            ThrowShuriken(mousePos);
 
         }
 
@@ -323,11 +326,13 @@ public class JB_PlayerController : MonoBehaviour
     }
 
   
-    private void ThrowShuriken()
+    private void ThrowShuriken(Vector3 mousePosition)
     {
         // throwing a shuriken requires a combo point, we are checking to see if we any to use
         if(resourceScript.currentCombo > 0)
         {
+            Vector2 dir = FaceMouse();
+
             anim.SetTrigger("Throw");
 
             // play shuriken throw sound
@@ -335,6 +340,11 @@ public class JB_PlayerController : MonoBehaviour
 
             // calls function to adjust combo point
             resourceScript.UpdateComboPoints(-1);
+
+
+            GameObject shuriken = Instantiate(kunaiPrefab, throwSpawn.position, Quaternion.identity);
+
+            shuriken.transform.up = dir;
 
             // throwing shuriken in right direction
             //if (m_isFacingRight)
@@ -367,6 +377,18 @@ public class JB_PlayerController : MonoBehaviour
         
     }
 
-   
+    private Vector2 FaceMouse()
+    {
+        Vector3 mousePos = Input.mousePosition;
+
+        mousePos = Camera.main.ScreenToWorldPoint(mousePos);
+
+        Vector2 direction = new Vector2((mousePos.x - throwSpawn.position.x), (mousePos.y - throwSpawn.position.y));
+
+        return direction;
+
+
+    }
+
 
 }

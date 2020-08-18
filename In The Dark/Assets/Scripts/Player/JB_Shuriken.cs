@@ -18,22 +18,23 @@ public class JB_Shuriken : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("spawned");
+        
         rb = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (facingRight)
-        {
-            rb.velocity = (Vector2.right) * speed;
-        }
-        else
-        {
-            rb.velocity = (Vector2.left) * speed;
-        }
+        //if (facingRight)
+        //{
+        //    rb.velocity = (Vector2.right) * speed;
+        //}
+        //else
+        //{
+        //    rb.velocity = (Vector2.left) * speed;
+        //}
 
+        rb.velocity = transform.up * speed;
 
     }
 
