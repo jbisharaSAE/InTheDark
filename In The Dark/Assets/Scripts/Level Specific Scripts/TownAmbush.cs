@@ -6,11 +6,19 @@ public class TownAmbush : MonoBehaviour
 {
     public GameObject[] badGuys;
     public GameObject player;
+    public GameObject door;
+    public GameObject doorOpen;
+    public GameObject doorClosed;
     public bool trigger;
     public bool test;
+
+    private bool moveDoor;
+    private Vector3 doorNewPos;
+
     void Start()
     {
         player = GameObject.FindWithTag("Player");
+        moveDoor = false;
     }
 
     void Update()
@@ -19,6 +27,20 @@ public class TownAmbush : MonoBehaviour
         {
             test = false;
             Ambush();
+        }
+
+        if (badGuys[0] == null && badGuys[1] == null)
+        {
+            OpenDoor();
+        }
+
+        if (moveDoor == true)
+        {
+            door.transform.SetPositionAndRotation(doorNewPos * Time.deltaTime, doorClosed.transform.rotation);
+            if (door.transform.position == doorNewPos)
+            {
+                moveDoor = false;
+            }
         }
     }
 
@@ -33,11 +55,18 @@ public class TownAmbush : MonoBehaviour
 
     public void Ambush()
     {
+        doorNewPos = doorClosed.transform.position;
+        moveDoor = true;
         foreach (GameObject i in badGuys)
         {
             i.SetActive(true);
         }
+
     }
 
-    // need to add trigger for beating both bad guys to open door to leave room
+    public void OpenDoor()
+    {
+        doorNewPos = doorOpen.transform.position;
+        moveDoor = true;
+    }
 }
