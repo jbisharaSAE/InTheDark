@@ -193,6 +193,7 @@ public class JB_ResourceManagement : MonoBehaviour
     {
         if(m_currentCombo >= 3)
         {
+            playerScript.isAttacking = true;
             // frontal slash
             // instantiate sprite
             if(swordSlashPrefab != null)
@@ -208,6 +209,7 @@ public class JB_ResourceManagement : MonoBehaviour
                 
 
             UpdateComboPoints(-3);
+            StartCoroutine(StopAttacking());
         }
     }
 
@@ -217,10 +219,13 @@ public class JB_ResourceManagement : MonoBehaviour
         {
             // aoe slash
             // instantiate sprite
+            playerScript.isAttacking = true;
+
             if (aoeSlashPrefab != null)
                 Instantiate(aoeSlashPrefab, transform.position, Quaternion.identity);
 
             UpdateComboPoints(-3);
+            StartCoroutine(StopAttacking());
         }
     }
 
@@ -230,10 +235,19 @@ public class JB_ResourceManagement : MonoBehaviour
         {
             // heal
             // modify health component  
+            playerScript.isAttacking = true;
+
             if (healthScript)
                 healthScript.RestoreHealth(m_healAbilityAmount);
 
             UpdateComboPoints(-2);
+            StartCoroutine(StopAttacking());
         }
+    }
+
+    IEnumerator StopAttacking()
+    {
+        yield return new WaitForSeconds(0.5f);
+        playerScript.isAttacking = false;
     }
 }

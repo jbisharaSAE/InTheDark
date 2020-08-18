@@ -26,6 +26,7 @@ public class JB_PlayerController : MonoBehaviour
     public int dashCharge = 2;
     public int attackPhase = 0;
     private bool m_isFacingRight = true;
+    private bool m_isAttacking = false;
     private Rigidbody2D m_rigidBody;
     private JB_ResourceManagement resourceScript;
     private AdvancedCharacterMovement advancedScript;
@@ -45,6 +46,7 @@ public class JB_PlayerController : MonoBehaviour
     public static Vector3 playerScale;
 
     public bool isFacingRight { get { return m_isFacingRight; } }
+    public bool isAttacking { get { return m_isAttacking; } set { m_isAttacking = value} }
 
     // Use this for initialization
     void Awake ()
@@ -143,6 +145,7 @@ public class JB_PlayerController : MonoBehaviour
         else
         {
             attackPhase = 0;
+            m_isAttacking = false;
             //resourceScript.attackPhase = attackPhase;
         }
 
@@ -263,6 +266,7 @@ public class JB_PlayerController : MonoBehaviour
     {
         if(resourceScript.currentEnergy > 10.0f)
         {
+            m_isAttacking = true;
             attackTimer = 1.0f;
 
             switch (attackPhase)
