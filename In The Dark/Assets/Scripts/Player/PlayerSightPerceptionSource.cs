@@ -18,6 +18,7 @@ public class PlayerSightPerceptionSource : ShadowAreaListener, ISightPerceptible
     [SerializeField] private HealthComponent m_healthComp = null;                   // Owners health component
     [SerializeField] private AdvancedCharacterMovement m_movementComp = null;       // Owners movement component
     [SerializeField] private Renderer m_rendererComp = null;
+    [SerializeField] private JB_PlayerController m_controller = null;
 
     [SerializeField] private AudioSource m_hideSoundSource = null;
     [SerializeField] private AudioClip m_hideSound = null;
@@ -32,6 +33,9 @@ public class PlayerSightPerceptionSource : ShadowAreaListener, ISightPerceptible
 
         if (!m_movementComp)
             m_movementComp = GetComponent<AdvancedCharacterMovement>();
+
+        if (!m_controller)
+            m_controller = GetComponent<JB_PlayerController>();
 
         m_rendererComp = GetComponent<Renderer>();
     }
@@ -107,6 +111,10 @@ public class PlayerSightPerceptionSource : ShadowAreaListener, ISightPerceptible
     {
         // Fully visible while dashing
         if (m_movementComp && m_movementComp.isDashing)
+            return false;
+
+        // Fully visible while attacking
+        if (m_controller && m_controller.isAttacking)
             return false;
 
         // If already seen by a enemy, we should be visible to all enemies
