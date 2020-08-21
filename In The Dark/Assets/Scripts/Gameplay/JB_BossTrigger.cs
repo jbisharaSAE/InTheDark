@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class JB_BossOneTrigger : MonoBehaviour
+public class JB_BossTrigger : MonoBehaviour
 {
-    [SerializeField] private GameObject bossOne;
+    [SerializeField] private GameObject bossPrefab;
     
 
     
@@ -12,7 +12,7 @@ public class JB_BossOneTrigger : MonoBehaviour
     {
         if(collision.gameObject.tag == "Player")
         {
-            bossOne.SetActive(true);
+            bossPrefab.SetActive(true);
 
             GameManager.SetInputDisabled(true);
             //GameManager.inputDisabled;

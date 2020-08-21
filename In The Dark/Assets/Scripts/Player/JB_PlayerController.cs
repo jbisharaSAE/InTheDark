@@ -32,7 +32,7 @@ public class JB_PlayerController : MonoBehaviour
     private AdvancedCharacterMovement advancedScript;
     private AudioSource audioSource;
 
-
+    [SerializeField] private Vector3 offSet;
     [SerializeField] private JB_SwordTrigger swordScript;
 
     [Header("Audio: SFX")]
@@ -295,6 +295,7 @@ public class JB_PlayerController : MonoBehaviour
                     
                     // attack animation 2
                     anim.SetTrigger("attackTwo");
+                    
                     break;
                 case 2:
                     
@@ -333,6 +334,10 @@ public class JB_PlayerController : MonoBehaviour
         {
             Vector2 dir = FaceMouse();
 
+            dir.Normalize();
+
+            Vector3 spawnPos = dir + new Vector2(throwSpawn.position.x, throwSpawn.position.y);
+
             anim.SetTrigger("Throw");
 
             // play shuriken throw sound
@@ -342,9 +347,11 @@ public class JB_PlayerController : MonoBehaviour
             resourceScript.UpdateComboPoints(-1);
 
 
-            GameObject shuriken = Instantiate(kunaiPrefab, throwSpawn.position, Quaternion.identity);
+            GameObject shuriken = Instantiate(kunaiPrefab, spawnPos, Quaternion.identity);
 
             shuriken.transform.up = dir;
+
+            
 
             // throwing shuriken in right direction
             //if (m_isFacingRight)

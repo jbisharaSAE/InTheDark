@@ -15,9 +15,6 @@ MonoBehaviour:
   interactions:
   - characterSprite: {fileID: 21300000, guid: 7fe104ad6a9a9aa4f84f0fe79b125a99, type: 3}
     name: Tatsu
-    sentences: Too long has it been since my family died ... These renegades will
-      pay for that they have done with blood
-  - characterSprite: {fileID: 21300000, guid: 7fe104ad6a9a9aa4f84f0fe79b125a99, type: 3}
-    name: Tatsu
-    sentences: The time for vengeance has come, I will make them regret for not ending
-      me with my family ... They will feel my wrath!
+    sentences: '<needs words to be put in>
+
+'
