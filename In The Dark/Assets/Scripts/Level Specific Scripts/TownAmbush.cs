@@ -44,13 +44,13 @@ public class TownAmbush : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.tag.Equals("Player") && !trigger)
-        {
+        //if (other == player && !trigger)
+        //{
             trigger = true;
             Ambush();
-        }
+       // }
     }
 
     public void Ambush()
