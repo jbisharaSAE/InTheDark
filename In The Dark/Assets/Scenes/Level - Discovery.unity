@@ -10916,7 +10916,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e237608c7757a4140ade7d6ba3e3221f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bossOne: {fileID: 7587927}
+  bossPrefab: {fileID: 7587927}
 --- !u!4 &1365550844 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3501701928538831549, guid: 6846ab0347454f146b8f5c4a976517e8,
