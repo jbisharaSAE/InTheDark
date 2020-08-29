@@ -245,12 +245,14 @@ public class JB_PlayerController : MonoBehaviour
             --dashCharge;
             dashRecharge = 50.0f;
             advancedScript.Dash();
+            anim.SetTrigger("dash");
         }
         else if(dashCharge == 1)
         {
             --dashCharge;
             dashRecharge = 0.0f;
             advancedScript.Dash();
+            anim.SetTrigger("dash");
         }
 
        
