@@ -239,7 +239,7 @@ public class JB_Boss : MonoBehaviour
     {
         float rand = Random.value;
 
-        if(rand < 0.25f)
+        if(rand < 0.65f)
         {
             // spawn a reflective shield  that needs to be destroyed before attacking boss
             bossShield.SetActive(true);
