@@ -15,3 +15,5 @@ MonoBehaviour:
   m_levelNames:
   - Level - Discovery
   - Level - Town
+  - Level - Castle
+  - Level - Mines
