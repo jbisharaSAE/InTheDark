@@ -84,7 +84,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_speed: 15
-  m_damageInfo: {fileID: 0}
+  m_damageInfo: {fileID: 11400000, guid: 63131f8645a47f24cbac742d027207cb, type: 2}
   m_lifespan: 4
   m_autoDestroyAfter: 1
 --- !u!1 &4897515094728771097

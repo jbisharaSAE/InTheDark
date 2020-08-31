@@ -20,13 +20,14 @@ public class JB_PlayerController : MonoBehaviour
     //movement + attack 
     private float hSpeed = 10f;
 	private float moveXInput;
-    private float attackTimer = 0.0f;
+    private float attackTimer = 0.8f;
     private float dashRecharge = 100.0f; 
     public float dashRefillSpeed;
     public int dashCharge = 2;
     public int attackPhase = 0;
     private bool m_isFacingRight = true;
     private bool m_isAttacking = false;
+    private float swingDelay = 0.2f;
     private Rigidbody2D m_rigidBody;
     private JB_ResourceManagement resourceScript;
     private AdvancedCharacterMovement advancedScript;
@@ -164,12 +165,12 @@ public class JB_PlayerController : MonoBehaviour
         // increases character speed * sprint
         if (Input.GetKey(KeyCode.LeftShift))
         {
-            anim.SetBool("Sprint", true);
+            //anim.SetBool("Sprint", true);
             hSpeed = 25f;
         }
         else
         {
-            anim.SetBool("Sprint", false);
+            //anim.SetBool("Sprint", false);
             hSpeed = 10f;
         }
 
@@ -192,7 +193,7 @@ public class JB_PlayerController : MonoBehaviour
         //RaycastHit2D hit = Physics2D.Raycast(transform.position, dir, Mathf.Infinity, 11);
 
         // dash ability
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.F))
         {
             Dash();
         }
@@ -223,7 +224,7 @@ public class JB_PlayerController : MonoBehaviour
         }
 
         // parry ability
-        if (Input.GetKeyDown(KeyCode.Q))
+        if (Input.GetKeyDown(KeyCode.G))
         {
             StartCoroutine(ParryCollider());
         }
@@ -232,8 +233,10 @@ public class JB_PlayerController : MonoBehaviour
     IEnumerator ParryCollider()
     {
         parryColliderObj.SetActive(true);
+        gameObject.GetComponent<HealthComponent>().isInvincible = true;
         yield return new WaitForSeconds(0.5f);
         parryColliderObj.SetActive(false);
+        gameObject.GetComponent<HealthComponent>().isInvincible = false;
     }
 
     private void Dash()
@@ -274,48 +277,50 @@ public class JB_PlayerController : MonoBehaviour
             m_isAttacking = true;
             attackTimer = 1.0f;
 
-            switch (attackPhase)
-            {
-                case 0:
-                    resourceScript.UpdateEnergy(-10.0f);
+                switch (attackPhase)
+                {
+                    case 0:
+                        resourceScript.UpdateEnergy(-10.0f);
 
-                    // play sound
-                    audioSource.PlayOneShot(swordSwings[0]);
+                        // play sound
+                        audioSource.PlayOneShot(swordSwings[0]);
 
-                    swordScript.PlayerAttack(1);
-                    
-                    // attack animation 1
-                    anim.SetTrigger("attackOne");
-                    break;
-                case 1:
-                    resourceScript.UpdateEnergy(-20.0f);
+                        swordScript.PlayerAttack(1);
 
-                    // play sound
-                    audioSource.PlayOneShot(swordSwings[1]);
+                        // attack animation 1
+                        anim.SetTrigger("attackOne");
+                        break;
+                    case 1:
+                        resourceScript.UpdateEnergy(-20.0f);
 
-                    swordScript.PlayerAttack(1);
-                    
-                    // attack animation 2
-                    anim.SetTrigger("attackTwo");
-                    
-                    break;
-                case 2:
-                    
-                    resourceScript.UpdateEnergy(-25.0f);
+                        // play sound
+                        audioSource.PlayOneShot(swordSwings[1]);
 
-                    // play sound
-                    audioSource.PlayOneShot(swordSwings[2]);
+                        swordScript.PlayerAttack(1);
 
-                    swordScript.PlayerAttack(2);
+                        // attack animation 2
+                        anim.SetTrigger("attackTwo");
 
-                    // attack animation 3
-                    anim.SetTrigger("stab");
-                    
-                    break;
+                        break;
+                    case 2:
 
-            }
+                        resourceScript.UpdateEnergy(-25.0f);
 
-            ++attackPhase;
+                        // play sound
+                        audioSource.PlayOneShot(swordSwings[2]);
+
+                        swordScript.PlayerAttack(2);
+
+                        // attack animation 3
+                        anim.SetTrigger("stab");
+
+                        break;
+
+                }
+                ++attackPhase;
+            
+
+            
             //resourceScript.attackPhase = attackPhase;
         }
         

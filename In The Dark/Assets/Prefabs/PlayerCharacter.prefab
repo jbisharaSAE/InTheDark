@@ -313,6 +313,7 @@ MonoBehaviour:
   dashRefillSpeed: 18
   dashCharge: 2
   attackPhase: 0
+  offSet: {x: 0, y: 0, z: 0}
   swordScript: {fileID: 5189482154927268627}
   swordSwings:
   - {fileID: 8300000, guid: b728d45697cb3044bad2c94cbc80f7f5, type: 3}
@@ -346,7 +347,7 @@ MonoBehaviour:
   - {fileID: 0}
   energyRefillSpeed: 25
   hpRefillSpeed: 5
-  m_healAbilityAmount: 0
+  m_healAbilityAmount: 15
   swordScript: {fileID: 2707334436452098184}
   swordSlashPrefab: {fileID: 744953840303490751, guid: 28bebe12bbe3cf441b2fccba1544fe26,
     type: 3}
@@ -441,6 +442,7 @@ MonoBehaviour:
   m_healthComp: {fileID: 5556191119478186715}
   m_movementComp: {fileID: 902845812}
   m_rendererComp: {fileID: 0}
+  m_controller: {fileID: 0}
   m_hideSoundSource: {fileID: 726622976027601848}
   m_hideSound: {fileID: 8300000, guid: 1478f5a4d0c25f142bb303479d95604e, type: 3}
   m_visibleSound: {fileID: 8300000, guid: 1478f5a4d0c25f142bb303479d95604e, type: 3}
