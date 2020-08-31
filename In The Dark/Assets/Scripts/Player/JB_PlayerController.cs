@@ -103,10 +103,13 @@ public class JB_PlayerController : MonoBehaviour
 
     void UpdateInput()
     {
+        anim.SetFloat("vSpeed", GetComponent<Rigidbody2D>().velocity.y);
+
         if (GameManager.isInputDisabled)
         {
             advancedScript.SetMoveInput(0f);
             moveXInput = 0f;
+            anim.SetFloat("HSpeed", 0f);
             return;
         }
 
@@ -127,8 +130,6 @@ public class JB_PlayerController : MonoBehaviour
 
 
         anim.SetFloat("HSpeed", Mathf.Abs(moveXInput));
-        anim.SetFloat("vSpeed", GetComponent<Rigidbody2D>().velocity.y);
-
 
         //m_rigidBody.velocity = new Vector2((moveXInput * hSpeed), m_rigidBody.velocity.y);
 

@@ -7,12 +7,16 @@ using TMPro;
 
 public class JB_DialogueManager : MonoBehaviour
 {
+    public delegate void OnDialogueFinished(JB_Dialogue dialogue);
+    public static OnDialogueFinished onDialogueFinished;
+
     //public Animator animator;
     public GameObject systemPanel;
     public TextMeshProUGUI dialogueText;
     public TextMeshProUGUI nameText;
     public Image characterImage;
-    
+
+    private JB_Dialogue curDialogue = null;
 
     private Queue<string> sentences;
     private Queue<string> names;
@@ -50,6 +54,8 @@ public class JB_DialogueManager : MonoBehaviour
         DisplayNextSentence();
 
         GameManager.SetInputDisabled(true);
+
+        curDialogue = dialogue;
     }
 
     public void DisplayNextSentence()
@@ -96,5 +102,10 @@ public class JB_DialogueManager : MonoBehaviour
         systemPanel.SetActive(false);
         GameManager.SetInputDisabled(false);
         //Time.timeScale = 1f;
+
+        if (onDialogueFinished != null)
+            onDialogueFinished.Invoke(curDialogue);
+
+        curDialogue = null;
     }
 }

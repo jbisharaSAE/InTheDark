@@ -12267,6 +12267,51 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 1
+--- !u!1 &1066718768
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1066718769}
+  - component: {fileID: 1066718770}
+  m_Layer: 0
+  m_Name: FinishLevelAfterEndDialogue
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1066718769
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1066718768}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1355841104}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1066718770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1066718768}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ced65aa7f40a2354e95b822387c1dbb4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_dialogueToRespondTo: {fileID: 11400000, guid: a0cf1db1c76e02547ba1f8f8e8789a87,
+    type: 2}
 --- !u!1 &1067520524
 GameObject:
   m_ObjectHideFlags: 0
@@ -14751,6 +14796,7 @@ Transform:
   m_Children:
   - {fileID: 1951264375}
   - {fileID: 1729936518}
+  - {fileID: 1066718769}
   m_Father: {fileID: 0}
   m_RootOrder: 34
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -19605,7 +19651,7 @@ PrefabInstance:
         type: 3}
       propertyPath: dialogue
       value: 
-      objectReference: {fileID: 11400000, guid: 0df8d67d92436f348a7ed810832a0414,
+      objectReference: {fileID: 11400000, guid: a0cf1db1c76e02547ba1f8f8e8789a87,
         type: 2}
     - target: {fileID: 3501701928538831548, guid: 6846ab0347454f146b8f5c4a976517e8,
         type: 3}
@@ -22081,7 +22127,7 @@ PrefabInstance:
         type: 3}
       propertyPath: dialogue
       value: 
-      objectReference: {fileID: 11400000, guid: 0df8d67d92436f348a7ed810832a0414,
+      objectReference: {fileID: 11400000, guid: d4225c7ea0bac994aa21d6a36e8d006f,
         type: 2}
     - target: {fileID: 3501701928538831548, guid: 6846ab0347454f146b8f5c4a976517e8,
         type: 3}
