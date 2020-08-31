@@ -346,7 +346,7 @@ public class JB_PlayerController : MonoBehaviour
 
             Vector3 spawnPos = dir + new Vector2(throwSpawn.position.x, throwSpawn.position.y);
 
-            anim.SetTrigger("Throw");
+            //anim.SetTrigger("Throw");
 
             // play shuriken throw sound
             audioSource.PlayOneShot(shurikenThrowSFX);
