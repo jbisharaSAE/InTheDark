@@ -8773,6 +8773,18 @@ Transform:
   m_Father: {fileID: 1702719397}
   m_RootOrder: 19
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &675140873 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2470732381550654836, guid: d313913fba692ee4cb82924b103911ed,
+    type: 3}
+  m_PrefabInstance: {fileID: 216505913}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &683713330
 GameObject:
   m_ObjectHideFlags: 0
@@ -16414,6 +16426,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 11427360, guid: 4fafe4882143b794d89de7a74ee788cb, type: 3}
+      propertyPath: dashBar
+      value: 
+      objectReference: {fileID: 675140873}
     - target: {fileID: 21279570, guid: 4fafe4882143b794d89de7a74ee788cb, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -16467,7 +16483,7 @@ PrefabInstance:
     - target: {fileID: 5556191119478186715, guid: 4fafe4882143b794d89de7a74ee788cb,
         type: 3}
       propertyPath: m_invincible
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7958675995587055205, guid: 4fafe4882143b794d89de7a74ee788cb,
         type: 3}
