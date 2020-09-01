@@ -16,6 +16,8 @@ public class Audio_Cursor : MonoBehaviour
         Cursor.SetCursor(mouseCursorTexture, Vector2.zero, CursorMode.ForceSoftware);
 
         DontDestroyOnLoad(gameObject);
+
+        OnLevelWasLoaded(0);
     }
 
     private void OnLevelWasLoaded(int level)
