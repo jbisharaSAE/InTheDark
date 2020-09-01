@@ -12,4 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c442a2c301f27941985171e741b85b4, type: 3}
   m_Name: BossThree
   m_EditorClassIdentifier: 
-  interactions: []
+  interactions:
+  - characterSprite: {fileID: 21300000, guid: 7fe104ad6a9a9aa4f84f0fe79b125a99, type: 3}
+    name: Tatsu
+    sentences: Long have I waited to avenge my family ... the time has come to pay
+      for your crimes!
+  - characterSprite: {fileID: 21300000, guid: 29aa883d57da5ab4897b61fb8ba6350f, type: 3}
+    name: Kenshin
+    sentences: Is this your gratitude for sparing your life? ... So be it, come and
+      meet your end!
