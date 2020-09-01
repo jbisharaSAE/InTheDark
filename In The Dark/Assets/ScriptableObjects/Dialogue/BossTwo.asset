@@ -13,6 +13,10 @@ MonoBehaviour:
   m_Name: BossTwo
   m_EditorClassIdentifier: 
   interactions:
+  - characterSprite: {fileID: 21300000, guid: 7fe104ad6a9a9aa4f84f0fe79b125a99, type: 3}
+    name: Tatsu
+    sentences: You managed to flee from once, you will not escape from me this time!
   - characterSprite: {fileID: 21300000, guid: 0f0b7dd60cba9ba40b5268a4ff80ba53, type: 3}
     name: Gensai
-    sentences: Who do you think you are! You will pay for this!
+    sentences: Haha! I was not fleeing! I was only buying time for reinforcements!
+      Prepare to die!

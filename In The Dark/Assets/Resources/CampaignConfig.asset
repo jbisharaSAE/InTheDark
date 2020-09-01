@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CampaignConfig
   m_EditorClassIdentifier: 
   m_levelNames:
-  - Level - Discovery
-  - Level - Town
-  - Level 3(Unnamed)
-  - Level 2(Unammed)1
+  - Level 1 - Discovery
+  - Level 2 - Town
+  - Level 3 - Mines
+  - Level 4 - Castle

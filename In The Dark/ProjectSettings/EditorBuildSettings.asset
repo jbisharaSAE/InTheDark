@@ -9,15 +9,15 @@ EditorBuildSettings:
     path: Assets/Scenes/MainMenu.unity
     guid: 285710493f775ec49866fdb06ff18c5d
   - enabled: 1
-    path: Assets/Scenes/Level - Discovery.unity
+    path: Assets/Scenes/Level 1 - Discovery.unity
     guid: 4ea29e4c59e27e548a291ae35d41aa84
   - enabled: 1
-    path: Assets/Scenes/Level - Town.unity
+    path: Assets/Scenes/Level 2 - Town.unity
     guid: 6d903a504e8d40445b0ab4b569df9492
   - enabled: 1
-    path: Assets/Scenes/Level 2(Unnamed) 1.unity
+    path: Assets/Scenes/Level 4 - Castle.unity
     guid: afce001bdfb36d341a4ba4fe32794366
   - enabled: 1
-    path: Assets/Scenes/Level 3(Unnamed).unity
+    path: Assets/Scenes/Level 3 - Mines.unity
     guid: bc1db179261aa7e4185cc916e87c25d5
   m_configObjects: {}

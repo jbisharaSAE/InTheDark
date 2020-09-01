@@ -346,7 +346,7 @@ MonoBehaviour:
   - {fileID: 0}
   energyRefillSpeed: 25
   hpRefillSpeed: 5
-  m_healAbilityAmount: 15
+  m_healAbilityAmount: 60
   swordScript: {fileID: 2707334436452098184}
   swordSlashPrefab: {fileID: 744953840303490751, guid: 28bebe12bbe3cf441b2fccba1544fe26,
     type: 3}
