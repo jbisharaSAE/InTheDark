@@ -193,7 +193,7 @@ public class JB_Boss : MonoBehaviour
     {
         float rand = Random.value;
 
-        if(rand < 0.25f)
+        if(rand < 0.50f)
         {
             
             Vector2 newPos = new Vector2(transform.position.x, transform.position.y + 2.52f);

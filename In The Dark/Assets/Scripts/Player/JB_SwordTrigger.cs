@@ -18,6 +18,7 @@ public class JB_SwordTrigger : MonoBehaviour
         {
             if (attackPhase == 1)
             {
+                resourceScript.BasicSwordAttack(1);
                 DamageEnemy(1, colInfo);
             }
             else if (attackPhase == 2)
@@ -25,6 +26,7 @@ public class JB_SwordTrigger : MonoBehaviour
                 RandomGeneratedCombo();
                 DamageEnemy(2, colInfo);
             }
+          
         }
             
         

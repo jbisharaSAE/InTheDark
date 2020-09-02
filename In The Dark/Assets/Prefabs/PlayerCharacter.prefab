@@ -344,7 +344,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  energyRefillSpeed: 25
+  energyRefillSpeed: 30
   hpRefillSpeed: 5
   m_healAbilityAmount: 60
   swordScript: {fileID: 2707334436452098184}
