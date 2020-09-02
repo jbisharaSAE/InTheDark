@@ -32,6 +32,8 @@ public class JB_Boss : MonoBehaviour
     [SerializeField] private float bossVanishHeight = 100f;
     [SerializeField] private float hpRefillSpeed = 25;
 
+    public bool canPerformAction { get { return !(GameManager.isPaused || GameManager.isInputDisabled); } }
+
     public float moveSpeed { get { return m_moveSpeed; } }
 
     void Start()
@@ -49,7 +51,9 @@ public class JB_Boss : MonoBehaviour
                 InvokeRepeating("BossSummon", 10f, 10f);
                 break;
             case 2:
-                shieldHP = bossShield.GetComponent<HealthComponent>();
+                if (!shieldHP)
+                    shieldHP = bossShield.GetComponent<HealthComponent>();
+
                 InvokeRepeating("BossShield", 10f, 10f);
                 break;
         }
@@ -191,6 +195,9 @@ public class JB_Boss : MonoBehaviour
 
     private void BossVanish()
     {
+        if (!canPerformAction)
+            return;
+
         float rand = Random.value;
 
         if(rand < 0.25f)
@@ -216,17 +223,20 @@ public class JB_Boss : MonoBehaviour
     #region boss_two
     private void BossSummon()
     {
+        if (!canPerformAction)
+            return;
+
         float rand = Random.value;
 
         if (rand < 1f)
         {
             // get player location
             // summmon add above player location
-            Vector2 spawnAddLocation = new Vector3(player.transform.position.x, bossVanishHeight);
+            Vector2 spawnAddLocation = new Vector3(player.transform.position.x, player.transform.position.y + bossVanishHeight);
             GameObject summonedAdd = Instantiate(bossAddPrefab, spawnAddLocation, bossAddPrefab.transform.rotation);
             summonedAdd.GetComponent<EnemyTargetSelector>().overrideTarget = player.transform.gameObject;
             summonedAdd.GetComponent<BruteEnemyScript>().patrolArea = addPatrolArea;
-            StartCoroutine(FindPlayerToLandOn(summonedAdd));
+            //StartCoroutine(FindPlayerToLandOn(summonedAdd));
 
             // add falls on top of player
 
@@ -237,6 +247,9 @@ public class JB_Boss : MonoBehaviour
     #region boss_three
     private void BossShield()
     {
+        if (!canPerformAction)
+            return;
+
         float rand = Random.value;
 
         if(rand < 0.65f)
