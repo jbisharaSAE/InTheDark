@@ -55,5 +55,43 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 95000010398391834, guid: 30ef59945f2a7ea499bbbe10a7d48f1a,
+        type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6264909944771340707, guid: 30ef59945f2a7ea499bbbe10a7d48f1a,
+        type: 3}
+      propertyPath: healthScript
+      value: 
+      objectReference: {fileID: 8626366660419745808}
+    - target: {fileID: 6264909944771340707, guid: 30ef59945f2a7ea499bbbe10a7d48f1a,
+        type: 3}
+      propertyPath: bossAddPrefab
+      value: 
+      objectReference: {fileID: 7789554410778016530, guid: 954264de0d5550f45942cdb35b75a566,
+        type: 3}
+    - target: {fileID: 7434001076028026551, guid: 30ef59945f2a7ea499bbbe10a7d48f1a,
+        type: 3}
+      propertyPath: m_health
+      value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 7434001076028026551, guid: 30ef59945f2a7ea499bbbe10a7d48f1a,
+        type: 3}
+      propertyPath: m_maxHealth
+      value: 300
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 30ef59945f2a7ea499bbbe10a7d48f1a, type: 3}
+--- !u!114 &8626366660419745808 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7434001076028026551, guid: 30ef59945f2a7ea499bbbe10a7d48f1a,
+    type: 3}
+  m_PrefabInstance: {fileID: 1197361919981442727}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c6ccd1b1adfb2b41b1b57eea836b9bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

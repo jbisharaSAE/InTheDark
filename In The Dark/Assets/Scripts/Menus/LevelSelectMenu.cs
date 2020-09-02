@@ -26,6 +26,19 @@ public class LevelSelectMenu : MonoBehaviour
     private NinjasSaveData m_saveData = null;       // Loaded save data
     private CampaignConfig m_config = null;         // Loaded campaign config
 
+    void Update()
+    {
+        // Cheat, to unlock all levels
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            m_saveData.SetLevelUnlocked(m_config.GetNumLevels());
+            m_saveData.Save();
+
+            for (int i = 0; i < m_levelsData.Count; ++i)
+                m_levelsData[i].UpdateButtonStatus(m_saveData);
+        }
+    }
+
     void OnEnable()
     {
         m_saveData = NinjasSaveData.Load();

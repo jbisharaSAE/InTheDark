@@ -434,7 +434,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 747886a8cebc8a9479da598da8413f00, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_hiddenOpacity: 0.6
+  m_hiddenOpacity: 0.4
   m_hiddenFadeTime: 0.25
   m_layersToIgnoreWhenHidden:
   - Enemy
