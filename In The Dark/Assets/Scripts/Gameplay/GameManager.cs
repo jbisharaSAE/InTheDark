@@ -201,8 +201,10 @@ public class GameManager : MonoBehaviour
         // next level
         int nextLevelIndex = curLevelIndex + 1;
         if (!config.IsValidLevelIndex(nextLevelIndex))
-            // TODO: End of campaign
-            return false;
+        {
+            OpenLevel("MainMenu");
+            return true;
+        }
 
         // TODO: Would need to make sure level is actually valid (we can open the scene)
         // If not, just iterate to the next level (also need to make sure that game isn't finished)

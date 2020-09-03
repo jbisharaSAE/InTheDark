@@ -252,17 +252,18 @@ public class JB_Boss : MonoBehaviour
 
         float rand = Random.value;
 
-        if(rand < 0.65f)
+        if(rand < 0.65f && !bossShield.activeSelf)
         {
             // spawn a reflective shield  that needs to be destroyed before attacking boss
             bossShield.SetActive(true);
-            gameObject.GetComponent<HealthComponent>().isInvincible = true;
+            shieldHP.RestoreHealth(shieldHP.maxHealth);
+            healthScript.GetComponent<HealthComponent>().isInvincible = true;
         }
     }
 
     private void TurnInvincibleOff(HealthComponent hpComponent)
     {
-        gameObject.GetComponent<HealthComponent>().isInvincible = false;
+        healthScript.isInvincible = false;
         bossShield.SetActive(false);
     }
     #endregion

@@ -98,7 +98,7 @@ public class HealthComponent : MonoBehaviour
     /// <returns>Amount of health applied</returns>
     private float RestoreHealthImpl(float amount)
     {
-        if (isDead || amount <= 0f)
+        if (amount <= 0f)
             return 0f;
 
         // Don't bother if already at max health
