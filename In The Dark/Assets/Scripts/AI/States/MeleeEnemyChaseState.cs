@@ -26,6 +26,12 @@ public class MeleeEnemyChaseState : StateMachineBehaviour
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        if (GameManager.isPaused || JB_DialogueManager.isPlayingDialogue)
+        {
+            m_movementComp.SetMoveInput(0f);
+            return;
+        }
+
         GameObject target = m_selectorComp.target;
         if (!target)
         {

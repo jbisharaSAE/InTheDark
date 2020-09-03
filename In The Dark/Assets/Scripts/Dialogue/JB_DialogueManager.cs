@@ -10,6 +10,8 @@ public class JB_DialogueManager : MonoBehaviour
     public delegate void OnDialogueFinished(JB_Dialogue dialogue);
     public static OnDialogueFinished onDialogueFinished;
 
+    public static bool isPlayingDialogue { get; private set; }
+
     //public Animator animator;
     public GameObject systemPanel;
     public TextMeshProUGUI dialogueText;
@@ -51,11 +53,12 @@ public class JB_DialogueManager : MonoBehaviour
         }
 
 
-        DisplayNextSentence();
-
         GameManager.SetInputDisabled(true);
 
         curDialogue = dialogue;
+        isPlayingDialogue = true;
+
+        DisplayNextSentence();
     }
 
     public void DisplayNextSentence()
@@ -107,5 +110,6 @@ public class JB_DialogueManager : MonoBehaviour
             onDialogueFinished.Invoke(curDialogue);
 
         curDialogue = null;
+        isPlayingDialogue = false;
     }
 }

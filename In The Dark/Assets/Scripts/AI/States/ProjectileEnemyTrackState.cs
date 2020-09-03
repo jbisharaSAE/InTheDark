@@ -15,6 +15,9 @@ public class ProjectileEnemyTrackState : StateMachineBehaviour
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        if (GameManager.isPaused || JB_DialogueManager.isPlayingDialogue)
+            return;
+
         // We can just exit this state now if target is not in sight,
         // as we most likely won't be moving 
         GameObject target = m_targetComp.target;

@@ -52,6 +52,12 @@ public class MeleeEnemyPatrolState : StateMachineBehaviour
 
     public override void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        if (GameManager.isPaused || JB_DialogueManager.isPlayingDialogue)
+        {
+            m_movementComp.SetMoveInput(0f);
+            return;
+        }
+
         // Keep moving until we are barely just outside of the patrol area
         if (m_patrolAreaComp && m_patrolAreaComp.HasPassedPatrolArea(animator.transform.position, m_movementInput))
         {
