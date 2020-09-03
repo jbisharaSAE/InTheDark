@@ -59,6 +59,7 @@ public class JB_PlayerController : MonoBehaviour
         resourceScript = GetComponent<JB_ResourceManagement>();
 
         advancedScript = GetComponent<AdvancedCharacterMovement>();
+        advancedScript.jumpedOffWall += OnWallJumped;
 
         audioSource = GetComponent<AudioSource>();
     }
@@ -69,8 +70,6 @@ public class JB_PlayerController : MonoBehaviour
         #region player_input
         UpdateInput();
         #endregion
-
-        
 
         anim.SetBool("ground", advancedScript.isGrounded);
 
@@ -334,6 +333,11 @@ public class JB_PlayerController : MonoBehaviour
         
     }
 
+    public void OnWallJumped(AdvancedCharacterMovement.WallJumpSide side)
+    {
+        anim.SetTrigger("wallJump");
+    }
+
   
     private void ThrowShuriken(Vector3 mousePosition)
     {
@@ -346,7 +350,7 @@ public class JB_PlayerController : MonoBehaviour
 
             Vector3 spawnPos = dir + new Vector2(throwSpawn.position.x, throwSpawn.position.y);
 
-            //anim.SetTrigger("Throw");
+            anim.SetTrigger("Throw");
 
             // play shuriken throw sound
             audioSource.PlayOneShot(shurikenThrowSFX);

@@ -20,8 +20,8 @@ public class AdvancedCharacterMovement : CharacterMovement
     }
 
     // Event that is called jumping off a wall
-    public delegate void OnJumpOfWall(WallJumpSide wallJumpSide);
-    public OnJumpOfWall jumpedOfWall;
+    public delegate void OnJumpOffWall(WallJumpSide wallJumpSide);
+    public OnJumpOffWall jumpedOffWall;
 
     [Header("Advanced (Wall Jump)")]
     [SerializeField] protected bool m_limitWallJumpSide = false;                // If wall jump side should be limited to once
@@ -175,8 +175,8 @@ public class AdvancedCharacterMovement : CharacterMovement
                 m_aboutToJump = true;
                 m_lastWallJumpSide = WallJumpSide.Left;
 
-                if (jumpedOfWall != null)
-                    jumpedOfWall.Invoke(m_lastWallJumpSide);
+                if (jumpedOffWall != null)
+                    jumpedOffWall.Invoke(m_lastWallJumpSide);
 
                 StartCoroutine(DisableInputAfterWallJump());
                 return true;
@@ -196,8 +196,8 @@ public class AdvancedCharacterMovement : CharacterMovement
                 m_aboutToJump = true;
                 m_lastWallJumpSide = WallJumpSide.Right;
 
-                if (jumpedOfWall != null)
-                    jumpedOfWall.Invoke(m_lastWallJumpSide);
+                if (jumpedOffWall != null)
+                    jumpedOffWall.Invoke(m_lastWallJumpSide);
 
                 StartCoroutine(DisableInputAfterWallJump());
                 return true;
